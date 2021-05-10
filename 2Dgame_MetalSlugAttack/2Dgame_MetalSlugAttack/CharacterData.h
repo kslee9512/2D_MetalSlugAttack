@@ -20,6 +20,8 @@ private:
 	STATUS characterStatus;
 	float attackCooltime;
 	float purchaseCooltime;
+	float changeTimer;
+	float moveSpeed;
 	CollisionChecker* collisionChecker;
 public:
 	 HRESULT Init(int unitNum, CollisionChecker* collisionChecker);

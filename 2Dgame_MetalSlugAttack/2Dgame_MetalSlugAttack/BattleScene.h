@@ -2,6 +2,7 @@
 #include "GameNode.h"
 class Image;
 class CollisionChecker;
+class PlayerManager;
 typedef struct FrameUi
 {
 	Image* unit_Frame_able;
@@ -18,6 +19,7 @@ private:
 	Image* ui_Down;
 	FrameUi unit_Frame[5];
 	CollisionChecker* collisionChecker;
+	PlayerManager* playerMgr;
 public:
 	virtual HRESULT Init();
 	virtual void Release();

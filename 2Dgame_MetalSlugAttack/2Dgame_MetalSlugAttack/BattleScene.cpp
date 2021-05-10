@@ -1,6 +1,7 @@
 #include "BattleScene.h"
 #include "Image.h"
 #include "CollisionChecker.h"
+#include "PlayerManager.h"
 HRESULT BattleScene::Init()
 {
 	ImageManager::GetSingleton()->AddImage("background", "Image/Background/background.bmp", WINSIZE_X, 380);
@@ -8,6 +9,8 @@ HRESULT BattleScene::Init()
 	ImageManager::GetSingleton()->AddImage("ui_down", "Image/Ui/Ui_Down.bmp", WINSIZE_X, 150);
 	ImageManager::GetSingleton()->AddImage("unit_frame", "Image/Ui/unit_Frame.bmp", 80, 80);
 	ImageManager::GetSingleton()->AddImage("unit_frame_undo", "Image/Ui/unit_Frame_undo.bmp", 80, 80);
+	ImageManager::GetSingleton()->AddImage("Eri_walk", "Image/Eri/Eri_walk.bmp", 350, 50, 7, 1, true, RGB(255, 255, 255));
+	ImageManager::GetSingleton()->AddImage("Eri_stand", "Image/Eri/Eri_stand.bmp", 250, 50, 5, 1, true, RGB(255, 255, 255));
 	unit_Frame[0].canPurchase = true;
 	backGround = ImageManager::GetSingleton()->FindImage("background");
 	if (backGround == nullptr)
@@ -41,6 +44,7 @@ HRESULT BattleScene::Init()
 	}
 	unit_Frame[0].frameBox = { 250, 450, 330, 530 };
 	collisionChecker = new CollisionChecker();
+	playerMgr = new PlayerManager();
 
 	return S_OK;
 }
@@ -53,6 +57,7 @@ void BattleScene::Release()
 void BattleScene::Update()
 {
 	CheckPurchase();
+	playerMgr->Update();
 	//ChangeFrameImage();
 }
 
@@ -69,6 +74,10 @@ void BattleScene::Render(HDC hdc)
 	{
 		unit_Frame[0].unit_Frame_unable->Render(hdc, 250, 480);
 	}
+	if (playerMgr->GetPlayerVector().size() >= 1)
+	{
+		playerMgr->Render(hdc);
+	}
 }
 
 void BattleScene::CheckPurchase()
@@ -78,6 +87,7 @@ void BattleScene::CheckPurchase()
 		if (PtInRect(&(unit_Frame[0].frameBox), g_ptMouse))
 		{
 			unit_Frame[0].canPurchase = false;
+			playerMgr->Init(1, collisionChecker);
 		}
 	}
 }
