@@ -1,0 +1,144 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="GameNode" Collapsed="true">
+    <Position X="6" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFACABABAAA=</HashCode>
+      <FileName>GameNode.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Image" Collapsed="true">
+    <Position X="13.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAkAAIAEQACAAAAAABAAAABIgAAAAAAAABACEFAAAQA=</HashCode>
+      <FileName>Image.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Singleton&lt;T&gt;" Collapsed="true">
+    <Position X="6" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAABAAAACAAAAAAABAAIEAAAAAAAAAAAA=</HashCode>
+      <FileName>Singleton.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ImageManager" Collapsed="true">
+    <Position X="7.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAICABACAAA=</HashCode>
+      <FileName>ImageManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KeyManager" Collapsed="true">
+    <Position X="9.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAACAAAAiAAAAIAAAAAAAAAABAAAAAACABQAAAA=</HashCode>
+      <FileName>KeyManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SceneManager" Collapsed="true">
+    <Position X="2.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAACAAAAAAAAgAAgAAAAAAAABQAAAAABADAJAAAgA=</HashCode>
+      <FileName>SceneManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TimerManager" Collapsed="true">
+    <Position X="5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQEAAAAAAAAAAAAEABAAAAAAAAAAAAAABACABAAAAA=</HashCode>
+      <FileName>TimerManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Timer" Collapsed="true">
+    <Position X="12" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIEgAAAAAQAAABAEAEAEgAQAAAAAAAAABACAAAAQAA=</HashCode>
+      <FileName>Timer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CollisionChecker" Collapsed="true">
+    <Position X="12" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAABACAAA=</HashCode>
+      <FileName>CollisionChecker.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CharacterData" Collapsed="true">
+    <Position X="2.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAQAAAAAEgAAAQAABCAAAIQADDAAAAAAkBQCABEAAEA=</HashCode>
+      <FileName>CharacterData.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PlayerManager" Collapsed="true">
+    <Position X="5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAgAAAAAAAAAAAAAAAAAABAAAAAAABACABAAAAE=</HashCode>
+      <FileName>PlayerManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BattleScene" Collapsed="true">
+    <Position X="7.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAYiAQACACAACACEAIAAAAAAIBAAgIAAEJACAVAAAAE=</HashCode>
+      <FileName>BattleScene.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MainGame" Collapsed="true">
+    <Position X="9.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAABBAAAAAAEADAAAAAIAAAAAAgABECABAEBAA=</HashCode>
+      <FileName>MainGame.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="FrameUi" Collapsed="true">
+    <Position X="12" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAKAAAAAAgAA=</HashCode>
+      <FileName>BattleScene.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="tagFPoint" Collapsed="true">
+    <Position X="3.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABgAAAAAAA=</HashCode>
+      <FileName>Config.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Typedef Name="FPOINT" Collapsed="true">
+    <Position X="0.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Config.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="PFPOINT" Collapsed="true">
+    <Position X="3.5" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Config.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Enum Name="STATUS" Collapsed="true">
+    <Position X="13.75" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAgAAACAAgAAAAAAAAQAAAAAA=</HashCode>
+      <FileName>CharacterData.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ATTACKSTATUS" Collapsed="true">
+    <Position X="12" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAAAAAABAAAAAAQAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>BattleScene.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="UnitType" Collapsed="true">
+    <Position X="12" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Config.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="맑은 고딕" Size="9" />
+</ClassDiagram>

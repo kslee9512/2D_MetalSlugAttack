@@ -22,6 +22,12 @@
     <Filter Include="소스 파일\2DFrameWork\Timer">
       <UniqueIdentifier>{bce98eaf-7465-4fea-aa63-f1be2364b24c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Coolision">
+      <UniqueIdentifier>{40dd61aa-7e3c-4e6a-a0cd-9bdea1f6405c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\GameData">
+      <UniqueIdentifier>{0a660a3a-0488-43e4-802a-054659c20a23}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -54,14 +60,14 @@
     <ClCompile Include="BattleScene.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="CharacterData.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="CollisionChecker.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\Coolision</Filter>
+    </ClCompile>
+    <ClCompile Include="CharacterData.cpp">
+      <Filter>소스 파일\GameData</Filter>
     </ClCompile>
     <ClCompile Include="PlayerManager.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\GameData</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -101,14 +107,17 @@
     <ClInclude Include="BattleScene.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="CharacterData.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="CollisionChecker.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>소스 파일\Coolision</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterData.h">
+      <Filter>소스 파일\GameData</Filter>
     </ClInclude>
     <ClInclude Include="PlayerManager.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>소스 파일\GameData</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

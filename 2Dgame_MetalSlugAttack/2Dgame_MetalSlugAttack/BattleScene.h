@@ -21,6 +21,12 @@ private:
 	Image* attack_Undo;
 	Image* attack_Ready;
 	Image* attack_Fire;
+	Image* hp_Frame[2];
+	Image* miniMap;
+	Image* pfText[2];
+	Image* player_Hpbar;
+	Image* enemy_Hpbar;
+	Image* apBar;
 	FrameUi unit_Frame[5];
 	CollisionChecker* collisionChecker;
 	RECT attackBox;
@@ -30,6 +36,7 @@ private:
 	int attackFireFrame;
 	float changeTime;
 	float checkAttackCool;
+	float attackCool;
 	int currFrameX;
 	ATTACKSTATUS attackStatus;
 public:
@@ -38,8 +45,7 @@ public:
 	virtual void Update();
 	virtual void Render(HDC hdc);
 
-	void CheckPurchase();
-	void CheckAttackButton();
+	void CheckUi();
 
 	virtual ~BattleScene() {};
 };

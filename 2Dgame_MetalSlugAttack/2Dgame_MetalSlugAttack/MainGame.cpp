@@ -48,10 +48,10 @@ void MainGame::Render()
 
 	SceneManager::GetSingleton()->Render(hBackDC);
 	// ÀÎ»ç
-	TextOut(hBackDC, 20, 20, "MainGame ·»´õ Áß", strlen("MainGame ·»´õ Áß"));
+	//TextOut(hBackDC, 20, 20, "MainGame ·»´õ Áß", strlen("MainGame ·»´õ Áß"));
 	// ¸¶¿ì½º ÁÂÇ¥
-	wsprintf(szText, "X : %d, Y : %d", g_ptMouse.x, g_ptMouse.y);
-	TextOut(hBackDC, 200, 20, szText, strlen(szText));
+	//wsprintf(szText, "X : %d, Y : %d", g_ptMouse.x, g_ptMouse.y);
+	//TextOut(hBackDC, 200, 20, szText, strlen(szText));
 	// FPS
 	TimerManager::GetSingleton()->Render(hBackDC);
 
