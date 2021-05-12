@@ -13,6 +13,8 @@ private:
 	Image* image_Dead;
 	Image* image_Win;
 	FPOINT pos;
+	FPOINT hitBoxPos;
+	FPOINT attackBoxPos;
 	bool isAlive;
 	int currFrameX;
 	UnitType unitType;
@@ -29,6 +31,13 @@ private:
 	int fireMaxFrame;
 	int deadMaxFrame;
 	int winMaxFrame;
+	int characterHp;
+	int characterAtk;
+	int unitCoast;
+	int hitBoxWidth;
+	int hitBoxHeight;
+	int attackRangeWidth;
+	int attackRangeHeight;
 public:
 	 HRESULT Init(int unitNum, CollisionChecker* collisionChecker);
 	 void Release();
@@ -36,5 +45,7 @@ public:
 	 void Render(HDC hdc);
 	 void SetCollisionList();
 	 void Move();
+
+	 bool GetIsAlive() { return this->isAlive; }
 };
 

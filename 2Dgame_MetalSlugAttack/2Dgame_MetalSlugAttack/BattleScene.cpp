@@ -2,6 +2,7 @@
 #include "Image.h"
 #include "CollisionChecker.h"
 #include "PlayerManager.h"
+#include "EnemyManager.h"
 HRESULT BattleScene::Init()
 {
 	attackUndoFrame = 14;
@@ -36,7 +37,16 @@ HRESULT BattleScene::Init()
 	ImageManager::GetSingleton()->AddImage("Eri_win", "Image/Eri/Eri_win.bmp", 560, 50, 7, 1, true, RGB(255, 255, 255));
 	ImageManager::GetSingleton()->AddImage("Eri_dead", "Image/Eri/Eri_dead.bmp", 1680, 50, 21, 1, true, RGB(255, 255, 255));
 
+
+	//Rifle Image Add
+	ImageManager::GetSingleton()->AddImage("rifle_stand", "Image/Rifle/rifle_stand.bmp", 480, 60, 8, 1, true, RGB(255, 255, 255));
+	ImageManager::GetSingleton()->AddImage("rifle_walk", "Image/Rifle/rifle_walk.bmp", 720, 60, 12, 1, true, RGB(255, 255, 255));
+	ImageManager::GetSingleton()->AddImage("rifle_dead", "Image/Rifle/rifle_dead.bmp", 660, 60, 11, 1, true, RGB(255, 255, 255));
+	ImageManager::GetSingleton()->AddImage("rifle_fire", "Image/Rifle/rifle_fire.bmp", 480, 60, 8, 1, true, RGB(255, 255, 255));
+	ImageManager::GetSingleton()->AddImage("rifle_win", "Image/Rifle/rifle_win.bmp", 360, 60, 6, 1, true, RGB(255, 255, 255));
+
 	unit_Frame[0].canPurchase = true;
+	unit_Frame[0].selectNum = 1;
 	backGround = ImageManager::GetSingleton()->FindImage("background");
 	ui_Up = ImageManager::GetSingleton()->FindImage("ui_up");
 	ui_Down = ImageManager::GetSingleton()->FindImage("ui_down");
@@ -57,13 +67,16 @@ HRESULT BattleScene::Init()
 	attackBox = { 860, 470, 958, 568 };
 	collisionChecker = new CollisionChecker();
 	playerMgr = new PlayerManager();
+	enemyMgr = new EnemyManager();
 
 	return S_OK;
 }
 
 void BattleScene::Release()
 {
-	
+	SAFE_RELEASE(playerMgr);
+	SAFE_RELEASE(enemyMgr);
+	SAFE_RELEASE(collisionChecker);
 }
 
 void BattleScene::Update()
@@ -100,6 +113,8 @@ void BattleScene::Update()
 	CheckUi();
 
 	playerMgr->Update();
+	EnemyInit();
+	enemyMgr->Update();
 
 }
 
@@ -125,6 +140,10 @@ void BattleScene::Render(HDC hdc)
 	{
 		playerMgr->Render(hdc);
 	}
+	if (enemyMgr->GetEnemyVector().size() >= 1)
+	{
+		enemyMgr->Render(hdc);
+	}
 	if (attackStatus == ATTACKSTATUS::UNDO)
 	{
 		attack_Undo->FrameRender(hdc, 860, 470, currFrameX, 0, false, 2);
@@ -149,12 +168,20 @@ void BattleScene::CheckUi()
 		if (PtInRect(&(unit_Frame[0].frameBox), g_ptMouse))
 		{
 			unit_Frame[0].canPurchase = false;
-			playerMgr->Init(1, collisionChecker);
+			playerMgr->Init(unit_Frame[0].selectNum, collisionChecker);
 		}
 		if (PtInRect((&attackBox), g_ptMouse) && attackStatus == ATTACKSTATUS::READY)
 		{
 			attackStatus = ATTACKSTATUS::FIRED;
 			currFrameX = 0;
 		}
+	}
+}
+
+void BattleScene::EnemyInit()
+{
+	if (KeyManager::GetSingleton()->IsOnceKeyDown(VK_NUMPAD5))
+	{
+		enemyMgr->Init(collisionChecker);
 	}
 }

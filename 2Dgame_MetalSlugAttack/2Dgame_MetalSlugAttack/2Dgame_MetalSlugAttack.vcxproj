@@ -142,6 +142,7 @@
     <ClCompile Include="BattleScene.cpp" />
     <ClCompile Include="CharacterData.cpp" />
     <ClCompile Include="CollisionChecker.cpp" />
+    <ClCompile Include="EnemyManager.cpp" />
     <ClCompile Include="GameNode.cpp" />
     <ClCompile Include="Image.cpp" />
     <ClCompile Include="ImageManager.cpp" />
@@ -159,6 +160,7 @@
     <ClInclude Include="CollisionChecker.h" />
     <ClInclude Include="CommonFunction.h" />
     <ClInclude Include="Config.h" />
+    <ClInclude Include="EnemyManager.h" />
     <ClInclude Include="GameNode.h" />
     <ClInclude Include="Image.h" />
     <ClInclude Include="ImageManager.h" />

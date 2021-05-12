@@ -3,18 +3,21 @@
 class Image;
 class CollisionChecker;
 class PlayerManager;
+class EnemyManager;
 typedef struct FrameUi
 {
 	Image* unit_Frame_able;
 	Image* unit_Frame_unable;
 	bool canPurchase;
 	RECT frameBox;
+	int selectNum;
 };
 enum class ATTACKSTATUS {UNDO, READY, FIRED};
 
 class BattleScene : public GameNode
 {
 private:
+	//UI
 	Image* backGround;
 	Image* ui_Up;
 	Image* ui_Down;
@@ -28,17 +31,19 @@ private:
 	Image* enemy_Hpbar;
 	Image* apBar;
 	FrameUi unit_Frame[5];
-	CollisionChecker* collisionChecker;
+	ATTACKSTATUS attackStatus;
+	int currFrameX;
 	RECT attackBox;
-	PlayerManager* playerMgr;
 	int attackUndoFrame;
 	int attackReadyFrame;
 	int attackFireFrame;
 	float changeTime;
 	float checkAttackCool;
 	float attackCool;
-	int currFrameX;
-	ATTACKSTATUS attackStatus;
+
+	CollisionChecker* collisionChecker;	//충돌처리
+	PlayerManager* playerMgr;
+	EnemyManager* enemyMgr;
 public:
 	virtual HRESULT Init();
 	virtual void Release();
@@ -46,7 +51,7 @@ public:
 	virtual void Render(HDC hdc);
 
 	void CheckUi();
-
+	void EnemyInit();
 	virtual ~BattleScene() {};
 };
 

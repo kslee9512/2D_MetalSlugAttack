@@ -8,6 +8,7 @@ class PlayerManager : public GameNode
 {
 private:
 	vector<CharacterData*> vPlayerCharacter;
+	vector<CharacterData*>::iterator itlPlayerCharacter;
 	CollisionChecker* collisionChecker;
 public:
 	 HRESULT Init(int unitNum, CollisionChecker* collisionChecker);
