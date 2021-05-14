@@ -7,6 +7,7 @@ HRESULT EnemyManager::Init(CollisionChecker* collisionChecker)
 	this->collisionChecker = collisionChecker;
 	vEnemyMgr.push_back(new CharacterData);
 	vEnemyMgr[0]->Init(-1, collisionChecker);
+	vEnemyMgr[0]->AddCollisionList();
 	return S_OK;
 }
 

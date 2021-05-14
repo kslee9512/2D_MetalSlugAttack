@@ -6,6 +6,7 @@ class CollisionChecker;
 class CharacterData : public  GameNode
 {
 private:
+	CollisionChecker* collisionChecker;
 	string Name;
 	Image* image_Stand;
 	Image* image_Walk;
@@ -16,6 +17,7 @@ private:
 	FPOINT hitBoxPos;
 	FPOINT attackBoxPos;
 	bool isAlive;
+	bool readyToFire;
 	int currFrameX;
 	UnitType unitType;
 	RECT attackRange;
@@ -25,7 +27,6 @@ private:
 	float purchaseCooltime;
 	float changeTimer;
 	float moveSpeed;
-	CollisionChecker* collisionChecker;
 	int standMaxFrame;
 	int walkMaxFrame;
 	int fireMaxFrame;
@@ -38,14 +39,18 @@ private:
 	int hitBoxHeight;
 	int attackRangeWidth;
 	int attackRangeHeight;
+	int maxAttackCount;
+	int attackCount;
 public:
 	 HRESULT Init(int unitNum, CollisionChecker* collisionChecker);
 	 void Release();
 	 void Update();
 	 void Render(HDC hdc);
-	 void SetCollisionList();
 	 void Move();
 
-	 bool GetIsAlive() { return this->isAlive; }
+	 bool GetCharacterAlive() { return this->isAlive; }
+	 RECT GetAttackBox() { return this->attackRange; }
+	 RECT GetHitBox() { return this->hitBox; }
+	 void AddCollisionList();
 };
 

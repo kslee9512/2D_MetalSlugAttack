@@ -4,15 +4,16 @@
 #include "CommonFunction.h"
 HRESULT CharacterData::Init(int unitNum, CollisionChecker* collisionChecker)
 {
+    this->collisionChecker = collisionChecker;
     changeTimer = 0.0f; // 프레임 변경 확인용 타이머
     currFrameX = 0; //캐릭터 이미지 전환용 프레임
     isAlive = true;
-    characterStatus = STATUS::STAND;
+    characterStatus = STATUS::WALK;
 
     //Rifle Init
     if (unitNum == -1)
     {
-        this->collisionChecker = collisionChecker;
+        Name = "소총수";
         unitType = UnitType::ENEMY;
         image_Stand = ImageManager::GetSingleton()->FindImage("rifle_stand");
         if (image_Stand == nullptr)
@@ -46,7 +47,8 @@ HRESULT CharacterData::Init(int unitNum, CollisionChecker* collisionChecker)
             return E_FAIL;
         }
         pos.x = WINSIZE_X - 180;
-        pos.y = 300;
+        pos.y = 350;
+        maxAttackCount = 1;
         moveSpeed = 60.0f;
         standMaxFrame = 7;
         fireMaxFrame = 7;
@@ -58,15 +60,15 @@ HRESULT CharacterData::Init(int unitNum, CollisionChecker* collisionChecker)
         attackCooltime = 3.0f;
         hitBoxHeight = 50;
         hitBoxWidth = 30;
-        attackRangeWidth = 200;
+        hitBoxPos = { pos.x + hitBoxWidth, pos.y };
+        attackRangeWidth = 250;
         attackRangeHeight = 150;
-        hitBox = GetRectToCenter(pos.x, pos.y, hitBoxWidth, hitBoxHeight);
-        SetCollisionList();
+
     }
     //Player_Eri Init
     if (unitNum == 1)
     {
-        this->collisionChecker = collisionChecker;
+        Name = "Eri";
         unitType = UnitType::PLAYER;
         image_Stand = ImageManager::GetSingleton()->FindImage("Eri_stand");
         if (image_Stand == nullptr)
@@ -99,8 +101,7 @@ HRESULT CharacterData::Init(int unitNum, CollisionChecker* collisionChecker)
             MessageBox(g_hWnd, "Eri_Win_Image Load_Fail", "Image_Load Fail", MB_OK);
             return E_FAIL;
         }
-        isAlive = true;
-        characterStatus = STATUS::WALK;
+        maxAttackCount = 1;
         pos.x = 130;
         pos.y = 350;
         moveSpeed = 100.0f;
@@ -118,9 +119,22 @@ HRESULT CharacterData::Init(int unitNum, CollisionChecker* collisionChecker)
         hitBoxPos.y = pos.y;
         attackRangeWidth = 200;
         attackRangeHeight = 150;
+    }
+    if (unitType == UnitType::ENEMY)
+    {
+        attackBoxPos = { pos.x - (attackRangeWidth / 2) + 30, pos.y };
+        attackRange = GetRectToCenter(attackBoxPos.x, attackBoxPos.y, attackRangeWidth, attackRangeHeight);
+        hitBox = GetRectToCenter(pos.x, pos.y, hitBoxWidth, hitBoxHeight);
+    }
+    else if (unitType == UnitType::PLAYER)
+    {
+        attackBoxPos = { pos.x + (attackRangeWidth / 2) - 30, pos.y };
+        attackRange = GetRectToCenter(attackBoxPos.x, attackBoxPos.y, attackRangeWidth, attackRangeHeight);
         hitBox = GetRectToCenter(hitBoxPos.x, hitBoxPos.y, hitBoxWidth, hitBoxHeight);
     }
-    SetCollisionList();
+    attackCount = 0;
+
+
     return S_OK;
 }
 
@@ -152,6 +166,7 @@ void CharacterData::Update()
         else if (characterStatus == STATUS::FIRE && currFrameX > fireMaxFrame)
         {
             currFrameX = 0;
+            attackCount = 0;
             characterStatus = STATUS::STAND;
         }
         else if (characterStatus == STATUS::DEAD && currFrameX > deadMaxFrame)
@@ -171,6 +186,7 @@ void CharacterData::Render(HDC hdc)
 {
     if (isAlive == true)
     {
+        Rectangle(hdc, attackRange.left, attackRange.top, attackRange.right, attackRange.bottom);
         if (characterStatus == STATUS::WALK)
         {
             image_Walk->FrameRender(hdc, pos.x, pos.y, currFrameX, 0, true, 2);
@@ -191,20 +207,8 @@ void CharacterData::Render(HDC hdc)
         {
             image_Dead->FrameRender(hdc, pos.x, pos.y, currFrameX, 0, true, 2);
         }
-        //Rectangle(hdc, hitBox.left, hitBox.top, hitBox.right, hitBox.bottom);
-        //Rectangle(hdc, attackRange.left, attackRange.top, attackRange.right, attackRange.bottom);
-    }
-}
+        Rectangle(hdc, hitBox.left, hitBox.top, hitBox.right, hitBox.bottom);
 
-void CharacterData::SetCollisionList()
-{
-    if (unitType == UnitType::PLAYER)
-    {
-        collisionChecker->AddPlayerCharacter(this);
-    }
-    else if (unitType == UnitType::ENEMY)
-    {
-        collisionChecker->AddEnemyCharacter(this);
     }
 }
 
@@ -213,21 +217,33 @@ void CharacterData::Move()
     if (unitType == UnitType::PLAYER && characterStatus == STATUS::WALK)
     {
         pos.x += moveSpeed * TimerManager::GetSingleton()->GetElapsedTime();
+        hitBoxPos.x += moveSpeed * TimerManager::GetSingleton()->GetElapsedTime();
+        attackBoxPos.x += moveSpeed * TimerManager::GetSingleton()->GetElapsedTime();
+        hitBox = GetRectToCenter(hitBoxPos.x, hitBoxPos.y, hitBoxWidth, hitBoxHeight);
+        attackRange = GetRectToCenter(attackBoxPos.x, attackBoxPos.y, attackRangeWidth, attackRangeHeight);
     }
     else if (unitType == UnitType::ENEMY && characterStatus == STATUS::WALK)
     {
         pos.x -= moveSpeed * TimerManager::GetSingleton()->GetElapsedTime();
+        hitBoxPos.x -= moveSpeed * TimerManager::GetSingleton()->GetElapsedTime();
+        attackBoxPos.x -= moveSpeed * TimerManager::GetSingleton()->GetElapsedTime();
+        hitBox = GetRectToCenter(hitBoxPos.x, hitBoxPos.y, hitBoxWidth, hitBoxHeight);
+        attackRange = GetRectToCenter(attackBoxPos.x, attackBoxPos.y, attackRangeWidth, attackRangeHeight);
     }
     if (pos.x >= WINSIZE_X || pos.x < 0)
     {
         isAlive = false;
-        if (unitType == UnitType::PLAYER)
-        {
-            collisionChecker->EraseDeadPlayerCharacter(this);
-        }
-        else if (unitType == UnitType::ENEMY)
-        {
-            collisionChecker->EraseDeadEnemyCharacter(this);
-        }
+    }
+}
+
+void CharacterData::AddCollisionList()
+{
+    if (unitType == UnitType::PLAYER)
+    {
+        collisionChecker->AddPlayerCharacter(this);
+    }
+    else if (unitType == UnitType::ENEMY)
+    {
+        collisionChecker->AddEnemyCharacter(this);
     }
 }

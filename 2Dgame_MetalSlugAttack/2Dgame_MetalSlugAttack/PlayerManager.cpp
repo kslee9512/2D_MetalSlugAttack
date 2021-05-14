@@ -8,23 +8,26 @@ HRESULT PlayerManager::Init(int unitNum, CollisionChecker* collisionChecker)
     {
         vPlayerCharacter.push_back(new CharacterData);
         vPlayerCharacter[0]->Init(unitNum, collisionChecker);
+        vPlayerCharacter[0]->AddCollisionList();
     }
     else
     {
         for (int i = 0; i < vPlayerCharacter.size();)
         {
-            if (!vPlayerCharacter[i]->GetIsAlive())
+            if (!vPlayerCharacter[i]->GetCharacterAlive())
             {
                 vPlayerCharacter[i]->Init(unitNum, collisionChecker);
+                vPlayerCharacter[i]->AddCollisionList();
                 break;
             }
-            else if (vPlayerCharacter[i]->GetIsAlive() == true)
+            else if (vPlayerCharacter[i]->GetCharacterAlive() == true)
             {
                 i++;
                 if (i == vPlayerCharacter.size())
                 {
                     vPlayerCharacter.push_back(new CharacterData);
                     vPlayerCharacter[i]->Init(unitNum, collisionChecker);
+                    vPlayerCharacter[i]->AddCollisionList();
                     break;
                 }
             }

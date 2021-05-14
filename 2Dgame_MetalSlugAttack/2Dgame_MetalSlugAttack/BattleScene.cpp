@@ -76,7 +76,6 @@ void BattleScene::Release()
 {
 	SAFE_RELEASE(playerMgr);
 	SAFE_RELEASE(enemyMgr);
-	SAFE_RELEASE(collisionChecker);
 }
 
 void BattleScene::Update()
@@ -115,6 +114,8 @@ void BattleScene::Update()
 	playerMgr->Update();
 	EnemyInit();
 	enemyMgr->Update();
+	collisionChecker->CheckAlive();
+	collisionChecker->CheckAttackRange();
 
 }
 
