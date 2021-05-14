@@ -66,7 +66,7 @@ HRESULT CharacterData::Init(int unitNum, CollisionChecker* collisionChecker)
 
     }
     //Player_Eri Init
-    if (unitNum == 1)
+    else if (unitNum == 1)
     {
         Name = "Eri";
         unitType = UnitType::PLAYER;
@@ -134,8 +134,16 @@ HRESULT CharacterData::Init(int unitNum, CollisionChecker* collisionChecker)
     }
     attackCount = 0;
 
+    if (unitType == UnitType::PLAYER)
+    {
+        collisionChecker->AddPlayerCharacter(this);
+    }
+    else if (unitType == UnitType::ENEMY)
+    {
+        collisionChecker->AddEnemyCharacter(this);
+    }
 
-    return S_OK;
+    return S_OK; 
 }
 
 void CharacterData::Release()
@@ -233,17 +241,5 @@ void CharacterData::Move()
     if (pos.x >= WINSIZE_X || pos.x < 0)
     {
         isAlive = false;
-    }
-}
-
-void CharacterData::AddCollisionList()
-{
-    if (unitType == UnitType::PLAYER)
-    {
-        collisionChecker->AddPlayerCharacter(this);
-    }
-    else if (unitType == UnitType::ENEMY)
-    {
-        collisionChecker->AddEnemyCharacter(this);
     }
 }

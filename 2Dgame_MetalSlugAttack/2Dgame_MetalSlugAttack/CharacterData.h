@@ -51,6 +51,5 @@ public:
 	 bool GetCharacterAlive() { return this->isAlive; }
 	 RECT GetAttackBox() { return this->attackRange; }
 	 RECT GetHitBox() { return this->hitBox; }
-	 void AddCollisionList();
 };
 

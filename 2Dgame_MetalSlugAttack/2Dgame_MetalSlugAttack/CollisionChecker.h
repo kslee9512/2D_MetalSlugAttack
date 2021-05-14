@@ -20,5 +20,4 @@ public:
 
 	void CheckAlive();
 	void CheckAttackRange();
-	void TestArray();
 };

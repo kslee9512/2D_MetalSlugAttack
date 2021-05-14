@@ -6,42 +6,33 @@ void CollisionChecker::CheckAlive()
 {
 	for (itlPlayerCharacter = lPlayerCharacter.begin(); itlPlayerCharacter != lPlayerCharacter.end(); itlPlayerCharacter++)
 	{
-		if (!(*itlPlayerCharacter)->GetCharacterAlive())
+		if ((*itlPlayerCharacter)->GetCharacterAlive() == false)
 		{
-			lPlayerCharacter.erase(itlPlayerCharacter);
+			EraseDeadPlayerCharacter(*itlPlayerCharacter);
 		}
 	}
 	for (itlEnemyCharacter = lEnemyCharacter.begin(); itlEnemyCharacter != lEnemyCharacter.end(); itlEnemyCharacter++)
 	{
-		if (!(*itlEnemyCharacter)->GetCharacterAlive())
+		if ((*itlEnemyCharacter)->GetCharacterAlive() == false)
 		{
-			lEnemyCharacter.erase(itlEnemyCharacter);
+			EraseDeadPlayerCharacter(*itlEnemyCharacter);
 		}
 	}
 }
 
 void CollisionChecker::CheckAttackRange()
 {
+	RECT rc;
+	RECT playerRc;
+	RECT enemyRc;
 	for (itlPlayerCharacter = lPlayerCharacter.begin(); itlPlayerCharacter != lPlayerCharacter.end(); itlPlayerCharacter++)
 	{
 		for (itlEnemyCharacter = lEnemyCharacter.begin(); itlEnemyCharacter != lEnemyCharacter.end(); itlEnemyCharacter++)
 		{
-			RECT rc;
-			RECT playerRc = (*itlPlayerCharacter)->GetAttackBox();
-			RECT enemyRc = (*itlEnemyCharacter)->GetHitBox();
-			if (IntersectRect(&rc, &playerRc, &enemyRc))
+			if ((*itlPlayerCharacter)->GetAttackBox().right >= (*itlEnemyCharacter)->GetAttackBox().left)
 			{
 				int a = 0;
 			}
 		}
-	}
-}
-
-void CollisionChecker::TestArray()
-{
-	if (KeyManager::GetSingleton()->IsOnceKeyDown(VK_NUMPAD2))
-	{
-		int a = lPlayerCharacter.size();
-		int b = lEnemyCharacter.size();
 	}
 }

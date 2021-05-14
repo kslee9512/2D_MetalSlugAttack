@@ -3,6 +3,7 @@
 #include "CollisionChecker.h"
 #include "PlayerManager.h"
 #include "EnemyManager.h"
+
 HRESULT BattleScene::Init()
 {
 	attackUndoFrame = 14;
@@ -65,6 +66,7 @@ HRESULT BattleScene::Init()
 	apBar = ImageManager::GetSingleton()->FindImage("apbar");
 	unit_Frame[0].frameBox = { 250, 450, 330, 530 };
 	attackBox = { 860, 470, 958, 568 };
+
 	collisionChecker = new CollisionChecker();
 	playerMgr = new PlayerManager();
 	enemyMgr = new EnemyManager();
@@ -80,6 +82,13 @@ void BattleScene::Release()
 
 void BattleScene::Update()
 {
+	CheckUi();
+	playerMgr->Update();
+	EnemyInit();
+	enemyMgr->Update();
+	collisionChecker->CheckAttackRange();
+	collisionChecker->CheckAlive();
+
 	changeTime += TimerManager::GetSingleton()->GetElapsedTime();
 	if (attackStatus == ATTACKSTATUS::UNDO)
 	{
@@ -109,13 +118,6 @@ void BattleScene::Update()
 			attackStatus = ATTACKSTATUS::UNDO;
 		}
 	}
-	CheckUi();
-
-	playerMgr->Update();
-	EnemyInit();
-	enemyMgr->Update();
-	collisionChecker->CheckAlive();
-	collisionChecker->CheckAttackRange();
 
 }
 
