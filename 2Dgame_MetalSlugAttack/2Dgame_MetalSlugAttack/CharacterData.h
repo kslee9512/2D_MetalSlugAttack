@@ -18,6 +18,7 @@ private:
 	FPOINT attackBoxPos;
 	bool isAlive;
 	bool readyToFire;
+	bool findEnemy;
 	int currFrameX;
 	UnitType unitType;
 	RECT attackRange;
@@ -47,10 +48,13 @@ public:
 	 void Update();
 	 void Render(HDC hdc);
 	 void Move();
+
 	 void SetStatus(STATUS status) { this->characterStatus = status; }
+	 void SetFindEnemy(bool findEnemy) { this->findEnemy = findEnemy; }
+	 void SetCurrFrameX(int currFrameX) { this->currFrameX = currFrameX; }
+	 bool GetFindEnemy() { return this->findEnemy; }
 
 	 bool GetCharacterAlive() { return this->isAlive; }
 	 RECT GetAttackBox() { return this->attackRange; }
 	 RECT GetHitBox() { return this->hitBox; }
 };
-

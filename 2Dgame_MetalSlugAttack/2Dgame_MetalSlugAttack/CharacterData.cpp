@@ -9,7 +9,8 @@ HRESULT CharacterData::Init(int unitNum, CollisionChecker* collisionChecker)
     currFrameX = 0; //캐릭터 이미지 전환용 프레임
     isAlive = true;
     characterStatus = STATUS::WALK;
-
+    findEnemy = false;
+    readyToFire = true;
     //Rifle Init
     if (unitNum == -1)
     {
@@ -142,7 +143,6 @@ HRESULT CharacterData::Init(int unitNum, CollisionChecker* collisionChecker)
     {
         collisionChecker->AddEnemyCharacter(this);
     }
-
     return S_OK; 
 }
 
@@ -194,7 +194,7 @@ void CharacterData::Render(HDC hdc)
 {
     if (isAlive == true)
     {
-        Rectangle(hdc, attackRange.left, attackRange.top, attackRange.right, attackRange.bottom);
+        //Rectangle(hdc, attackRange.left, attackRange.top, attackRange.right, attackRange.bottom);
         if (characterStatus == STATUS::WALK)
         {
             image_Walk->FrameRender(hdc, pos.x, pos.y, currFrameX, 0, true, 2);
@@ -215,28 +215,34 @@ void CharacterData::Render(HDC hdc)
         {
             image_Dead->FrameRender(hdc, pos.x, pos.y, currFrameX, 0, true, 2);
         }
-       Rectangle(hdc, hitBox.left, hitBox.top, hitBox.right, hitBox.bottom);
+       //Rectangle(hdc, hitBox.left, hitBox.top, hitBox.right, hitBox.bottom);
 
     }
 }
 
 void CharacterData::Move()
 {
-    if (unitType == UnitType::PLAYER && characterStatus == STATUS::WALK)
+    if (unitType == UnitType::PLAYER && !findEnemy)
     {
+        characterStatus = STATUS::WALK;
         pos.x += moveSpeed * TimerManager::GetSingleton()->GetElapsedTime();
         hitBoxPos.x += moveSpeed * TimerManager::GetSingleton()->GetElapsedTime();
         attackBoxPos.x += moveSpeed * TimerManager::GetSingleton()->GetElapsedTime();
         hitBox = GetRectToCenter(hitBoxPos.x, hitBoxPos.y, hitBoxWidth, hitBoxHeight);
         attackRange = GetRectToCenter(attackBoxPos.x, attackBoxPos.y, attackRangeWidth, attackRangeHeight);
     }
-    else if (unitType == UnitType::ENEMY && characterStatus == STATUS::WALK)
+    else if (unitType == UnitType::ENEMY && !findEnemy)
     {
+        characterStatus = STATUS::WALK;
         pos.x -= moveSpeed * TimerManager::GetSingleton()->GetElapsedTime();
         hitBoxPos.x -= moveSpeed * TimerManager::GetSingleton()->GetElapsedTime();
         attackBoxPos.x -= moveSpeed * TimerManager::GetSingleton()->GetElapsedTime();
         hitBox = GetRectToCenter(hitBoxPos.x, hitBoxPos.y, hitBoxWidth, hitBoxHeight);
         attackRange = GetRectToCenter(attackBoxPos.x, attackBoxPos.y, attackRangeWidth, attackRangeHeight);
+    }
+    if (findEnemy)
+    {
+        characterStatus = STATUS::STAND;
     }
     if (pos.x >= WINSIZE_X || pos.x < 0)
     {
