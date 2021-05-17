@@ -88,7 +88,7 @@ void BattleScene::Update()
 	enemyMgr->Update();
 	collisionChecker->CheckAttackRange();
 	collisionChecker->CheckAlive();
-
+	collisionChecker->CalcDamage();
 	changeTime += TimerManager::GetSingleton()->GetElapsedTime();
 	if (attackStatus == ATTACKSTATUS::UNDO)
 	{

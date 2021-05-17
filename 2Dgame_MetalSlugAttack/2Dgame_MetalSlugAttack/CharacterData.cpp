@@ -5,6 +5,7 @@
 HRESULT CharacterData::Init(int unitNum, CollisionChecker* collisionChecker)
 {
     this->collisionChecker = collisionChecker;
+    fireCount = 0.0f;
     changeTimer = 0.0f; // 프레임 변경 확인용 타이머
     currFrameX = 0; //캐릭터 이미지 전환용 프레임
     isAlive = true;
@@ -49,7 +50,6 @@ HRESULT CharacterData::Init(int unitNum, CollisionChecker* collisionChecker)
         }
         pos.x = WINSIZE_X - 180;
         pos.y = 350;
-        maxAttackCount = 1;
         moveSpeed = 60.0f;
         standMaxFrame = 7;
         fireMaxFrame = 7;
@@ -153,11 +153,6 @@ void CharacterData::Release()
 
 void CharacterData::Update()
 {
-    if (KeyManager::GetSingleton()->IsOnceKeyDown(VK_SPACE))
-    {
-        characterStatus = STATUS::FIRE;
-        currFrameX = 0;
-    }
     changeTimer += TimerManager::GetSingleton()->GetElapsedTime();
     if (changeTimer >= 0.08f)
     {
@@ -173,13 +168,12 @@ void CharacterData::Update()
         }
         else if (characterStatus == STATUS::FIRE && currFrameX > fireMaxFrame)
         {
-            currFrameX = 0;
-            attackCount = 0;
+            fireCount = 0;
             characterStatus = STATUS::STAND;
+            currFrameX = 0;
         }
         else if (characterStatus == STATUS::DEAD && currFrameX > deadMaxFrame)
         {
-            currFrameX = 0;
             isAlive = false;
         }
         else if (characterStatus == STATUS::WIN && currFrameX > winMaxFrame)
@@ -188,6 +182,7 @@ void CharacterData::Update()
         }
     }
     Move();
+    CheckFireCount();
 }
 
 void CharacterData::Render(HDC hdc)
@@ -240,12 +235,32 @@ void CharacterData::Move()
         hitBox = GetRectToCenter(hitBoxPos.x, hitBoxPos.y, hitBoxWidth, hitBoxHeight);
         attackRange = GetRectToCenter(attackBoxPos.x, attackBoxPos.y, attackRangeWidth, attackRangeHeight);
     }
+    if (pos.x >= WINSIZE_X || pos.x < 0)
+    {
+        isAlive = false;
+    }
     if (findEnemy)
     {
         characterStatus = STATUS::STAND;
     }
-    if (pos.x >= WINSIZE_X || pos.x < 0)
+    else if(!findEnemy)
     {
-        isAlive = false;
+        characterStatus = STATUS::WALK;
+    }
+}
+
+void CharacterData::CheckFireCount()
+{
+    if ((characterStatus == STATUS::STAND) || (characterStatus == STATUS::WALK) && !readyToFire)
+    {
+        fireCount += TimerManager::GetSingleton()->GetElapsedTime();
+    }
+    if (fireCount >= attackCooltime)
+    {
+        readyToFire = true;
+    }
+    if (findEnemy && readyToFire)
+    {
+        characterStatus = STATUS::FIRE;
     }
 }

@@ -20,4 +20,5 @@ public:
 
 	void CheckAlive();
 	void CheckAttackRange();
+	void CalcDamage();
 };

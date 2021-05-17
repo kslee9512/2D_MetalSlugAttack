@@ -20,7 +20,7 @@ void CollisionChecker::CheckAlive()
 	{
 		if ((*itlEnemyCharacter)->GetCharacterAlive() == false)
 		{
-			EraseDeadPlayerCharacter(*itlEnemyCharacter);
+			EraseDeadEnemyCharacter(*itlEnemyCharacter);
 			break;
 		}
 	}
@@ -51,7 +51,7 @@ void CollisionChecker::CheckAttackRange()
 					break;
 				}
 			}
-			else
+			else if(!IntersectRect(&rc, &playerAttackBox, &enemyHitBox))
 			{
 				(*itlPlayerCharacter)->SetFindEnemy(false);
 			}
@@ -76,7 +76,41 @@ void CollisionChecker::CheckAttackRange()
 			}
 			else
 			{
-				(*itlPlayerCharacter)->SetFindEnemy(false);
+				(*itlEnemyCharacter)->SetFindEnemy(false);
+			}
+		}
+	}
+}
+
+void CollisionChecker::CalcDamage()
+{
+	for (itlPlayerCharacter = lPlayerCharacter.begin(); itlPlayerCharacter != lPlayerCharacter.end(); itlPlayerCharacter++)
+	{
+		for (itlEnemyCharacter = lEnemyCharacter.begin(); itlEnemyCharacter != lEnemyCharacter.end(); itlEnemyCharacter++)
+		{
+			if ((*itlPlayerCharacter)->GetStatus() == STATUS::FIRE && (*itlPlayerCharacter)->GetReadyToFire() && (*itlPlayerCharacter)->GetFindEnemy())
+			{
+				if ((*itlEnemyCharacter)->GetCharacterHp() > 0)
+				{
+					(*itlEnemyCharacter)->SetCharacterHp((*itlPlayerCharacter)->GetCharacterAtk());
+				}
+				if ((*itlEnemyCharacter)->GetCharacterHp() <= 0)
+				{
+					(*itlEnemyCharacter)->SetStatus(STATUS::DEAD);
+				}
+				(*itlPlayerCharacter)->SetReadyToFire(false);
+				break;
+			}
+		}
+	}
+	for (itlEnemyCharacter = lEnemyCharacter.begin(); itlEnemyCharacter != lEnemyCharacter.end(); itlEnemyCharacter++)
+	{
+		for (itlPlayerCharacter = lPlayerCharacter.begin(); itlPlayerCharacter != lPlayerCharacter.end(); itlPlayerCharacter++)
+		{
+			if ((*itlEnemyCharacter)->GetStatus() == STATUS::FIRE && (*itlEnemyCharacter)->GetReadyToFire() && (*itlEnemyCharacter)->GetFindEnemy())
+			{
+				(*itlEnemyCharacter)->SetReadyToFire(false);
+				break;
 			}
 		}
 	}
