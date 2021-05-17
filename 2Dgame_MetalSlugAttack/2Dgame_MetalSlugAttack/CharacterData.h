@@ -47,6 +47,7 @@ public:
 	 void Update();
 	 void Render(HDC hdc);
 	 void Move();
+	 void SetStatus(STATUS status) { this->characterStatus = status; }
 
 	 bool GetCharacterAlive() { return this->isAlive; }
 	 RECT GetAttackBox() { return this->attackRange; }

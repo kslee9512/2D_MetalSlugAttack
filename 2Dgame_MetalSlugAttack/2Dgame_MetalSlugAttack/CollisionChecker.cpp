@@ -2,6 +2,7 @@
 #include "PlayerManager.h"
 #include "EnemyManager.h"
 #include "CharacterData.h"
+
 void CollisionChecker::CheckAlive()
 {
 	for (itlPlayerCharacter = lPlayerCharacter.begin(); itlPlayerCharacter != lPlayerCharacter.end(); itlPlayerCharacter++)
@@ -9,6 +10,7 @@ void CollisionChecker::CheckAlive()
 		if ((*itlPlayerCharacter)->GetCharacterAlive() == false)
 		{
 			EraseDeadPlayerCharacter(*itlPlayerCharacter);
+			break;
 		}
 	}
 	for (itlEnemyCharacter = lEnemyCharacter.begin(); itlEnemyCharacter != lEnemyCharacter.end(); itlEnemyCharacter++)
@@ -16,6 +18,7 @@ void CollisionChecker::CheckAlive()
 		if ((*itlEnemyCharacter)->GetCharacterAlive() == false)
 		{
 			EraseDeadPlayerCharacter(*itlEnemyCharacter);
+			break;
 		}
 	}
 }
@@ -29,9 +32,11 @@ void CollisionChecker::CheckAttackRange()
 	{
 		for (itlEnemyCharacter = lEnemyCharacter.begin(); itlEnemyCharacter != lEnemyCharacter.end(); itlEnemyCharacter++)
 		{
-			if ((*itlPlayerCharacter)->GetAttackBox().right >= (*itlEnemyCharacter)->GetAttackBox().left)
+			playerRc = (*itlPlayerCharacter)->GetAttackBox();
+			enemyRc = (*itlEnemyCharacter)->GetHitBox();
+			if (IntersectRect(&rc, &playerRc, &enemyRc))
 			{
-				int a = 0;
+				(*itlPlayerCharacter)->SetStatus(STATUS::STAND);
 			}
 		}
 	}

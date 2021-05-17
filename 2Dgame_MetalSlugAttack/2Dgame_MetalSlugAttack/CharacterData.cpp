@@ -215,7 +215,7 @@ void CharacterData::Render(HDC hdc)
         {
             image_Dead->FrameRender(hdc, pos.x, pos.y, currFrameX, 0, true, 2);
         }
-        Rectangle(hdc, hitBox.left, hitBox.top, hitBox.right, hitBox.bottom);
+       Rectangle(hdc, hitBox.left, hitBox.top, hitBox.right, hitBox.bottom);
 
     }
 }
