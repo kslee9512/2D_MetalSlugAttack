@@ -9,7 +9,7 @@ HRESULT CharacterData::Init(int unitNum, CollisionChecker* collisionChecker)
     changeTimer = 0.0f; // 프레임 변경 확인용 타이머
     currFrameX = 0; //캐릭터 이미지 전환용 프레임
     isAlive = true;
-    characterStatus = STATUS::WALK;
+    characterStatus = STATUS::STAND;
     findEnemy = false;
     readyToFire = true;
     currAttackCount = 0;
@@ -153,46 +153,18 @@ void CharacterData::Release()
 
 void CharacterData::Update()
 {
-    if (characterHp <= 0)
+    switch (characterStatus)
     {
-        isAlive = false;
+    case STATUS::WALK :
+        UpdateMove();
+        break;
+    case STATUS::STAND :
+        UpdateStand();
+        break;
+    case STATUS::FIRE :
+        UpdateFire();
+        break;
     }
-    changeTimer += TimerManager::GetSingleton()->GetElapsedTime();
-    if (characterStatus == STATUS::WALK || characterStatus == STATUS::STAND)
-    {
-        fireCount += TimerManager::GetSingleton()->GetElapsedTime();
-    }
-    Attack();
-    if (changeTimer >= 0.08f)
-    {
-        changeTimer = 0.0f;
-        currFrameX++;
-        if (characterStatus == STATUS::WALK && currFrameX > walkMaxFrame)
-        {
-            currFrameX = 0;
-        }
-        else if (characterStatus == STATUS::STAND && currFrameX > standMaxFrame)
-        {
-            currFrameX = 0;
-        }
-        else if (characterStatus == STATUS::FIRE && currFrameX > fireMaxFrame)
-        {
-            fireCount = 0;
-            readyToFire = false;
-            characterStatus = STATUS::STAND;
-            currFrameX = 0;
-        }
-        else if (characterStatus == STATUS::DEAD && currFrameX > deadMaxFrame)
-        {
-            isAlive = false;
-        }
-        else if (characterStatus == STATUS::WIN && currFrameX > winMaxFrame)
-        {
-            currFrameX = 0;
-        }
-    }
-
-    Move();
 }
 
 void CharacterData::Render(HDC hdc)
@@ -225,20 +197,42 @@ void CharacterData::Render(HDC hdc)
     }
 }
 
-void CharacterData::Move()
+void CharacterData::UpdateMove()
 {
-    if (unitType == UnitType::PLAYER && !findEnemy)
+    //움직임 프레임
+    changeTimer += TimerManager::GetSingleton()->GetElapsedTime();
+    if (changeTimer >= 0.07f)
     {
-        characterStatus = STATUS::WALK;
+        changeTimer = 0.0f;
+        currFrameX++;
+        if (currFrameX > walkMaxFrame)
+        {
+            currFrameX = 0;
+        }
+    }
+    if (!readyToFire && fireCount < attackCooltime)
+    {
+        fireCount += TimerManager::GetSingleton()->GetElapsedTime();
+        if (fireCount >= attackCooltime)
+        {
+            readyToFire = true;
+        }
+    }
+    if (findEnemy)
+    {
+        currFrameX = 0;
+        characterStatus = STATUS::STAND;
+    }
+    if (unitType == UnitType::PLAYER)
+    {
         pos.x += moveSpeed * TimerManager::GetSingleton()->GetElapsedTime();
         hitBoxPos.x += moveSpeed * TimerManager::GetSingleton()->GetElapsedTime();
         attackBoxPos.x += moveSpeed * TimerManager::GetSingleton()->GetElapsedTime();
         hitBox = GetRectToCenter(hitBoxPos.x, hitBoxPos.y, hitBoxWidth, hitBoxHeight);
         attackRange = GetRectToCenter(attackBoxPos.x, attackBoxPos.y, attackRangeWidth, attackRangeHeight);
     }
-    else if (unitType == UnitType::ENEMY && !findEnemy)
+    else if (unitType == UnitType::ENEMY)
     {
-        characterStatus = STATUS::WALK;
         pos.x -= moveSpeed * TimerManager::GetSingleton()->GetElapsedTime();
         hitBoxPos.x -= moveSpeed * TimerManager::GetSingleton()->GetElapsedTime();
         attackBoxPos.x -= moveSpeed * TimerManager::GetSingleton()->GetElapsedTime();
@@ -249,21 +243,53 @@ void CharacterData::Move()
     {
         isAlive = false;
     }
-    if (findEnemy && !readyToFire)
+}
+
+void CharacterData::UpdateStand()
+{
+    changeTimer += TimerManager::GetSingleton()->GetElapsedTime();
+    if (changeTimer >= 0.07f)
     {
-        characterStatus = STATUS::STAND;
+        changeTimer = 0.0f;
+        currFrameX++;
+        if (currFrameX > standMaxFrame)
+        {
+            currFrameX = 0;
+        }
+    }
+    if (!readyToFire && fireCount < attackCooltime)
+    {
+        fireCount += TimerManager::GetSingleton()->GetElapsedTime();
+        if (fireCount >= attackCooltime)
+        {
+            fireCount = 0;
+            readyToFire = true;
+        }
+    }
+    if (findEnemy && readyToFire)
+    {
+        currFrameX = 0;
+        characterStatus = STATUS::FIRE;
+    }
+    else if (!findEnemy)
+    {
+        characterStatus = STATUS::WALK;
     }
 }
 
-void CharacterData::Attack()
+void CharacterData::UpdateFire()
 {
-    if (!readyToFire && fireCount >= attackCooltime)
+    changeTimer += TimerManager::GetSingleton()->GetElapsedTime();
+    if (changeTimer >= 0.07f)
     {
-        readyToFire = true;
-        currFrameX = 0;
-    }
-    if (readyToFire && findEnemy)
-    {
-        characterStatus = STATUS::FIRE;
+        changeTimer = 0.0f;
+        currFrameX++;
+        if (currFrameX > fireMaxFrame)
+        {
+            currFrameX = 0;
+            fireCount = 0.0f;
+            readyToFire = false;
+            characterStatus = STATUS::STAND;
+        }
     }
 }

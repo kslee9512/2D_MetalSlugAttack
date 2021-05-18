@@ -48,8 +48,9 @@ public:
 	 void Release();
 	 void Update();
 	 void Render(HDC hdc);
-	 void Move();
-	 void Attack();
+	 void UpdateMove();
+	 void UpdateStand();
+	 void UpdateFire();
 
 	 void SetStatus(STATUS status) { this->characterStatus = status; }
 	 void SetFindEnemy(bool findEnemy) { this->findEnemy = findEnemy; }

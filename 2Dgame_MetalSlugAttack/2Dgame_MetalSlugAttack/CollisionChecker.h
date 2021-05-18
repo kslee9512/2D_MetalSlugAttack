@@ -19,6 +19,5 @@ public:
 	void EraseDeadEnemyCharacter(CharacterData* characterData) { lEnemyCharacter.remove(characterData); }
 
 	void CheckAlive();
-	void CheckAttackRange();
-	void CalcDamage();
+	void CheckEnemy();
 };
