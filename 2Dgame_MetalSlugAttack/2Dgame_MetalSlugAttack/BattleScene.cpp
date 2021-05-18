@@ -184,6 +184,6 @@ void BattleScene::EnemyInit()
 {
 	if (KeyManager::GetSingleton()->IsOnceKeyDown(VK_NUMPAD5))
 	{
-		enemyMgr->Init(collisionChecker);
+		enemyMgr->Init(-1, collisionChecker);
 	}
 }

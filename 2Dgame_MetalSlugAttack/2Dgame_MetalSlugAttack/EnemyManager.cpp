@@ -2,12 +2,36 @@
 #include "CharacterData.h"
 #include "CollisionChecker.h"
 
-HRESULT EnemyManager::Init(CollisionChecker* collisionChecker)
+HRESULT EnemyManager::Init(int unitNum, CollisionChecker* collisionChecker)
 {
-	this->collisionChecker = collisionChecker;
-	vEnemyMgr.push_back(new CharacterData);
-	vEnemyMgr[0]->Init(-1, collisionChecker);
-	return S_OK;
+    this->collisionChecker = collisionChecker;
+    if (vEnemyMgr.size() < 1)
+    {
+        vEnemyMgr.push_back(new CharacterData);
+        vEnemyMgr[0]->Init(unitNum, collisionChecker);
+    }
+    else
+    {
+        for (int i = 0; i < vEnemyMgr.size();)
+        {
+            if (!vEnemyMgr[i]->GetCharacterAlive())
+            {
+                vEnemyMgr[i]->Init(unitNum, collisionChecker);
+                break;
+            }
+            else if (vEnemyMgr[i]->GetCharacterAlive() == true)
+            {
+                i++;
+                if (i == vEnemyMgr.size())
+                {
+                    vEnemyMgr.push_back(new CharacterData);
+                    vEnemyMgr[i]->Init(unitNum, collisionChecker);
+                    break;
+                }
+            }
+        }
+    }
+    return S_OK;
 }
 
 void EnemyManager::Release()

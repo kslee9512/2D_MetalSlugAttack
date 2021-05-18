@@ -11,7 +11,7 @@ private:
 	vector<CharacterData*>::iterator itlEnemyMgr;
 	CollisionChecker* collisionChecker;
 public:
-	HRESULT Init(CollisionChecker* collisionChecker);
+	HRESULT Init(int unitNum, CollisionChecker* collisionChecker);
 	void Release();
 	void Update();
 	void Render(HDC hdc);

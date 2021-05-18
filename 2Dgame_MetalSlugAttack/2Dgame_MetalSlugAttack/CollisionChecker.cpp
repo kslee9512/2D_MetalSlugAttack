@@ -33,36 +33,49 @@ void CollisionChecker::CheckEnemy()
 	RECT playerHitBox;
 	RECT enemyHitBox;
 	RECT enemyAttackRange;
-
-	for (itlPlayerCharacter = lPlayerCharacter.begin(); itlPlayerCharacter != lPlayerCharacter.end(); itlPlayerCharacter++)
-	{
-		for (itlEnemyCharacter = lEnemyCharacter.begin(); itlEnemyCharacter != lEnemyCharacter.end(); itlEnemyCharacter++)
-		{
-			playerAttackRange = (*itlPlayerCharacter)->GetAttackBox();
-			enemyHitBox = (*itlEnemyCharacter)->GetHitBox();
-			if (IntersectRect(&rc, &playerAttackRange, &enemyHitBox))
-			{
-				(*itlPlayerCharacter)->SetFindEnemy(true);
-			}
-			else
-			{
-				(*itlPlayerCharacter)->SetFindEnemy(false);
-			}
-		}
-	}
-	for (itlEnemyCharacter = lEnemyCharacter.begin(); itlEnemyCharacter != lEnemyCharacter.end(); itlEnemyCharacter++)
+	if (lPlayerCharacter.size() >= 1)
 	{
 		for (itlPlayerCharacter = lPlayerCharacter.begin(); itlPlayerCharacter != lPlayerCharacter.end(); itlPlayerCharacter++)
 		{
-			playerHitBox = (*itlPlayerCharacter)->GetHitBox();
-			enemyAttackRange = (*itlEnemyCharacter)->GetAttackBox();
-			if (IntersectRect(&rc, &playerHitBox, &enemyAttackRange))
+			if (lEnemyCharacter.size() < 1)
 			{
-				(*itlEnemyCharacter)->SetFindEnemy(true);
+				(*itlPlayerCharacter)->SetFindEnemy(false);
 			}
-			else
+			for (itlEnemyCharacter = lEnemyCharacter.begin(); itlEnemyCharacter != lEnemyCharacter.end(); itlEnemyCharacter++)
 			{
-				(*itlEnemyCharacter)->SetFindEnemy(false);
+				playerAttackRange = (*itlPlayerCharacter)->GetAttackBox();
+				enemyHitBox = (*itlEnemyCharacter)->GetHitBox();
+				if (IntersectRect(&rc, &playerAttackRange, &enemyHitBox))
+				{
+					(*itlPlayerCharacter)->SetFindEnemy(true);
+					if ((*itlPlayerCharacter)->GetStatus() == STATUS::FIRE)
+					{
+						(*itlEnemyCharacter)->SetCharacterHp((*itlPlayerCharacter)->GetCharacterAtk());
+					}
+				}
+				else
+				{
+					(*itlPlayerCharacter)->SetFindEnemy(false);
+				}
+			}
+		}
+	}
+	if (lEnemyCharacter.size() >= 1)
+	{
+		for (itlEnemyCharacter = lEnemyCharacter.begin(); itlEnemyCharacter != lEnemyCharacter.end(); itlEnemyCharacter++)
+		{
+			for (itlPlayerCharacter = lPlayerCharacter.begin(); itlPlayerCharacter != lPlayerCharacter.end(); itlPlayerCharacter++)
+			{
+				playerHitBox = (*itlPlayerCharacter)->GetHitBox();
+				enemyAttackRange = (*itlEnemyCharacter)->GetAttackBox();
+				if (IntersectRect(&rc, &playerHitBox, &enemyAttackRange))
+				{
+					(*itlEnemyCharacter)->SetFindEnemy(true);
+				}
+				else
+				{
+					(*itlEnemyCharacter)->SetFindEnemy(false);
+				}
 			}
 		}
 	}

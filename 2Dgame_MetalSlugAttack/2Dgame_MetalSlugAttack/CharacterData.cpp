@@ -165,6 +165,10 @@ void CharacterData::Update()
         UpdateFire();
         break;
     }
+    if (characterHp <= 0)
+    {
+        isAlive = false;
+    }
 }
 
 void CharacterData::Render(HDC hdc)
