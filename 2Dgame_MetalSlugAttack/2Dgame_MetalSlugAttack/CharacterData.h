@@ -42,22 +42,27 @@ private:
 	int attackRangeWidth;
 	int attackRangeHeight;
 	int maxAttackCount;
-	int attackCount;
+	int currAttackCount;
 public:
 	 HRESULT Init(int unitNum, CollisionChecker* collisionChecker);
 	 void Release();
 	 void Update();
 	 void Render(HDC hdc);
 	 void Move();
-	 void CheckFireCount();
+	 void Attack();
 
 	 void SetStatus(STATUS status) { this->characterStatus = status; }
 	 void SetFindEnemy(bool findEnemy) { this->findEnemy = findEnemy; }
 	 void SetCurrFrameX(int currFrameX) { this->currFrameX = currFrameX; }
 	 void SetReadyToFire(bool readyToFire) { this->readyToFire = readyToFire; }
 	 void SetCharacterHp(int damage) { this->characterHp -= damage; }
+	 void SetIsAlive(bool isAlive) { this->isAlive = isAlive; }
+	 void PlusCurrAttackCount() { this->currAttackCount++; }
+	 void SetCurrAttackCount(int count) { this->currAttackCount = count; }
+	 int GetCurrAttackCount() { return this->currAttackCount; }
 	 int GetCharacterAtk() { return this->characterAtk; }
 	 int GetCharacterHp() { return this->characterHp; }
+	 int GetMaxAttackCount() { return this->maxAttackCount; }
 	 bool GetFindEnemy() { return this->findEnemy; }
 	 bool GetReadyToFire() { return this->readyToFire; }
 	 bool GetCharacterAlive() { return this->isAlive; }

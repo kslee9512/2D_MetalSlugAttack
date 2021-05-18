@@ -12,6 +12,7 @@ HRESULT CharacterData::Init(int unitNum, CollisionChecker* collisionChecker)
     characterStatus = STATUS::WALK;
     findEnemy = false;
     readyToFire = true;
+    currAttackCount = 0;
     //Rifle Init
     if (unitNum == -1)
     {
@@ -64,7 +65,7 @@ HRESULT CharacterData::Init(int unitNum, CollisionChecker* collisionChecker)
         hitBoxPos = { pos.x + hitBoxWidth, pos.y };
         attackRangeWidth = 250;
         attackRangeHeight = 150;
-
+        maxAttackCount = 1;
     }
     //Player_Eri Init
     else if (unitNum == 1)
@@ -102,7 +103,6 @@ HRESULT CharacterData::Init(int unitNum, CollisionChecker* collisionChecker)
             MessageBox(g_hWnd, "Eri_Win_Image Load_Fail", "Image_Load Fail", MB_OK);
             return E_FAIL;
         }
-        maxAttackCount = 1;
         pos.x = 130;
         pos.y = 350;
         moveSpeed = 100.0f;
@@ -120,6 +120,7 @@ HRESULT CharacterData::Init(int unitNum, CollisionChecker* collisionChecker)
         hitBoxPos.y = pos.y;
         attackRangeWidth = 200;
         attackRangeHeight = 150;
+        maxAttackCount = 1;
     }
     if (unitType == UnitType::ENEMY)
     {
@@ -133,7 +134,6 @@ HRESULT CharacterData::Init(int unitNum, CollisionChecker* collisionChecker)
         attackRange = GetRectToCenter(attackBoxPos.x, attackBoxPos.y, attackRangeWidth, attackRangeHeight);
         hitBox = GetRectToCenter(hitBoxPos.x, hitBoxPos.y, hitBoxWidth, hitBoxHeight);
     }
-    attackCount = 0;
 
     if (unitType == UnitType::PLAYER)
     {
@@ -153,7 +153,16 @@ void CharacterData::Release()
 
 void CharacterData::Update()
 {
+    if (characterHp <= 0)
+    {
+        isAlive = false;
+    }
     changeTimer += TimerManager::GetSingleton()->GetElapsedTime();
+    if (characterStatus == STATUS::WALK || characterStatus == STATUS::STAND)
+    {
+        fireCount += TimerManager::GetSingleton()->GetElapsedTime();
+    }
+    Attack();
     if (changeTimer >= 0.08f)
     {
         changeTimer = 0.0f;
@@ -169,6 +178,7 @@ void CharacterData::Update()
         else if (characterStatus == STATUS::FIRE && currFrameX > fireMaxFrame)
         {
             fireCount = 0;
+            readyToFire = false;
             characterStatus = STATUS::STAND;
             currFrameX = 0;
         }
@@ -181,8 +191,8 @@ void CharacterData::Update()
             currFrameX = 0;
         }
     }
+
     Move();
-    CheckFireCount();
 }
 
 void CharacterData::Render(HDC hdc)
@@ -239,27 +249,20 @@ void CharacterData::Move()
     {
         isAlive = false;
     }
-    if (findEnemy)
+    if (findEnemy && !readyToFire)
     {
         characterStatus = STATUS::STAND;
     }
-    else if(!findEnemy)
-    {
-        characterStatus = STATUS::WALK;
-    }
 }
 
-void CharacterData::CheckFireCount()
+void CharacterData::Attack()
 {
-    if ((characterStatus == STATUS::STAND) || (characterStatus == STATUS::WALK) && !readyToFire)
-    {
-        fireCount += TimerManager::GetSingleton()->GetElapsedTime();
-    }
-    if (fireCount >= attackCooltime)
+    if (!readyToFire && fireCount >= attackCooltime)
     {
         readyToFire = true;
+        currFrameX = 0;
     }
-    if (findEnemy && readyToFire)
+    if (readyToFire && findEnemy)
     {
         characterStatus = STATUS::FIRE;
     }

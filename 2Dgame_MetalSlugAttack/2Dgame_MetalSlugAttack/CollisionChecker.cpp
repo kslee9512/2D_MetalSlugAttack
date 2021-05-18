@@ -29,50 +29,45 @@ void CollisionChecker::CheckAlive()
 void CollisionChecker::CheckAttackRange()
 {
 	RECT rc;
-	RECT playerAttackBox;
 	RECT playerHitBox;
+	RECT playerAttackRange;
 	RECT enemyHitBox;
-	RECT enemyAttackBox;
-
-	//PlayerCharacter의 공격범위에 EnemyCharacter가 들어 올 경우
+	RECT enemyAttackRange;
 	for (itlPlayerCharacter = lPlayerCharacter.begin(); itlPlayerCharacter != lPlayerCharacter.end(); itlPlayerCharacter++)
 	{
 		for (itlEnemyCharacter = lEnemyCharacter.begin(); itlEnemyCharacter != lEnemyCharacter.end(); itlEnemyCharacter++)
 		{
-			playerAttackBox = (*itlPlayerCharacter)->GetAttackBox();
+			playerAttackRange = (*itlPlayerCharacter)->GetAttackBox();
 			enemyHitBox = (*itlEnemyCharacter)->GetHitBox();
-
-			if (IntersectRect(&rc, &playerAttackBox, &enemyHitBox))
+			if (IntersectRect(&rc, &playerAttackRange, &enemyHitBox))
 			{
-				if (!(*itlPlayerCharacter)->GetFindEnemy())
+				if (!((*itlPlayerCharacter)->GetFindEnemy()))
 				{
 					(*itlPlayerCharacter)->SetFindEnemy(true);
 					(*itlPlayerCharacter)->SetCurrFrameX(0);
-					break;
 				}
+				break;
 			}
-			else if(!IntersectRect(&rc, &playerAttackBox, &enemyHitBox))
+			else
 			{
 				(*itlPlayerCharacter)->SetFindEnemy(false);
 			}
 		}
 	}
-
-	//EnemyCharacter의 공격범위에 PlayerCharacter가 들어 올 경우
 	for (itlEnemyCharacter = lEnemyCharacter.begin(); itlEnemyCharacter != lEnemyCharacter.end(); itlEnemyCharacter++)
 	{
 		for (itlPlayerCharacter = lPlayerCharacter.begin(); itlPlayerCharacter != lPlayerCharacter.end(); itlPlayerCharacter++)
 		{
 			playerHitBox = (*itlPlayerCharacter)->GetHitBox();
-			enemyAttackBox = (*itlEnemyCharacter)->GetAttackBox();
-			if (IntersectRect(&rc, &playerHitBox, &enemyAttackBox))
+			enemyAttackRange = (*itlEnemyCharacter)->GetAttackBox();
+			if (IntersectRect(&rc, &playerHitBox, &enemyAttackRange))
 			{
 				if (!(*itlEnemyCharacter)->GetFindEnemy())
 				{
 					(*itlEnemyCharacter)->SetFindEnemy(true);
 					(*itlEnemyCharacter)->SetCurrFrameX(0);
-					break;
 				}
+				break;
 			}
 			else
 			{
@@ -84,33 +79,34 @@ void CollisionChecker::CheckAttackRange()
 
 void CollisionChecker::CalcDamage()
 {
+	RECT rc;
+	RECT playerHitBox;
+	RECT playerAttackRange;
+	RECT enemyHitBox;
+	RECT enemyAttackRange;
 	for (itlPlayerCharacter = lPlayerCharacter.begin(); itlPlayerCharacter != lPlayerCharacter.end(); itlPlayerCharacter++)
 	{
 		for (itlEnemyCharacter = lEnemyCharacter.begin(); itlEnemyCharacter != lEnemyCharacter.end(); itlEnemyCharacter++)
 		{
-			if ((*itlPlayerCharacter)->GetStatus() == STATUS::FIRE && (*itlPlayerCharacter)->GetReadyToFire() && (*itlPlayerCharacter)->GetFindEnemy())
+			playerAttackRange = (*itlPlayerCharacter)->GetAttackBox();
+			enemyHitBox = (*itlEnemyCharacter)->GetHitBox();
+			if (IntersectRect(&rc, &playerAttackRange, &enemyHitBox))
 			{
-				if ((*itlEnemyCharacter)->GetCharacterHp() > 0)
+				if ((*itlPlayerCharacter)->GetStatus() == STATUS::FIRE
+					&& (*itlPlayerCharacter)->GetCurrAttackCount() < (*itlPlayerCharacter)->GetMaxAttackCount())
 				{
 					(*itlEnemyCharacter)->SetCharacterHp((*itlPlayerCharacter)->GetCharacterAtk());
+					if ((*itlEnemyCharacter)->GetCharacterHp() <= 0)
+					{
+						(*itlEnemyCharacter)->SetIsAlive(false);
+					}
 				}
-				if ((*itlEnemyCharacter)->GetCharacterHp() <= 0)
+				(*itlPlayerCharacter)->PlusCurrAttackCount();
+				if ((*itlPlayerCharacter)->GetStatus() == STATUS::STAND
+					&& (*itlPlayerCharacter)->GetCurrAttackCount() >= (*itlPlayerCharacter)->GetMaxAttackCount())
 				{
-					(*itlEnemyCharacter)->SetStatus(STATUS::DEAD);
+					(*itlPlayerCharacter)->SetCurrAttackCount(0);
 				}
-				(*itlPlayerCharacter)->SetReadyToFire(false);
-				break;
-			}
-		}
-	}
-	for (itlEnemyCharacter = lEnemyCharacter.begin(); itlEnemyCharacter != lEnemyCharacter.end(); itlEnemyCharacter++)
-	{
-		for (itlPlayerCharacter = lPlayerCharacter.begin(); itlPlayerCharacter != lPlayerCharacter.end(); itlPlayerCharacter++)
-		{
-			if ((*itlEnemyCharacter)->GetStatus() == STATUS::FIRE && (*itlEnemyCharacter)->GetReadyToFire() && (*itlEnemyCharacter)->GetFindEnemy())
-			{
-				(*itlEnemyCharacter)->SetReadyToFire(false);
-				break;
 			}
 		}
 	}
