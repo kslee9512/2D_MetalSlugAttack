@@ -45,13 +45,16 @@ void CollisionChecker::CheckEnemy()
 			{
 				playerAttackRange = (*itlPlayerCharacter)->GetAttackBox();
 				enemyHitBox = (*itlEnemyCharacter)->GetHitBox();
-				if (IntersectRect(&rc, &playerAttackRange, &enemyHitBox))
+				if (IntersectRect(&rc, &playerAttackRange, &enemyHitBox) 
+					&& ((*itlPlayerCharacter)->GetStatus() == STATUS::WALK
+					|| (*itlPlayerCharacter)->GetStatus() == STATUS::STAND))
 				{
 					(*itlPlayerCharacter)->SetFindEnemy(true);
-					if ((*itlPlayerCharacter)->GetStatus() == STATUS::FIRE)
+					if ((*itlPlayerCharacter)->GetReadyToFire())
 					{
 						(*itlEnemyCharacter)->SetCharacterHp((*itlPlayerCharacter)->GetCharacterAtk());
 					}
+					break;
 				}
 				else
 				{
@@ -71,6 +74,7 @@ void CollisionChecker::CheckEnemy()
 				if (IntersectRect(&rc, &playerHitBox, &enemyAttackRange))
 				{
 					(*itlEnemyCharacter)->SetFindEnemy(true);
+					break;
 				}
 				else
 				{

@@ -273,6 +273,7 @@ void CharacterData::UpdateStand()
     if (findEnemy && readyToFire)
     {
         currFrameX = 0;
+        readyToFire = false;
         characterStatus = STATUS::FIRE;
     }
     else if (!findEnemy)
@@ -292,7 +293,6 @@ void CharacterData::UpdateFire()
         {
             currFrameX = 0;
             fireCount = 0.0f;
-            readyToFire = false;
             characterStatus = STATUS::STAND;
         }
     }
