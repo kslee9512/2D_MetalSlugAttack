@@ -3,18 +3,18 @@
 #include <vector>
 
 class CollisionChecker;
-class CharacterData;
+class Enemy;
 class EnemyManager : public GameNode
 {
 private:
-	vector<CharacterData*> vEnemyMgr;
-	vector<CharacterData*>::iterator itlEnemyMgr;
+	vector<Enemy*> vEnemyMgr;
+	vector<Enemy*>::iterator itlEnemyMgr;
 	CollisionChecker* collisionChecker;
 public:
 	HRESULT Init(int unitNum, CollisionChecker* collisionChecker);
 	void Release();
 	void Update();
 	void Render(HDC hdc);
-	vector<CharacterData*> GetEnemyVector() { return this->vEnemyMgr; }
+	vector<Enemy*> GetEnemyVector() { return this->vEnemyMgr; }
 };
 

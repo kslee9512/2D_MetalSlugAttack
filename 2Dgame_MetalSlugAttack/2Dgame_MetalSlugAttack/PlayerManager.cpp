@@ -1,12 +1,12 @@
 #include "PlayerManager.h"
 #include "CollisionChecker.h"
-#include "CharacterData.h"
+#include "Player.h"
 HRESULT PlayerManager::Init(int unitNum, CollisionChecker* collisionChecker)
 {
     this->collisionChecker = collisionChecker;
     if (vPlayerCharacter.size() < 1)
     {
-        vPlayerCharacter.push_back(new CharacterData);
+        vPlayerCharacter.push_back(new Player);
         vPlayerCharacter[0]->Init(unitNum, collisionChecker);
     }
     else
@@ -23,7 +23,7 @@ HRESULT PlayerManager::Init(int unitNum, CollisionChecker* collisionChecker)
                 i++;
                 if (i == vPlayerCharacter.size())
                 {
-                    vPlayerCharacter.push_back(new CharacterData);
+                    vPlayerCharacter.push_back(new Player);
                     vPlayerCharacter[i]->Init(unitNum, collisionChecker);
                     break;
                 }

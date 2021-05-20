@@ -3,17 +3,17 @@
 #include <vector>
 
 class CollisionChecker;
-class CharacterData;
+class Player;
 class PlayerManager : public GameNode
 {
 private:
-	vector<CharacterData*> vPlayerCharacter;
-	vector<CharacterData*>::iterator itlPlayerCharacter;
+	vector<Player*> vPlayerCharacter;
+	vector<Player*>::iterator itlPlayerCharacter;
 	CollisionChecker* collisionChecker;
 public:
 	 HRESULT Init(int unitNum, CollisionChecker* collisionChecker);
 	 void Release();
 	 void Update();
 	 void Render(HDC hdc);
-	 vector<CharacterData*> GetPlayerVector() { return this->vPlayerCharacter; }
+	 vector<Player*> GetPlayerVector() { return this->vPlayerCharacter; }
 };

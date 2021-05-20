@@ -1,22 +1,25 @@
 #pragma once
-#include "CharacterData.h"
+#include "Player.h"
+#include "Enemy.h"
 #include <list>
-class CharacterData;
+
+class Player;
+class Enemy;
 class PlayerManager;
 class EnemyManager;
 class CollisionChecker
 {
 private:
-	list<CharacterData*>  lPlayerCharacter;
-	list<CharacterData*>::iterator itlPlayerCharacter;
-	list<CharacterData*> lEnemyCharacter;
-	list<CharacterData*>::iterator itlEnemyCharacter;
+	list<Player*> lPlayerCharacter;
+	list<Player*>::iterator itlPlayerCharacter;
+	list<Enemy*> lEnemyCharacter;
+	list<Enemy*>::iterator itlEnemyCharacter;
 public:
-	void AddPlayerCharacter(CharacterData* characterData) { lPlayerCharacter.push_back(characterData); }
-	void EraseDeadPlayerCharacter(CharacterData* characterData) { lPlayerCharacter.remove(characterData); }
+	void AddPlayerCharacter(Player* characterData) { lPlayerCharacter.push_back(characterData); }
+	void EraseDeadPlayerCharacter(Player* characterData) { lPlayerCharacter.remove(characterData); }
 
-	void AddEnemyCharacter(CharacterData* characterData) { lEnemyCharacter.push_back(characterData); }
-	void EraseDeadEnemyCharacter(CharacterData* characterData) { lEnemyCharacter.remove(characterData); }
+	void AddEnemyCharacter(Enemy* characterData) { lEnemyCharacter.push_back(characterData); }
+	void EraseDeadEnemyCharacter(Enemy* characterData) { lEnemyCharacter.remove(characterData); }
 
 	void CheckAlive();
 	void CheckEnemy();

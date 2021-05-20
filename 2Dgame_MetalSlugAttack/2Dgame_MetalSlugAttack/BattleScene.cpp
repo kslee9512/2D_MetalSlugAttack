@@ -14,6 +14,25 @@ HRESULT BattleScene::Init()
 	currFrameX = 0;
 	attackCool = 5.0f;
 	attackStatus = ATTACKSTATUS::UNDO;
+	playerApTimer = 0.0f;
+	enemyApTimer = 0.0f;
+	playerApLevel = 0;
+	enemyApLevel = 0;
+	playerAP = 0;
+	enemyAP = 0;
+	maxApLevel = 4;
+	for (int i = 0; i < 5; i++)
+	{
+		float timer = 0.5f;
+		apChargeTime[i] = timer;
+		timer -= 0.1f;
+	}
+	for (int i = 0; i < 5; i++)
+	{
+		int maxInt = 3000;
+		maxAp[i] = maxInt;
+		maxInt += 1500;
+	}
 	//UiImage Add
 	ImageManager::GetSingleton()->AddImage("background", "Image/Background/background.bmp", WINSIZE_X, 380);
 	ImageManager::GetSingleton()->AddImage("ui_up", "Image/Ui/Ui_Up.bmp", WINSIZE_X, 70);
@@ -67,9 +86,9 @@ HRESULT BattleScene::Init()
 	unit_Frame[0].frameBox = { 250, 450, 330, 530 };
 	attackBox = { 860, 470, 958, 568 };
 
-	collisionChecker = new CollisionChecker();
 	playerMgr = new PlayerManager();
 	enemyMgr = new EnemyManager();
+	collisionChecker = new CollisionChecker();
 
 	return S_OK;
 }
@@ -163,7 +182,7 @@ void BattleScene::Render(HDC hdc)
 	miniMap->Render(hdc, WINSIZE_X / 2 - 130, 10);
 }
 
-void BattleScene::CheckUi()
+void BattleScene::CheckUi()	//BattleScene 버튼 상호작용
 {
 	if (KeyManager::GetSingleton()->IsOnceKeyDown(VK_LBUTTON))
 	{
@@ -180,10 +199,34 @@ void BattleScene::CheckUi()
 	}
 }
 
-void BattleScene::EnemyInit()
+void BattleScene::EnemyInit() //Enemy Init 작동방식 구현
 {
 	if (KeyManager::GetSingleton()->IsOnceKeyDown(VK_NUMPAD5))
 	{
-		enemyMgr->Init(-1, collisionChecker);
+		enemyMgr->Init(1, collisionChecker);
+	}
+}
+
+void BattleScene::ApCount()	//AP시스템 관련(적 AP증가값 포함)
+{
+	playerApTimer += TimerManager::GetSingleton()->GetElapsedTime();
+	enemyApTimer += TimerManager::GetSingleton()->GetElapsedTime();
+	if (playerApTimer >= apChargeTime[playerApLevel])
+	{
+		playerApTimer = 0.0f;
+		playerAP++;
+		if (playerAP >= maxAp[playerApLevel])
+		{
+			playerAP = maxAp[playerApLevel];
+		}
+	}
+	if (enemyApTimer >= apChargeTime[enemyApLevel])
+	{
+		enemyApTimer = 0;
+		enemyAP++;
+		if (enemyAP >= maxAp[enemyApLevel])
+		{
+			enemyAP = maxAp[enemyApLevel];
+		}
 	}
 }

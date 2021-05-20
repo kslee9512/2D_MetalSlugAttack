@@ -11,6 +11,7 @@ typedef struct FrameUi
 	bool canPurchase;
 	RECT frameBox;
 	int selectNum;
+	int unitCoast;
 };
 enum class ATTACKSTATUS {UNDO, READY, FIRED};
 
@@ -40,6 +41,15 @@ private:
 	float changeTime;
 	float checkAttackCool;
 	float attackCool;
+	int playerAP;
+	int enemyAP;
+	int maxApLevel;
+	int maxAp[5];
+	float apChargeTime[5];
+	float playerApTimer;
+	float enemyApTimer;
+	int playerApLevel;
+	int enemyApLevel;
 
 	CollisionChecker* collisionChecker;	//충돌처리
 	PlayerManager* playerMgr;
@@ -50,8 +60,10 @@ public:
 	virtual void Update();
 	virtual void Render(HDC hdc);
 
+	
 	void CheckUi();
 	void EnemyInit();
+	void ApCount();
 	virtual ~BattleScene() {};
 };
 

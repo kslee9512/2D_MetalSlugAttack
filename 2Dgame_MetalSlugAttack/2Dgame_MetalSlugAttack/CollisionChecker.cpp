@@ -1,8 +1,8 @@
 #include "CollisionChecker.h"
 #include "PlayerManager.h"
 #include "EnemyManager.h"
-#include "CharacterData.h"
-
+#include "Player.h"
+#include "Enemy.h"
 void CollisionChecker::CheckAlive()
 {
 	//lPlayerCharacter의 iterator->isAlive값이 false의 경우 list에서 삭제
@@ -52,7 +52,11 @@ void CollisionChecker::CheckEnemy()
 					(*itlPlayerCharacter)->SetFindEnemy(true);
 					if ((*itlPlayerCharacter)->GetReadyToFire())
 					{
-						(*itlEnemyCharacter)->SetCharacterHp((*itlPlayerCharacter)->GetCharacterAtk());
+						if ((*itlPlayerCharacter)->GetCurrAttackCount() <= (*itlPlayerCharacter)->GetMaxAttackCount())
+						{
+							(*itlPlayerCharacter)->SetCurrAttackCount();
+							(*itlEnemyCharacter)->SetCharacterHp((*itlPlayerCharacter)->GetCharacterAtk());
+						}
 					}
 					break;
 				}

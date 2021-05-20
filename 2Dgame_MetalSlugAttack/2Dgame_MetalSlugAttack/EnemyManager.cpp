@@ -1,5 +1,5 @@
 #include "EnemyManager.h"
-#include "CharacterData.h"
+#include "Enemy.h"
 #include "CollisionChecker.h"
 
 HRESULT EnemyManager::Init(int unitNum, CollisionChecker* collisionChecker)
@@ -7,7 +7,7 @@ HRESULT EnemyManager::Init(int unitNum, CollisionChecker* collisionChecker)
     this->collisionChecker = collisionChecker;
     if (vEnemyMgr.size() < 1)
     {
-        vEnemyMgr.push_back(new CharacterData);
+        vEnemyMgr.push_back(new Enemy);
         vEnemyMgr[0]->Init(unitNum, collisionChecker);
     }
     else
@@ -24,7 +24,7 @@ HRESULT EnemyManager::Init(int unitNum, CollisionChecker* collisionChecker)
                 i++;
                 if (i == vEnemyMgr.size())
                 {
-                    vEnemyMgr.push_back(new CharacterData);
+                    vEnemyMgr.push_back(new Enemy);
                     vEnemyMgr[i]->Init(unitNum, collisionChecker);
                     break;
                 }
@@ -52,11 +52,8 @@ void EnemyManager::Update()
 
 void EnemyManager::Render(HDC hdc)
 {
-	if (vEnemyMgr.size() >= 1)
+	for (int i = 0; i < vEnemyMgr.size(); i++)
 	{
-		for (int i = 0; i < vEnemyMgr.size(); i++)
-		{
-			vEnemyMgr[i]->Render(hdc);
-		}
+		vEnemyMgr[i]->Render(hdc);
 	}
 }

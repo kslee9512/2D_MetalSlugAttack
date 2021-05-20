@@ -1,10 +1,11 @@
-#include "CharacterData.h"
+#include "Enemy.h"
 #include "CollisionChecker.h"
 #include "Image.h"
 #include "CommonFunction.h"
-HRESULT CharacterData::Init(int unitNum, CollisionChecker* collisionChecker)
+HRESULT Enemy::Init(int unitNum, CollisionChecker* collisionChecker)
 {
     this->collisionChecker = collisionChecker;
+    endDeadScene = false;
     fireCount = 0.0f;
     changeTimer = 0.0f; // 프레임 변경 확인용 타이머
     currFrameX = 0; //캐릭터 이미지 전환용 프레임
@@ -13,8 +14,7 @@ HRESULT CharacterData::Init(int unitNum, CollisionChecker* collisionChecker)
     findEnemy = false;
     readyToFire = true;
     currAttackCount = 0;
-    //Rifle Init
-    if (unitNum == -1)
+    if (unitNum == 1)
     {
         Name = "소총수";
         unitType = UnitType::ENEMY;
@@ -67,111 +67,43 @@ HRESULT CharacterData::Init(int unitNum, CollisionChecker* collisionChecker)
         attackRangeHeight = 150;
         maxAttackCount = 1;
     }
-    //Player_Eri Init
-    else if (unitNum == 1)
-    {
-        Name = "Eri";
-        unitType = UnitType::PLAYER;
-        image_Stand = ImageManager::GetSingleton()->FindImage("Eri_stand");
-        if (image_Stand == nullptr)
-        {
-            MessageBox(g_hWnd, "Eri_Stand_Image Load_Fail", "Image_Load Fail", MB_OK);
-            return E_FAIL;
-        }
-        
-        image_Walk = ImageManager::GetSingleton()->FindImage("Eri_walk");
-        if (image_Walk == nullptr)
-        {
-            MessageBox(g_hWnd, "Eri_Walk_Image Load_Fail", "Image_Load Fail", MB_OK);
-            return E_FAIL;
-        }
-        image_Fire = ImageManager::GetSingleton()->FindImage("Eri_fire");
-        if (image_Fire == nullptr)
-        {
-            MessageBox(g_hWnd, "Eri_Fire_Image Load_Fail", "Image_Load Fail", MB_OK);
-            return E_FAIL;
-        }
-        image_Dead = ImageManager::GetSingleton()->FindImage("Eri_dead");
-        if (image_Dead == nullptr)
-        {
-            MessageBox(g_hWnd, "Eri_Dead_Image Load_Fail", "Image_Load Fail", MB_OK);
-            return E_FAIL;
-        }
-        image_Win = ImageManager::GetSingleton()->FindImage("Eri_win");
-        if (image_Win == nullptr)
-        {
-            MessageBox(g_hWnd, "Eri_Win_Image Load_Fail", "Image_Load Fail", MB_OK);
-            return E_FAIL;
-        }
-        pos.x = 130;
-        pos.y = 350;
-        moveSpeed = 100.0f;
-        walkMaxFrame = 11;
-        standMaxFrame = 7;
-        fireMaxFrame = 5;
-        deadMaxFrame = 20;
-        winMaxFrame = 6;
-        characterHp = 50;
-        characterAtk = 15;
-        attackCooltime = 2.0f;
-        hitBoxHeight = 50;
-        hitBoxWidth = 30;
-        hitBoxPos.x = pos.x - hitBoxWidth;
-        hitBoxPos.y = pos.y;
-        attackRangeWidth = 200;
-        attackRangeHeight = 150;
-        maxAttackCount = 1;
-    }
-    if (unitType == UnitType::ENEMY)
-    {
-        attackBoxPos = { pos.x - (attackRangeWidth / 2) + 30, pos.y };
-        attackRange = GetRectToCenter(attackBoxPos.x, attackBoxPos.y, attackRangeWidth, attackRangeHeight);
-        hitBox = GetRectToCenter(pos.x, pos.y, hitBoxWidth, hitBoxHeight);
-    }
-    else if (unitType == UnitType::PLAYER)
-    {
-        attackBoxPos = { pos.x + (attackRangeWidth / 2) - 30, pos.y };
-        attackRange = GetRectToCenter(attackBoxPos.x, attackBoxPos.y, attackRangeWidth, attackRangeHeight);
-        hitBox = GetRectToCenter(hitBoxPos.x, hitBoxPos.y, hitBoxWidth, hitBoxHeight);
-    }
 
-    if (unitType == UnitType::PLAYER)
-    {
-        collisionChecker->AddPlayerCharacter(this);
-    }
-    else if (unitType == UnitType::ENEMY)
-    {
-        collisionChecker->AddEnemyCharacter(this);
-    }
-    return S_OK; 
+    attackBoxPos = { pos.x - (attackRangeWidth / 2) + 30, pos.y };
+    attackRange = GetRectToCenter(attackBoxPos.x, attackBoxPos.y, attackRangeWidth, attackRangeHeight);
+    hitBox = GetRectToCenter(pos.x, pos.y, hitBoxWidth, hitBoxHeight);
+    collisionChecker->AddEnemyCharacter(this);
+	return E_NOTIMPL;
 }
 
-void CharacterData::Release()
+void Enemy::Release()
 {
-
 }
 
-void CharacterData::Update()
+void Enemy::Update()
 {
     switch (characterStatus)
     {
-    case STATUS::WALK :
+    case STATUS::WALK:
         UpdateMove();
         break;
-    case STATUS::STAND :
+    case STATUS::STAND:
         UpdateStand();
         break;
-    case STATUS::FIRE :
+    case STATUS::FIRE:
         UpdateFire();
+        break;
+    case STATUS::DEAD:
+        UpdateDead();
         break;
     }
     if (characterHp <= 0)
     {
         isAlive = false;
+        currFrameX = 0;
     }
 }
 
-void CharacterData::Render(HDC hdc)
+void Enemy::Render(HDC hdc)
 {
     if (isAlive == true)
     {
@@ -192,16 +124,15 @@ void CharacterData::Render(HDC hdc)
         {
             image_Win->FrameRender(hdc, pos.x, pos.y, currFrameX, 0, true, 2);
         }
-        else if (characterStatus == STATUS::DEAD)
-        {
-            image_Dead->FrameRender(hdc, pos.x, pos.y, currFrameX, 0, true, 2);
-        }
-       //Rectangle(hdc, hitBox.left, hitBox.top, hitBox.right, hitBox.bottom);
-
+        //Rectangle(hdc, hitBox.left, hitBox.top, hitBox.right, hitBox.bottom);
+    }
+    if (characterStatus == STATUS::DEAD && isAlive == false && endDeadScene == false)
+    {
+        image_Dead->FrameRender(hdc, pos.x, pos.y, currFrameX, 0, true, 2);
     }
 }
 
-void CharacterData::UpdateMove()
+void Enemy::UpdateMove()
 {
     //움직임 프레임
     changeTimer += TimerManager::GetSingleton()->GetElapsedTime();
@@ -227,29 +158,20 @@ void CharacterData::UpdateMove()
         currFrameX = 0;
         characterStatus = STATUS::STAND;
     }
-    if (unitType == UnitType::PLAYER)
-    {
-        pos.x += moveSpeed * TimerManager::GetSingleton()->GetElapsedTime();
-        hitBoxPos.x += moveSpeed * TimerManager::GetSingleton()->GetElapsedTime();
-        attackBoxPos.x += moveSpeed * TimerManager::GetSingleton()->GetElapsedTime();
-        hitBox = GetRectToCenter(hitBoxPos.x, hitBoxPos.y, hitBoxWidth, hitBoxHeight);
-        attackRange = GetRectToCenter(attackBoxPos.x, attackBoxPos.y, attackRangeWidth, attackRangeHeight);
-    }
-    else if (unitType == UnitType::ENEMY)
-    {
-        pos.x -= moveSpeed * TimerManager::GetSingleton()->GetElapsedTime();
-        hitBoxPos.x -= moveSpeed * TimerManager::GetSingleton()->GetElapsedTime();
-        attackBoxPos.x -= moveSpeed * TimerManager::GetSingleton()->GetElapsedTime();
-        hitBox = GetRectToCenter(hitBoxPos.x, hitBoxPos.y, hitBoxWidth, hitBoxHeight);
-        attackRange = GetRectToCenter(attackBoxPos.x, attackBoxPos.y, attackRangeWidth, attackRangeHeight);
-    }
+
+    pos.x -= moveSpeed * TimerManager::GetSingleton()->GetElapsedTime();
+    hitBoxPos.x -= moveSpeed * TimerManager::GetSingleton()->GetElapsedTime();
+    attackBoxPos.x -= moveSpeed * TimerManager::GetSingleton()->GetElapsedTime();
+    hitBox = GetRectToCenter(hitBoxPos.x, hitBoxPos.y, hitBoxWidth, hitBoxHeight);
+    attackRange = GetRectToCenter(attackBoxPos.x, attackBoxPos.y, attackRangeWidth, attackRangeHeight);
+
     if (pos.x >= WINSIZE_X || pos.x < 0)
     {
         isAlive = false;
     }
 }
 
-void CharacterData::UpdateStand()
+void Enemy::UpdateStand()
 {
     changeTimer += TimerManager::GetSingleton()->GetElapsedTime();
     if (changeTimer >= 0.07f)
@@ -282,7 +204,7 @@ void CharacterData::UpdateStand()
     }
 }
 
-void CharacterData::UpdateFire()
+void Enemy::UpdateFire()
 {
     changeTimer += TimerManager::GetSingleton()->GetElapsedTime();
     if (changeTimer >= 0.07f)
@@ -294,6 +216,21 @@ void CharacterData::UpdateFire()
             currFrameX = 0;
             fireCount = 0.0f;
             characterStatus = STATUS::STAND;
+        }
+    }
+}
+
+void Enemy::UpdateDead()
+{
+    changeTimer += TimerManager::GetSingleton()->GetElapsedTime();
+    if (changeTimer >= 0.07f)
+    {
+        changeTimer = 0.0f;
+        currFrameX++;
+        if (currFrameX > deadMaxFrame)
+        {
+            currFrameX = 0;
+            endDeadScene = true;
         }
     }
 }

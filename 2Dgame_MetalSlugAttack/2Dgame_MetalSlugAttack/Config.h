@@ -27,7 +27,7 @@ using namespace std;
 #define SAFE_RELEASE(p) { if (p) { p->Release(); delete p; p = nullptr; } }
 
 enum class UnitType{ PLAYER, ENEMY};
-
+enum class STATUS { STAND, WALK, FIRE, DEAD, WIN };
 typedef struct tagFPoint
 {
 	float x;
