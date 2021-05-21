@@ -170,7 +170,7 @@ void Player::UpdateMove()
     attackBoxPos.x += moveSpeed * TimerManager::GetSingleton()->GetElapsedTime();
     hitBox = GetRectToCenter(hitBoxPos.x, hitBoxPos.y, hitBoxWidth, hitBoxHeight);
     attackRange = GetRectToCenter(attackBoxPos.x, attackBoxPos.y, attackRangeWidth, attackRangeHeight);
-    if (pos.x >= WINSIZE_X || pos.x < 0)
+    if (pos.x > WINSIZE_X + 100 || pos.x < - 100)
     {
         isAlive = false;
     }

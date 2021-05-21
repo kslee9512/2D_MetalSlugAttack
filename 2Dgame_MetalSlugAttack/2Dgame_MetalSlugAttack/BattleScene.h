@@ -19,6 +19,8 @@ class BattleScene : public GameNode
 {
 private:
 	//UI
+	Image* apWalk;
+	Image* apPurchase;
 	Image* backGround;
 	Image* ui_Up;
 	Image* ui_Down;
@@ -32,15 +34,20 @@ private:
 	Image* enemy_Hpbar;
 	Image* apBar;
 	FrameUi unit_Frame[5];
+	FrameUi apFrame;
 	ATTACKSTATUS attackStatus;
 	int currFrameX;
+	int apCurrFrameX;
 	RECT attackBox;
 	int attackUndoFrame;
 	int attackReadyFrame;
 	int attackFireFrame;
+	int apWalkFrame;
+	int apPurchaseFrame;
 	float changeTime;
 	float checkAttackCool;
 	float attackCool;
+	float apImageCount;
 	int playerAP;
 	int enemyAP;
 	int maxApLevel;

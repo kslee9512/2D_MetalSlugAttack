@@ -6,10 +6,14 @@
 
 HRESULT BattleScene::Init()
 {
+	apImageCount = 0.0f;
 	attackUndoFrame = 14;
 	attackReadyFrame = 3;
 	attackFireFrame = 10;
 	checkAttackCool = 0.0f;
+	apCurrFrameX = 0;
+	apWalkFrame = 11;
+	apPurchaseFrame = 14;
 	changeTime = 0.0f;
 	currFrameX = 0;
 	attackCool = 5.0f;
@@ -23,9 +27,9 @@ HRESULT BattleScene::Init()
 	maxApLevel = 4;
 	for (int i = 0; i < 5; i++)
 	{
-		float timer = 0.5f;
+		float timer = 0.08f;
 		apChargeTime[i] = timer;
-		timer -= 0.1f;
+		timer -= 0.01f;
 	}
 	for (int i = 0; i < 5; i++)
 	{
@@ -50,6 +54,8 @@ HRESULT BattleScene::Init()
 	ImageManager::GetSingleton()->AddImage("enemyhp", "Image/Ui/Red_Bar.bmp", 178, 8, true, RGB(255, 255, 255));
 	ImageManager::GetSingleton()->AddImage("playerhp", "Image/Ui/Yellow_Bar.bmp", 178, 8, true, RGB(255, 255, 255));
 	ImageManager::GetSingleton()->AddImage("apbar", "Image/Ui/Pointbar.bmp", 200, 76, true, RGB(255, 255, 255));
+	ImageManager::GetSingleton()->AddImage("apwalk", "Image/Ui/ap_walk.bmp", 600, 50, 12, 1, true, RGB(255, 255, 255));
+	ImageManager::GetSingleton()->AddImage("appurchase", "Image/Ui/ap_purchase.bmp", 750, 50, 15, 1, true, RGB(255, 255, 255));
 	//Character_Eri Image Add
 	ImageManager::GetSingleton()->AddImage("Eri_walk", "Image/Eri/Eri_walk.bmp", 960, 50, 12, 1, true, RGB(255, 255, 255));
 	ImageManager::GetSingleton()->AddImage("Eri_stand", "Image/Eri/Eri_stand.bmp", 640, 50, 8, 1, true, RGB(255, 255, 255));
@@ -83,6 +89,12 @@ HRESULT BattleScene::Init()
 	player_Hpbar = ImageManager::GetSingleton()->FindImage("playerhp");
 	enemy_Hpbar = ImageManager::GetSingleton()->FindImage("enemyhp");
 	apBar = ImageManager::GetSingleton()->FindImage("apbar");
+	apWalk = ImageManager::GetSingleton()->FindImage("apwalk");
+	apPurchase = ImageManager::GetSingleton()->FindImage("appurchase");
+	apFrame.unit_Frame_able = ImageManager::GetSingleton()->FindImage("unit_frame");
+	apFrame.unit_Frame_unable = ImageManager::GetSingleton()->FindImage("unit_frame_undo");
+	apFrame.canPurchase = true;
+	apFrame.frameBox = { 55 , 485, 125, 555 };
 	unit_Frame[0].frameBox = { 250, 450, 330, 530 };
 	attackBox = { 860, 470, 958, 568 };
 
@@ -102,6 +114,7 @@ void BattleScene::Release()
 void BattleScene::Update()
 {
 	CheckUi();
+	ApCount();
 	playerMgr->Update();
 	EnemyInit();
 	enemyMgr->Update();
@@ -149,6 +162,16 @@ void BattleScene::Render(HDC hdc)
 	hp_Frame[0]->Render(hdc, 100, 10);
 	hp_Frame[1]->Render(hdc, WINSIZE_X - 340, 10);
 	apBar->Render(hdc, 0, 400);
+	if (apFrame.canPurchase == true)
+	{
+		apFrame.unit_Frame_able->Render(hdc, 50, 480);
+		apWalk->FrameRender(hdc, 90, 520, apCurrFrameX, 0, true);
+	}
+	else if (apFrame.canPurchase == false)
+	{
+		apFrame.unit_Frame_unable->Render(hdc, 50, 480);
+		apPurchase->FrameRender(hdc, 90, 520, apCurrFrameX, 0, true);
+	}
 	if (unit_Frame[0].canPurchase == true)
 	{
 		unit_Frame[0].unit_Frame_able->Render(hdc, 250, 480);
@@ -180,6 +203,12 @@ void BattleScene::CheckUi()	//BattleScene 버튼 상호작용
 {
 	if (KeyManager::GetSingleton()->IsOnceKeyDown(VK_LBUTTON))
 	{
+		if (PtInRect(&(apFrame.frameBox), g_ptMouse))
+		{
+			apFrame.canPurchase = false;
+			apCurrFrameX = 0;
+			apImageCount = 0.0f;
+		}
 		if (PtInRect(&(unit_Frame[0].frameBox), g_ptMouse))
 		{
 			unit_Frame[0].canPurchase = false;
@@ -205,6 +234,22 @@ void BattleScene::ApCount()	//AP시스템 관련(적 AP증가값 포함)
 {
 	playerApTimer += TimerManager::GetSingleton()->GetElapsedTime();
 	enemyApTimer += TimerManager::GetSingleton()->GetElapsedTime();
+	apImageCount += TimerManager::GetSingleton()->GetElapsedTime();
+	if (apImageCount >= 0.1f)
+	{
+		apImageCount = 0.0f;
+		apCurrFrameX++;
+		if (apFrame.canPurchase && (apCurrFrameX > apWalkFrame))
+		{
+			apCurrFrameX = 0;
+		}
+		else if (!apFrame.canPurchase && (apCurrFrameX > apPurchaseFrame))
+		{
+			apCurrFrameX = 0;
+			apImageCount = 0.0f;
+			apFrame.canPurchase = true;
+		}
+	}
 	if (playerApTimer >= apChargeTime[playerApLevel])
 	{
 		playerApTimer = 0.0f;

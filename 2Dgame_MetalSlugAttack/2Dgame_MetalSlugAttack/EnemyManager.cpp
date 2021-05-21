@@ -14,12 +14,12 @@ HRESULT EnemyManager::Init(int unitNum, CollisionChecker* collisionChecker)
     {
         for (int i = 0; i < vEnemyMgr.size();)
         {
-            if (!vEnemyMgr[i]->GetCharacterAlive())
+            if (!vEnemyMgr[i]->GetCharacterAlive() && vEnemyMgr[i]->GetEndDeadScene())
             {
                 vEnemyMgr[i]->Init(unitNum, collisionChecker);
                 break;
             }
-            else if (vEnemyMgr[i]->GetCharacterAlive() == true)
+            else
             {
                 i++;
                 if (i == vEnemyMgr.size())

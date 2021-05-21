@@ -68,6 +68,7 @@ public:
 	int GetCharacterAtk() { return this->characterAtk; }
 	int GetCharacterHp() { return this->characterHp; }
 	int GetMaxAttackCount() { return this->maxAttackCount; }
+	bool GetEndDeadScene() { return this->endDeadScene; }
 	bool GetFindEnemy() { return this->findEnemy; }
 	bool GetReadyToFire() { return this->readyToFire; }
 	bool GetCharacterAlive() { return this->isAlive; }

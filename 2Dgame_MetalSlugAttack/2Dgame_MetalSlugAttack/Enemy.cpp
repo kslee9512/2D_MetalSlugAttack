@@ -68,7 +68,7 @@ HRESULT Enemy::Init(int unitNum, CollisionChecker* collisionChecker)
         maxAttackCount = 1;
     }
 
-    attackBoxPos = { pos.x - (attackRangeWidth / 2) + 30, pos.y };
+    attackBoxPos = { pos.x - (attackRangeWidth / 2) + 10, pos.y };
     attackRange = GetRectToCenter(attackBoxPos.x, attackBoxPos.y, attackRangeWidth, attackRangeHeight);
     hitBox = GetRectToCenter(pos.x, pos.y, hitBoxWidth, hitBoxHeight);
     collisionChecker->AddEnemyCharacter(this);

@@ -13,12 +13,12 @@ HRESULT PlayerManager::Init(int unitNum, CollisionChecker* collisionChecker)
     {
         for (int i = 0; i < vPlayerCharacter.size();)
         {
-            if (!vPlayerCharacter[i]->GetCharacterAlive())
+            if (!vPlayerCharacter[i]->GetCharacterAlive() && vPlayerCharacter[i]->GetEndDeadScene())
             {
                 vPlayerCharacter[i]->Init(unitNum, collisionChecker);
                 break;
             }
-            else if (vPlayerCharacter[i]->GetCharacterAlive() == true)
+            else
             {
                 i++;
                 if (i == vPlayerCharacter.size())
