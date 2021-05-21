@@ -71,6 +71,13 @@ HRESULT BattleScene::Init()
 	ImageManager::GetSingleton()->AddImage("rifle_fire", "Image/Rifle/rifle_fire.bmp", 480, 60, 8, 1, true, RGB(255, 255, 255));
 	ImageManager::GetSingleton()->AddImage("rifle_win", "Image/Rifle/rifle_win.bmp", 360, 60, 6, 1, true, RGB(255, 255, 255));
 
+	//Shield Image Add
+	ImageManager::GetSingleton()->AddImage("shield_stand", "Image/Shield/shield_stand.bmp", 480, 80, 6, 1, true, RGB(255, 255, 255));
+	ImageManager::GetSingleton()->AddImage("shield_walk", "Image/Shield/shield_walk.bmp", 720, 80, 9, 1, true, RGB(255, 255, 255));
+	ImageManager::GetSingleton()->AddImage("shield_attack", "Image/Shield/shield_attack.bmp", 1280, 80, 16, 1, true, RGB(255, 255, 255));
+	ImageManager::GetSingleton()->AddImage("shield_dead", "Image/Shield/shield_dead.bmp", 960, 80, 12, 1, true, RGB(255, 255, 255));
+	ImageManager::GetSingleton()->AddImage("shield_win", "Image/Shield/shield_win.bmp", 320, 80, 4, 1, true, RGB(255, 255, 255));
+
 	unit_Frame[0].canPurchase = true;
 	unit_Frame[0].selectNum = 1;
 	backGround = ImageManager::GetSingleton()->FindImage("background");
@@ -226,46 +233,11 @@ void BattleScene::EnemyInit() //Enemy Init 작동방식 구현
 {
 	if (KeyManager::GetSingleton()->IsOnceKeyDown('A'))
 	{
-		enemyMgr->Init(1, collisionChecker);
+		enemyMgr->Init(2, collisionChecker);
 	}
 }
 
 void BattleScene::ApCount()	//AP시스템 관련(적 AP증가값 포함)
 {
-	playerApTimer += TimerManager::GetSingleton()->GetElapsedTime();
-	enemyApTimer += TimerManager::GetSingleton()->GetElapsedTime();
-	apImageCount += TimerManager::GetSingleton()->GetElapsedTime();
-	if (apImageCount >= 0.1f)
-	{
-		apImageCount = 0.0f;
-		apCurrFrameX++;
-		if (apFrame.canPurchase && (apCurrFrameX > apWalkFrame))
-		{
-			apCurrFrameX = 0;
-		}
-		else if (!apFrame.canPurchase && (apCurrFrameX > apPurchaseFrame))
-		{
-			apCurrFrameX = 0;
-			apImageCount = 0.0f;
-			apFrame.canPurchase = true;
-		}
-	}
-	if (playerApTimer >= apChargeTime[playerApLevel])
-	{
-		playerApTimer = 0.0f;
-		playerAP++;
-		if (playerAP >= maxAp[playerApLevel])
-		{
-			playerAP = maxAp[playerApLevel];
-		}
-	}
-	if (enemyApTimer >= apChargeTime[enemyApLevel])
-	{
-		enemyApTimer = 0;
-		enemyAP++;
-		if (enemyAP >= maxAp[enemyApLevel])
-		{
-			enemyAP = maxAp[enemyApLevel];
-		}
-	}
+
 }

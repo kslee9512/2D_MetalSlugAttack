@@ -67,10 +67,62 @@ HRESULT Enemy::Init(int unitNum, CollisionChecker* collisionChecker)
         attackRangeHeight = 150;
         maxAttackCount = 1;
     }
+    else if (unitNum == 2)
+    {
+        Name = "¹æÆÐº´";
+        unitType = UnitType::ENEMY;
+        image_Stand = ImageManager::GetSingleton()->FindImage("shield_stand");
+        if (image_Stand == nullptr)
+        {
+            MessageBox(g_hWnd, "shield_stand_Image Load_Fail", "Image_Load Fail", MB_OK);
+            return E_FAIL;
+        }
 
+        image_Walk = ImageManager::GetSingleton()->FindImage("shield_walk");
+        if (image_Walk == nullptr)
+        {
+            MessageBox(g_hWnd, "shield_walk_Image Load_Fail", "Image_Load Fail", MB_OK);
+            return E_FAIL;
+        }
+        image_Fire = ImageManager::GetSingleton()->FindImage("shield_attack");
+        if (image_Fire == nullptr)
+        {
+            MessageBox(g_hWnd, "shield_attack_Image Load_Fail", "Image_Load Fail", MB_OK);
+            return E_FAIL;
+        }
+        image_Dead = ImageManager::GetSingleton()->FindImage("shield_dead");
+        if (image_Dead == nullptr)
+        {
+            MessageBox(g_hWnd, "shield_dead_Image Load_Fail", "Image_Load Fail", MB_OK);
+            return E_FAIL;
+        }
+        image_Win = ImageManager::GetSingleton()->FindImage("shield_win");
+        if (image_Win == nullptr)
+        {
+            MessageBox(g_hWnd, "shield_win_Image Load_Fail", "Image_Load Fail", MB_OK);
+            return E_FAIL;
+        }
+        pos.x = WINSIZE_X - 180;
+        pos.y = 325;
+        moveSpeed = 60.0f;
+        standMaxFrame = 5;
+        fireMaxFrame = 15;
+        walkMaxFrame = 8;
+        winMaxFrame = 3;
+        deadMaxFrame = 11;
+        characterHp = 300;
+        characterAtk = 50;
+        attackCooltime = 5.0f;
+        hitBoxHeight = 50;
+        hitBoxWidth = 30;
+        hitBoxPos = { pos.x + hitBoxWidth, pos.y };
+        attackRangeWidth = 50;
+        attackRangeHeight = 150;
+        maxAttackCount = 1;
+    }
     attackBoxPos = { pos.x - (attackRangeWidth / 2) + 10, pos.y };
     attackRange = GetRectToCenter(attackBoxPos.x, attackBoxPos.y, attackRangeWidth, attackRangeHeight);
-    hitBox = GetRectToCenter(pos.x, pos.y, hitBoxWidth, hitBoxHeight);
+    hitBox = GetRectToCenter(pos.x , pos.y, hitBoxWidth, hitBoxHeight);
     collisionChecker->AddEnemyCharacter(this);
 	return E_NOTIMPL;
 }
@@ -111,7 +163,7 @@ void Enemy::Render(HDC hdc)
 {
     if (isAlive == true)
     {
-        //Rectangle(hdc, attackRange.left, attackRange.top, attackRange.right, attackRange.bottom);
+        Rectangle(hdc, attackRange.left, attackRange.top, attackRange.right, attackRange.bottom);
         if (characterStatus == STATUS::WALK)
         {
             image_Walk->FrameRender(hdc, pos.x, pos.y, currFrameX, 0, true, 2);
@@ -128,7 +180,7 @@ void Enemy::Render(HDC hdc)
         {
             image_Win->FrameRender(hdc, pos.x, pos.y, currFrameX, 0, true, 2);
         }
-        //Rectangle(hdc, hitBox.left, hitBox.top, hitBox.right, hitBox.bottom);
+        Rectangle(hdc, hitBox.left, hitBox.top, hitBox.right, hitBox.bottom);
     }
     if (isAlive == false && endDeadScene == false)
     {
