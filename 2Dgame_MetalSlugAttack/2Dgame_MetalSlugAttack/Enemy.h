@@ -1,11 +1,13 @@
 #pragma once
 #include "GameNode.h"
 
+class Player;
 class CollisionChecker;
 class Enemy : public GameNode
 {
 private:
 	CollisionChecker* collisionChecker;
+	Player* target;
 	string Name;
 	Image* image_Stand;
 	Image* image_Walk;
@@ -59,6 +61,7 @@ public:
 	void SetReadyToFire(bool readyToFire) { this->readyToFire = readyToFire; }
 	void SetCharacterHp(int damage) { this->characterHp -= damage; }
 	void SetIsAlive(bool isAlive) { this->isAlive = isAlive; }
+	void SetTarget(Player* enemy) { this->target = enemy; }
 	void PlusCurrAttackCount() { this->currAttackCount++; }
 	void SetCurrAttackCount(int count) { this->currAttackCount = count; }
 	int GetCurrAttackCount() { return this->currAttackCount; }
@@ -68,6 +71,7 @@ public:
 	bool GetFindEnemy() { return this->findEnemy; }
 	bool GetReadyToFire() { return this->readyToFire; }
 	bool GetCharacterAlive() { return this->isAlive; }
+	bool GetEndDeadScene() { return this->endDeadScene; }
 	RECT GetAttackBox() { return this->attackRange; }
 	RECT GetHitBox() { return this->hitBox; }
 	STATUS GetStatus() { return this->characterStatus; }

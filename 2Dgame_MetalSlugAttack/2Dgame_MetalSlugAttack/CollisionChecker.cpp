@@ -50,14 +50,7 @@ void CollisionChecker::CheckEnemy()
 					|| (*itlPlayerCharacter)->GetStatus() == STATUS::STAND))
 				{
 					(*itlPlayerCharacter)->SetFindEnemy(true);
-					if ((*itlPlayerCharacter)->GetReadyToFire())
-					{
-						if ((*itlPlayerCharacter)->GetCurrAttackCount() <= (*itlPlayerCharacter)->GetMaxAttackCount())
-						{
-							(*itlPlayerCharacter)->SetCurrAttackCount();
-							(*itlEnemyCharacter)->SetCharacterHp((*itlPlayerCharacter)->GetCharacterAtk());
-						}
-					}
+					(*itlPlayerCharacter)->SetTarget((*itlEnemyCharacter));
 					break;
 				}
 				else
@@ -71,6 +64,10 @@ void CollisionChecker::CheckEnemy()
 	{
 		for (itlEnemyCharacter = lEnemyCharacter.begin(); itlEnemyCharacter != lEnemyCharacter.end(); itlEnemyCharacter++)
 		{
+			if (lPlayerCharacter.size() < 1)
+			{
+				(*itlEnemyCharacter)->SetFindEnemy(false);
+			}
 			for (itlPlayerCharacter = lPlayerCharacter.begin(); itlPlayerCharacter != lPlayerCharacter.end(); itlPlayerCharacter++)
 			{
 				playerHitBox = (*itlPlayerCharacter)->GetHitBox();
@@ -78,6 +75,7 @@ void CollisionChecker::CheckEnemy()
 				if (IntersectRect(&rc, &playerHitBox, &enemyAttackRange))
 				{
 					(*itlEnemyCharacter)->SetFindEnemy(true);
+					(*itlEnemyCharacter)->SetTarget((*itlPlayerCharacter));
 					break;
 				}
 				else

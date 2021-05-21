@@ -41,19 +41,19 @@ void EnemyManager::Release()
 
 void EnemyManager::Update()
 {
-	if (vEnemyMgr.size() >= 1)
-	{
 		for (int i = 0; i < vEnemyMgr.size(); i++)
 		{
 			vEnemyMgr[i]->Update();
 		}
-	}
 }
 
 void EnemyManager::Render(HDC hdc)
 {
 	for (int i = 0; i < vEnemyMgr.size(); i++)
 	{
-		vEnemyMgr[i]->Render(hdc);
+        if (!(vEnemyMgr[i]->GetEndDeadScene()))
+        {
+            vEnemyMgr[i]->Render(hdc);
+        }
 	}
 }

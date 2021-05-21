@@ -40,22 +40,16 @@ void PlayerManager::Release()
 
 void PlayerManager::Update()
 {
-    if (vPlayerCharacter.size() >= 1)
+    for (int i = 0; i < vPlayerCharacter.size(); i++)
     {
-        for (int i = 0; i < vPlayerCharacter.size(); i++)
-        {
-            vPlayerCharacter[i]->Update();
-        }
+        vPlayerCharacter[i]->Update();
     }
 }
 
 void PlayerManager::Render(HDC hdc)
 {
-    if (vPlayerCharacter.size() >= 1)
+    for (int i = 0; i < vPlayerCharacter.size(); i++)
     {
-        for (int i = 0; i < vPlayerCharacter.size(); i++)
-        {
-            vPlayerCharacter[i]->Render(hdc);
-        }
+        vPlayerCharacter[i]->Render(hdc);
     }
 }

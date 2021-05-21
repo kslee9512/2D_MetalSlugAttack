@@ -157,14 +157,8 @@ void BattleScene::Render(HDC hdc)
 	{
 		unit_Frame[0].unit_Frame_unable->Render(hdc, 250, 480);
 	}
-	if (playerMgr->GetPlayerVector().size() >= 1)
-	{
 		playerMgr->Render(hdc);
-	}
-	if (enemyMgr->GetEnemyVector().size() >= 1)
-	{
 		enemyMgr->Render(hdc);
-	}
 	if (attackStatus == ATTACKSTATUS::UNDO)
 	{
 		attack_Undo->FrameRender(hdc, 860, 470, currFrameX, 0, false, 2);
@@ -201,7 +195,7 @@ void BattleScene::CheckUi()	//BattleScene 버튼 상호작용
 
 void BattleScene::EnemyInit() //Enemy Init 작동방식 구현
 {
-	if (KeyManager::GetSingleton()->IsOnceKeyDown(VK_NUMPAD5))
+	if (KeyManager::GetSingleton()->IsOnceKeyDown('A'))
 	{
 		enemyMgr->Init(1, collisionChecker);
 	}

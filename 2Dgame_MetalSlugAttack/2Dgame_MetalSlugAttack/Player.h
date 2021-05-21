@@ -1,10 +1,12 @@
 #pragma once
 #include "GameNode.h"
 
+class Enemy;
 class CollisionChecker;
 class Player : public GameNode
 {
 	CollisionChecker* collisionChecker;
+	Enemy* target;
 	string Name;
 	Image* image_Stand;
 	Image* image_Walk;
@@ -17,6 +19,7 @@ class Player : public GameNode
 	bool isAlive;
 	bool readyToFire;
 	bool findEnemy;
+	bool endDeadScene;
 	int currFrameX;
 	UnitType unitType;
 	RECT attackRange;
@@ -50,6 +53,7 @@ public:
 	void UpdateMove();
 	void UpdateStand();
 	void UpdateFire();
+	void UpdateDead();
 
 	void SetStatus(STATUS status) { this->characterStatus = status; }
 	void SetFindEnemy(bool findEnemy) { this->findEnemy = findEnemy; }
@@ -57,6 +61,7 @@ public:
 	void SetReadyToFire(bool readyToFire) { this->readyToFire = readyToFire; }
 	void SetCharacterHp(int damage) { this->characterHp -= damage; }
 	void SetIsAlive(bool isAlive) { this->isAlive = isAlive; }
+	void SetTarget(Enemy* enemy) { this->target = enemy; }
 	void PlusCurrAttackCount() { this->currAttackCount++; }
 	void SetCurrAttackCount() { this->currAttackCount += 1; }
 	int GetCurrAttackCount() { return this->currAttackCount; }

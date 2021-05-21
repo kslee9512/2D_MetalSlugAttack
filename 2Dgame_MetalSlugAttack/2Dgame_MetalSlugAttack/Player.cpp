@@ -14,7 +14,7 @@ HRESULT Player::Init(int unitNum, CollisionChecker* collisionChecker)
     findEnemy = false;
     readyToFire = true;
     currAttackCount = 0;
-
+    endDeadScene = false;
     if (unitNum == 1)
     {
         Name = "Eri";
@@ -83,6 +83,16 @@ void Player::Release()
 
 void Player::Update()
 {
+    if (characterHp <= 0)
+    {
+        if (isAlive)
+        {
+            isAlive = false;
+            characterStatus = STATUS::DEAD;
+            currFrameX = 0;
+            changeTimer = 0.0f;
+        }
+    }
     switch (characterStatus)
     {
     case STATUS::WALK:
@@ -94,10 +104,9 @@ void Player::Update()
     case STATUS::FIRE:
         UpdateFire();
         break;
-    }
-    if (characterHp <= 0)
-    {
-        isAlive = false;
+    case STATUS::DEAD:
+        UpdateDead();
+        break;   
     }
 }
 
@@ -122,12 +131,11 @@ void Player::Render(HDC hdc)
         {
             image_Win->FrameRender(hdc, pos.x, pos.y, currFrameX, 0, true, 2);
         }
-        else if (characterStatus == STATUS::DEAD)
-        {
-            image_Dead->FrameRender(hdc, pos.x, pos.y, currFrameX, 0, true, 2);
-        }
         //Rectangle(hdc, hitBox.left, hitBox.top, hitBox.right, hitBox.bottom);
-
+    }
+    if (isAlive == false && endDeadScene == false)
+    {
+        image_Dead->FrameRender(hdc, pos.x, pos.y, currFrameX, 0, true, 2);
     }
 }
 
@@ -192,10 +200,14 @@ void Player::UpdateStand()
     if (findEnemy && readyToFire)
     {
         currFrameX = 0;
+        changeTimer = 0.0f;
         characterStatus = STATUS::FIRE;
+        target->SetCharacterHp(characterAtk);
     }
     else if (!findEnemy)
     {
+        currFrameX = 0;
+        changeTimer = 0.0f;
         characterStatus = STATUS::WALK;
     }
 }
@@ -207,13 +219,28 @@ void Player::UpdateFire()
     {
         changeTimer = 0.0f;
         currFrameX++;
-        if (currFrameX > fireMaxFrame)
+        if (currFrameX >= fireMaxFrame)
         {
             currFrameX = 0;
             fireCount = 0.0f;
             currAttackCount = 0;
             readyToFire = false;
             characterStatus = STATUS::STAND;
+        }
+    }
+}
+
+void Player::UpdateDead()
+{
+    changeTimer += TimerManager::GetSingleton()->GetElapsedTime();
+    if (changeTimer >= 0.07f)
+    {
+        changeTimer = 0.0f;
+        currFrameX++;
+        if (currFrameX > deadMaxFrame)
+        {
+            currFrameX = 0;
+            endDeadScene = true;
         }
     }
 }

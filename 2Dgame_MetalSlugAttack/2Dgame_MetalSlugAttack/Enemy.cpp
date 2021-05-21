@@ -58,7 +58,7 @@ HRESULT Enemy::Init(int unitNum, CollisionChecker* collisionChecker)
         winMaxFrame = 5;
         deadMaxFrame = 10;
         characterHp = 30;
-        characterAtk = 10;
+        characterAtk = 20;
         attackCooltime = 3.0f;
         hitBoxHeight = 50;
         hitBoxWidth = 30;
@@ -81,6 +81,15 @@ void Enemy::Release()
 
 void Enemy::Update()
 {
+    if (characterHp <= 0)
+    {
+        if (isAlive && endDeadScene == false)
+        {
+            isAlive = false;
+            characterStatus = STATUS::DEAD;
+            currFrameX = 0;
+        }
+    }
     switch (characterStatus)
     {
     case STATUS::WALK:
@@ -95,11 +104,6 @@ void Enemy::Update()
     case STATUS::DEAD:
         UpdateDead();
         break;
-    }
-    if (characterHp <= 0)
-    {
-        isAlive = false;
-        currFrameX = 0;
     }
 }
 
@@ -126,7 +130,7 @@ void Enemy::Render(HDC hdc)
         }
         //Rectangle(hdc, hitBox.left, hitBox.top, hitBox.right, hitBox.bottom);
     }
-    if (characterStatus == STATUS::DEAD && isAlive == false && endDeadScene == false)
+    if (isAlive == false && endDeadScene == false)
     {
         image_Dead->FrameRender(hdc, pos.x, pos.y, currFrameX, 0, true, 2);
     }
@@ -196,6 +200,7 @@ void Enemy::UpdateStand()
     {
         currFrameX = 0;
         readyToFire = false;
+        target->SetCharacterHp(characterAtk);
         characterStatus = STATUS::FIRE;
     }
     else if (!findEnemy)
