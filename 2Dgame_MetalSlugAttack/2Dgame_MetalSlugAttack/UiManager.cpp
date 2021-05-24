@@ -14,12 +14,12 @@ HRESULT UiManager::Init()
 	ImageManager::GetSingleton()->AddImage("unit_frame_undo", "Image/Ui/unit_Frame_undo.bmp", 80, 80, true, RGB(255, 255, 255));
 	ImageManager::GetSingleton()->AddImage("coastframe", "Image/Ui/PriceFrame.bmp", 90, 30, true, RGB(255, 0, 255));
 	ImageManager::GetSingleton()->AddImage("maxLv", "Image/Ui/maxlevel.bmp", 40, 20, true, RGB(255, 255, 255));
+	ImageManager::GetSingleton()->AddImage("cooltimebar", "Image/Ui/cooltimebar.bmp", 55, 20, true, RGB(255, 255, 255));
 	maxApImage = ImageManager::GetSingleton()->FindImage("maxLv");
 	for (int i = 0; i < 3; i++)
 	{
 		apFrame.coastImage_able[i] = ImageManager::GetSingleton()->FindImage("purchasenum");
 		apFrame.coastImage_unable[i] = ImageManager::GetSingleton()->FindImage("nullpurchasenum");
-
 	}
 	apFrame.coastFrame = ImageManager::GetSingleton()->FindImage("coastframe");
 	apFrame.unit_Frame_able = ImageManager::GetSingleton()->FindImage("unit_frame");
@@ -81,16 +81,38 @@ HRESULT UiManager::Init()
 	endPurchase = true;
 	apImageCount = 0.0f;
 	apStatus = APSTATUS::NORMAL;
+	for (int i = 0; i < 5; i++)
+	{
+		unitFrame[i].canPurchase = false;
+		unitFrame[i].endCoolTime = true;
+		unitFrame[i].unit_Frame_able = ImageManager::GetSingleton()->FindImage("unit_frame");
+		unitFrame[i].unit_Frame_unable = ImageManager::GetSingleton()->FindImage("unit_frame_undo");
+		unitFrame[i].coastFrame = ImageManager::GetSingleton()->FindImage("coastframe");
+		unitFrame[i].coolTimeBar = ImageManager::GetSingleton()->FindImage("cooltimebar");
+		unitFrame[i].selectNum = 1;
+		unitFrame[i].checkCoolTime = 0.0f;
+		unitFrame[i].frameBox = { 260 + (100 * i), 480, 340 + (100 * i), 560 };
+		unitFrame[i].currCoolTime = 0;
+		if (unitFrame[i].selectNum == 1)
+		{
+			unitFrame[i].unitCoast = 45 * (i + 1);
+			unitFrame[i].purchaseCoolTime = 5;
+		}
+		calcAp = unitFrame[i].unitCoast;
+		for (int j = 0; j < 3; j++)
+		{
+			unitFrame[i].coastImage_able[j] = ImageManager::GetSingleton()->FindImage("purchasenum");
+			unitFrame[i].coastImage_unable[j] = ImageManager::GetSingleton()->FindImage("nullpurchasenum");
+			unitFrame[i].calcUnitCoast[j] = calcAp % 10;
+			calcAp /= 10;
+		}
+	}
 	return S_OK;
 }
 
 void UiManager::Update()
 {
 	ApCount();
-	if (KeyManager::GetSingleton()->IsOnceKeyDown(VK_LBUTTON))
-	{
-		PurchaseAp();
-	}
 	UpdateNumImage();
 
 }
@@ -100,6 +122,31 @@ void UiManager::ApCount()
 	playerApTimer += TimerManager::GetSingleton()->GetElapsedTime();
 	enemyApTimer += TimerManager::GetSingleton()->GetElapsedTime();
 	apImageCount += TimerManager::GetSingleton()->GetElapsedTime();
+	for (int i = 0; i < 5; i++)
+	{
+		if (!(unitFrame[i].endCoolTime))
+		{
+			unitFrame[i].checkCoolTime += TimerManager::GetSingleton()->GetElapsedTime();
+			if (unitFrame[i].checkCoolTime >= 1)
+			{
+				unitFrame[i].checkCoolTime = 0.0f;
+				unitFrame[i].currCoolTime++;
+			}
+			if (unitFrame[i].currCoolTime == unitFrame[i].purchaseCoolTime)
+			{
+				unitFrame[i].endCoolTime = true;
+				unitFrame[i].currCoolTime = 0;
+			}
+		}
+		if (playerAP >= unitFrame[i].unitCoast && unitFrame[i].endCoolTime)
+		{
+			unitFrame[i].canPurchase = true;
+		}
+		else if (playerAP < unitFrame[i].unitCoast && unitFrame[i].endCoolTime)
+		{
+			unitFrame[i].canPurchase = false;
+		}
+	}
 	if (apImageCount >= 0.1f)
 	{
 		apImageCount = 0.0f;
@@ -190,7 +237,36 @@ void UiManager::Render(HDC hdc)
 	{
 		ap_Purchase->FrameRender(hdc, 100, 525, apCurrFrameX, 0, true);
 	}
-
+	int posX = 100;
+	for (int i = 0; i < 5; i++)
+	{
+		if (unitFrame[i].canPurchase)
+		{
+			unitFrame[i].unit_Frame_able->Render(hdc, 300 + (posX * i), 520, true);
+			unitFrame[i].coastFrame->Render(hdc, 300 + (posX * i), 555, true);
+			for (int j = 0; j < 3; j++)
+			{
+				unitFrame[i].coastImage_able[j]->FrameRender(hdc, 290 + (100 * i) + (10 * j), 555, unitFrame[i].calcUnitCoast[(j- 2)* -1], 0, true, 2);
+				//Rectangle(hdc, unitFrame[i].frameBox.left, unitFrame[i].frameBox.top, unitFrame[i].frameBox.right, unitFrame[i].frameBox.bottom);
+			}
+		}
+		else if (!(unitFrame[i].canPurchase))
+		{
+			unitFrame[i].unit_Frame_unable->Render(hdc, 300 + (posX * i), 520, true);
+			unitFrame[i].coastFrame->Render(hdc, 300 + (posX * i), 555, true);
+			if ((unitFrame[i].endCoolTime))
+			{
+				for (int j = 0; j < 3; j++)
+				{
+					unitFrame[i].coastImage_unable[j]->FrameRender(hdc, 290 + (100 * i) + (10 * j), 555, unitFrame[i].calcUnitCoast[(j - 2) * -1], 0, true, 2);
+				}
+			}
+			else if (!(unitFrame[i].endCoolTime))
+			{
+				unitFrame[i].coolTimeBar->CoolTimeRender(hdc, 300 + (100 * i), 555, true, unitFrame[i].purchaseCoolTime, unitFrame[i].currCoolTime);
+			}
+		}
+	}
 	wsprintf(test, "%d , %d", playerAP, playerApLevel);
 	TextOut(hdc, 80, 400, test, strlen(test));
 }
@@ -242,4 +318,29 @@ void UiManager::PurchaseAp()
 		apStatus = APSTATUS::PURCHASE;
 		apCurrFrameX = 0;
 	}
+}
+
+int UiManager::PurchaseUnit()
+{
+	for (int i = 0; i < 5; i++)
+	{
+		if (PtInRect(&(unitFrame[i].frameBox), g_ptMouse) && unitFrame[i].canPurchase)
+		{
+			playerAP -= unitFrame[i].unitCoast;
+			unitFrame[i].canPurchase = false;
+			unitFrame[i].endCoolTime = false;
+			return unitFrame[i].selectNum;
+			break;
+		}
+	}
+}
+
+bool UiManager::CheckUnitPurchase()
+{
+	for (int i = 0; i < 5; i++)
+	{
+		if (PtInRect(&(unitFrame[i].frameBox), g_ptMouse) && unitFrame[i].canPurchase)
+			return true;
+	}
+	return false;
 }

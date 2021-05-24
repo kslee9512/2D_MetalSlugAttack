@@ -81,6 +81,7 @@ public:
 	// 화면에 출력
 	void Render(HDC hdc, int destX = 0, int destY = 0,
 		bool isCenterRenderring = false);
+	void CoolTimeRender(HDC hdc, int destX = 0, int destY = 0, bool isCenterRenderring = false, int maxCoolTime = 0, int currTime = 0);
 	void FrameRender(HDC hdc, int destX, int destY,
 		int currFrameX, int currFrameY, bool isCenterRenderring = false, int size = 1);
 	void AlphaRender(HDC hdc, int destX, int destY,

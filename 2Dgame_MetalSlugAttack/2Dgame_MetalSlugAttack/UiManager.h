@@ -9,11 +9,16 @@ typedef struct FrameUi
 	Image* coastImage_able[3];
 	Image* coastImage_unable[3];
 	Image* coastFrame;
+	Image* coolTimeBar;
 	bool canPurchase;
+	bool endCoolTime;
 	RECT frameBox;
 	int selectNum;
 	int unitCoast;
-	float purchaseCoolTime;
+	int calcUnitCoast[3];
+	int currCoolTime;
+	int purchaseCoolTime;
+	float checkCoolTime;
 };
 enum class APSTATUS { NORMAL, PURCHASE, MAX};
 class UiManager : public GameNode
@@ -52,7 +57,7 @@ private:
 	int apLvUpCoast[5];
 	int maxApLevel;
 	FrameUi apFrame;
-	FrameUi unitFrame;
+	FrameUi unitFrame[5];
 	APSTATUS apStatus;
 public:
 	HRESULT Init();
@@ -61,4 +66,6 @@ public:
 	void Render(HDC hdc);
 	void UpdateNumImage();
 	void PurchaseAp();
+	int PurchaseUnit();
+	bool CheckUnitPurchase();
 };

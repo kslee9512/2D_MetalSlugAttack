@@ -19,8 +19,6 @@ HRESULT BattleScene::Init()
 	attackCool = 5.0f;
 	attackStatus = ATTACKSTATUS::UNDO;
 
-
-
 	//UiImage Add
 	ImageManager::GetSingleton()->AddImage("background", "Image/Background/background.bmp", WINSIZE_X, 380);
 	ImageManager::GetSingleton()->AddImage("ui_up", "Image/Ui/Ui_Up.bmp", WINSIZE_X, 70);
@@ -28,10 +26,10 @@ HRESULT BattleScene::Init()
 	ImageManager::GetSingleton()->AddImage("attack_undo", "Image/Ui/attack_undo.bmp", 735, 49, 15, 1, true, RGB(128, 128, 192));
 	ImageManager::GetSingleton()->AddImage("attack_ready", "Image/Ui/attack_ready.bmp", 212, 49, 4, 1, true, RGB(128, 128, 192));
 	ImageManager::GetSingleton()->AddImage("attack_fire", "Image/Ui/attack_fire.bmp", 583, 49, 11, 1, true, RGB(128, 128, 192));
-	ImageManager::GetSingleton()->AddImage("player_hpframe", "Image/Ui/Player_HpFrame.bmp", 240, 50, true, RGB(255, 255, 255));
-	ImageManager::GetSingleton()->AddImage("enemy_hpframe", "Image/Ui/Enemy_HpFrame.bmp", 240, 50, true, RGB(255, 255, 255));
-	ImageManager::GetSingleton()->AddImage("player", "Image/Ui/Player.bmp", 60, 30, true, RGB(255, 255, 255));
-	ImageManager::GetSingleton()->AddImage("enemy", "Image/Ui/Enemy.bmp", 60, 30, true, RGB(255, 255, 255));
+	ImageManager::GetSingleton()->AddImage("player_hpframe", "Image/Ui/Player_HpFrame.bmp", 240, 50, true, RGB(255, 0, 255));
+	ImageManager::GetSingleton()->AddImage("enemy_hpframe", "Image/Ui/Enemy_HpFrame.bmp", 240, 50, true, RGB(255, 0, 255));
+	ImageManager::GetSingleton()->AddImage("player", "Image/Ui/Player.bmp", 60, 30, true, RGB(255, 0, 255));
+	ImageManager::GetSingleton()->AddImage("enemy", "Image/Ui/Enemy.bmp", 60, 30, true, RGB(255, 0, 255));
 	ImageManager::GetSingleton()->AddImage("minimap", "Image/Ui/minimap.bmp", 270, 50, true, RGB(255, 255, 255));
 	ImageManager::GetSingleton()->AddImage("enemyhp", "Image/Ui/Red_Bar.bmp", 178, 8, true, RGB(255, 255, 255));
 	ImageManager::GetSingleton()->AddImage("playerhp", "Image/Ui/Yellow_Bar.bmp", 178, 8, true, RGB(255, 255, 255));
@@ -93,6 +91,16 @@ void BattleScene::Release()
 void BattleScene::Update()
 {
 	uiMgr->Update();
+	if (KeyManager::GetSingleton()->IsOnceKeyDown(VK_LBUTTON))
+	{
+		uiMgr->PurchaseAp();
+		if (uiMgr->CheckUnitPurchase())
+		{
+			int unitNum = 0;
+			unitNum = uiMgr->PurchaseUnit();
+			playerMgr->Init(unitNum, collisionChecker);
+		}
+	}
 	playerMgr->Update();
 	EnemyInit();
 	enemyMgr->Update();
