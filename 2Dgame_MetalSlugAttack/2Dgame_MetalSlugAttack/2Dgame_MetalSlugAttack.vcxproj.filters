@@ -75,7 +75,7 @@
     <ClCompile Include="Player.cpp">
       <Filter>소스 파일\GameData</Filter>
     </ClCompile>
-    <ClCompile Include="ApManager.cpp">
+    <ClCompile Include="UiManager.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -131,7 +131,7 @@
     <ClInclude Include="Player.h">
       <Filter>소스 파일\GameData</Filter>
     </ClInclude>
-    <ClInclude Include="ApManager.h">
+    <ClInclude Include="UiManager.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

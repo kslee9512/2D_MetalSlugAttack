@@ -34,6 +34,7 @@ typedef struct tagFPoint
 	float y;
 } FPOINT, * PFPOINT;
 
+
 //typedef tagFPoint FPOINT2;
 //typedef tagFPoint* PFPOINT2;
 

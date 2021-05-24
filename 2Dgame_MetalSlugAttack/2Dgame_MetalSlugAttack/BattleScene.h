@@ -4,15 +4,8 @@ class Image;
 class CollisionChecker;
 class PlayerManager;
 class EnemyManager;
-typedef struct FrameUi
-{
-	Image* unit_Frame_able;
-	Image* unit_Frame_unable;
-	bool canPurchase;
-	RECT frameBox;
-	int selectNum;
-	int unitCoast;
-};
+class UiManager;
+
 enum class ATTACKSTATUS {UNDO, READY, FIRED};
 
 class BattleScene : public GameNode
@@ -33,8 +26,6 @@ private:
 	Image* player_Hpbar;
 	Image* enemy_Hpbar;
 	Image* apBar;
-	FrameUi unit_Frame[5];
-	FrameUi apFrame;
 	ATTACKSTATUS attackStatus;
 	int currFrameX;
 	int apCurrFrameX;
@@ -58,7 +49,8 @@ private:
 	int playerApLevel;
 	int enemyApLevel;
 
-	CollisionChecker* collisionChecker;	//面倒贸府
+	CollisionChecker* collisionChecker;	//面倒贸府4
+	UiManager* uiMgr;
 	PlayerManager* playerMgr;
 	EnemyManager* enemyMgr;
 public:
@@ -68,9 +60,7 @@ public:
 	virtual void Render(HDC hdc);
 
 	
-	void CheckUi();
 	void EnemyInit();
-	void ApCount();
 	virtual ~BattleScene() {};
 };
 

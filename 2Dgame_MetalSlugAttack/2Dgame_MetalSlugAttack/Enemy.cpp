@@ -104,15 +104,15 @@ HRESULT Enemy::Init(int unitNum, CollisionChecker* collisionChecker)
         }
         pos.x = WINSIZE_X - 180;
         pos.y = 325;
-        moveSpeed = 60.0f;
+        moveSpeed = 50.0f;
         standMaxFrame = 5;
         fireMaxFrame = 15;
         walkMaxFrame = 8;
         winMaxFrame = 3;
         deadMaxFrame = 11;
-        characterHp = 300;
+        characterHp = 400;
         characterAtk = 50;
-        attackCooltime = 5.0f;
+        attackCooltime = 8.0f;
         hitBoxHeight = 50;
         hitBoxWidth = 30;
         hitBoxPos = { pos.x + hitBoxWidth, pos.y };
@@ -163,7 +163,7 @@ void Enemy::Render(HDC hdc)
 {
     if (isAlive == true)
     {
-        Rectangle(hdc, attackRange.left, attackRange.top, attackRange.right, attackRange.bottom);
+        //Rectangle(hdc, attackRange.left, attackRange.top, attackRange.right, attackRange.bottom);
         if (characterStatus == STATUS::WALK)
         {
             image_Walk->FrameRender(hdc, pos.x, pos.y, currFrameX, 0, true, 2);
@@ -180,7 +180,7 @@ void Enemy::Render(HDC hdc)
         {
             image_Win->FrameRender(hdc, pos.x, pos.y, currFrameX, 0, true, 2);
         }
-        Rectangle(hdc, hitBox.left, hitBox.top, hitBox.right, hitBox.bottom);
+        //Rectangle(hdc, hitBox.left, hitBox.top, hitBox.right, hitBox.bottom);
     }
     if (isAlive == false && endDeadScene == false)
     {
