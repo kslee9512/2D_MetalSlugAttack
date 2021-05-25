@@ -1,5 +1,6 @@
 #include "UiManager.h"
 #include "Image.h"
+//test
 HRESULT UiManager::Init()
 {
 	ImageManager::GetSingleton()->AddImage("currAp", "Image/Ui/ap_number.bmp", 100, 20, 10, 1, true, RGB(255, 255, 255));
