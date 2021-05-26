@@ -23,4 +23,5 @@ public:
 
 	void CheckAlive();
 	void CheckEnemy();
+	bool CheckEndGame();
 };

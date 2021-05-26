@@ -2,11 +2,13 @@
 #include "GameNode.h"
 
 class Enemy;
+class EnemyManager;
 class CollisionChecker;
 class Player : public GameNode
 {
 	CollisionChecker* collisionChecker;
 	Enemy* target;
+	EnemyManager* enemyBase;
 	string Name;
 	Image* image_Stand;
 	Image* image_Walk;
@@ -19,6 +21,7 @@ class Player : public GameNode
 	bool isAlive;
 	bool readyToFire;
 	bool findEnemy;
+	bool findBase;
 	bool endDeadScene;
 	int currFrameX;
 	UnitType unitType;
@@ -62,6 +65,8 @@ public:
 	void SetCharacterHp(int damage) { this->characterHp -= damage; }
 	void SetIsAlive(bool isAlive) { this->isAlive = isAlive; }
 	void SetTarget(Enemy* enemy) { this->target = enemy; }
+	void SetTarget(EnemyManager* enemyBase) { this->enemyBase = enemyBase; }
+	void SetFindBase(bool findBase) { this->findBase = findBase; }
 	void PlusCurrAttackCount() { this->currAttackCount++; }
 	void SetCurrAttackCount() { this->currAttackCount += 1; }
 	int GetCurrAttackCount() { return this->currAttackCount; }

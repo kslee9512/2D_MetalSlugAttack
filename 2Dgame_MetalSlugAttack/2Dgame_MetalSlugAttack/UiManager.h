@@ -13,12 +13,24 @@ typedef struct FrameUi
 	bool canPurchase;
 	bool endCoolTime;
 	RECT frameBox;
+	FPOINT portraitPos;
 	int selectNum;
 	int unitCoast;
 	int calcUnitCoast[3];
 	int currCoolTime;
 	int purchaseCoolTime;
 	float checkCoolTime;
+};
+typedef struct enemyAp
+{
+	int enemyApLevel;
+	int enemyAP;
+	float enemyApTimer;
+	int unitCoast[3];
+	int unitNum;
+	float coolTime[3];
+	int enemyUnitCoolTime[3];
+	bool canPurchase[3];
 };
 enum class APSTATUS { NORMAL, PURCHASE, MAX};
 class UiManager : public GameNode
@@ -41,7 +53,6 @@ private:
 	Image* maxApImage;
 	int calcApNum[3];
 	float playerApTimer;
-	float enemyApTimer;
 	float apImageCount;
 	int apCurrFrameX;
 	int apWalkFrame;
@@ -49,16 +60,15 @@ private:
 	int playerAP;
 	int currAp_calcNum[5];
 	int maxAp_calcNum[5];
-	int enemyAP;
 	float apChargeTime[5];
 	int maxAp[5];
 	int playerApLevel;
-	int enemyApLevel;
 	int apLvUpCoast[5];
 	int maxApLevel;
 	FrameUi apFrame;
 	FrameUi unitFrame[5];
 	APSTATUS apStatus;
+	enemyAp enemyAp;
 public:
 	HRESULT Init();
 	void Update();
@@ -66,6 +76,9 @@ public:
 	void Render(HDC hdc);
 	void UpdateNumImage();
 	void PurchaseAp();
+	bool CheckEnemyAP();
+	void RunEnemyCool();
 	int PurchaseUnit();
 	bool CheckUnitPurchase();
+	int GetEnemyUnitNum() { return this->enemyAp.unitNum; }
 };

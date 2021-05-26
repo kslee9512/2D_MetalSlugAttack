@@ -3,6 +3,7 @@
 //test
 HRESULT UiManager::Init()
 {
+	//Ui 프레임 관련
 	ImageManager::GetSingleton()->AddImage("currAp", "Image/Ui/ap_number.bmp", 100, 20, 10, 1, true, RGB(255, 255, 255));
 	ImageManager::GetSingleton()->AddImage("maxAp", "Image/Ui/ap_number_null.bmp", 100, 20, 10, 1, true, RGB(255, 255, 255));
 	ImageManager::GetSingleton()->AddImage("purchasenum", "Image/Ui/purchasenum.bmp", 200, 20, 10, 1, true, RGB(255, 255, 255));
@@ -16,6 +17,10 @@ HRESULT UiManager::Init()
 	ImageManager::GetSingleton()->AddImage("coastframe", "Image/Ui/PriceFrame.bmp", 90, 30, true, RGB(255, 0, 255));
 	ImageManager::GetSingleton()->AddImage("maxLv", "Image/Ui/maxlevel.bmp", 40, 20, true, RGB(255, 255, 255));
 	ImageManager::GetSingleton()->AddImage("cooltimebar", "Image/Ui/cooltimebar.bmp", 55, 20, true, RGB(255, 255, 255));
+
+	//캐릭터 초상화
+	ImageManager::GetSingleton()->AddImage("eri_portrait_able", "Image/Ui/eri_portrait_able.bmp", 80, 80, true, RGB(255, 255, 255));
+	ImageManager::GetSingleton()->AddImage("eri_portrait_unable", "Image/Ui/eri_portrait_unable.bmp", 80, 80, true, RGB(255, 255, 255));
 	maxApImage = ImageManager::GetSingleton()->FindImage("maxLv");
 	for (int i = 0; i < 3; i++)
 	{
@@ -41,16 +46,27 @@ HRESULT UiManager::Init()
 	maxApLevel = 4;
 	apCurrFrameX = 0;
 	playerApTimer = 0.0f;
-	enemyApTimer = 0.0f;
+	enemyAp.enemyApTimer = 0.0f;
+	enemyAp.unitCoast[0] = 30;
+	enemyAp.unitCoast[1] = 120;
+	enemyAp.unitCoast[2] = 300;
+	enemyAp.enemyUnitCoolTime[0] = 4;
+	enemyAp.enemyUnitCoolTime[1] = 15;
+	enemyAp.enemyUnitCoolTime[2] = 30;
+	for (int i = 0; i < 3; i++)
+	{
+		enemyAp.coolTime[i] = 0.0f;
+		enemyAp.canPurchase[i] = true;
+	}
 	playerApLevel = 0;
-	enemyApLevel = 0;
+	enemyAp.enemyApLevel = 0;
 	playerAP = 0;
-	enemyAP = 0;
-	float timer = 0.07f;
+	enemyAp.enemyAP = 0;
+	float timer = 0.05f;
 	for (int i = 0; i < 5; i++)
 	{
 		apChargeTime[i] = timer;
-		timer -= 0.01f;
+		timer -= 0.005f;
 	}
 	int maxInt = 3000;
 	for (int i = 0; i < 5; i++)
@@ -82,6 +98,7 @@ HRESULT UiManager::Init()
 	endPurchase = true;
 	apImageCount = 0.0f;
 	apStatus = APSTATUS::NORMAL;
+	//UnitFrame Init
 	for (int i = 0; i < 5; i++)
 	{
 		unitFrame[i].canPurchase = false;
@@ -96,8 +113,11 @@ HRESULT UiManager::Init()
 		unitFrame[i].currCoolTime = 0;
 		if (unitFrame[i].selectNum == 1)
 		{
-			unitFrame[i].unitCoast = 45 * (i + 1);
+			unitFrame[i].unitCoast = 40;
+			unitFrame[i].unit_Portrait_able = ImageManager::GetSingleton()->FindImage("eri_portrait_able");
+			unitFrame[i].unit_Portrait_Unable = ImageManager::GetSingleton()->FindImage("eri_portrait_unable");
 			unitFrame[i].purchaseCoolTime = 5;
+			unitFrame[i].portraitPos = { float(300 + (100 * i)), 515 };
 		}
 		calcAp = unitFrame[i].unitCoast;
 		for (int j = 0; j < 3; j++)
@@ -115,13 +135,13 @@ void UiManager::Update()
 {
 	ApCount();
 	UpdateNumImage();
-
+	RunEnemyCool();
 }
 
 void UiManager::ApCount()
 {
 	playerApTimer += TimerManager::GetSingleton()->GetElapsedTime();
-	enemyApTimer += TimerManager::GetSingleton()->GetElapsedTime();
+	enemyAp.enemyApTimer += TimerManager::GetSingleton()->GetElapsedTime();
 	apImageCount += TimerManager::GetSingleton()->GetElapsedTime();
 	for (int i = 0; i < 5; i++)
 	{
@@ -131,7 +151,7 @@ void UiManager::ApCount()
 			if (unitFrame[i].checkCoolTime >= 1)
 			{
 				unitFrame[i].checkCoolTime = 0.0f;
-				unitFrame[i].currCoolTime++;
+				unitFrame[i].currCoolTime += 1;
 			}
 			if (unitFrame[i].currCoolTime == unitFrame[i].purchaseCoolTime)
 			{
@@ -183,13 +203,13 @@ void UiManager::ApCount()
 			playerAP = maxAp[playerApLevel];
 		}
 	}
-	if (enemyApTimer >= apChargeTime[enemyApLevel])
+	if (enemyAp.enemyApTimer >= apChargeTime[enemyAp.enemyApLevel])
 	{
-		enemyApTimer = 0;
-		enemyAP++;
-		if (enemyAP >= maxAp[enemyApLevel])
+		enemyAp.enemyApTimer = 0;
+		enemyAp.enemyAP++;
+		if (enemyAp.enemyAP >= maxAp[enemyAp.enemyApLevel])
 		{
-			enemyAP = maxAp[enemyApLevel];
+			enemyAp.enemyAP = maxAp[enemyAp.enemyApLevel];
 		}
 	}
 }
@@ -238,6 +258,7 @@ void UiManager::Render(HDC hdc)
 	{
 		ap_Purchase->FrameRender(hdc, 100, 525, apCurrFrameX, 0, true);
 	}
+	//유닛구매 프레임
 	int posX = 100;
 	for (int i = 0; i < 5; i++)
 	{
@@ -248,6 +269,7 @@ void UiManager::Render(HDC hdc)
 			for (int j = 0; j < 3; j++)
 			{
 				unitFrame[i].coastImage_able[j]->FrameRender(hdc, 290 + (100 * i) + (10 * j), 555, unitFrame[i].calcUnitCoast[(j- 2)* -1], 0, true, 2);
+				unitFrame[i].unit_Portrait_able->Render(hdc, unitFrame[i].portraitPos.x, unitFrame[i].portraitPos.y, true);
 				//Rectangle(hdc, unitFrame[i].frameBox.left, unitFrame[i].frameBox.top, unitFrame[i].frameBox.right, unitFrame[i].frameBox.bottom);
 			}
 		}
@@ -259,16 +281,18 @@ void UiManager::Render(HDC hdc)
 			{
 				for (int j = 0; j < 3; j++)
 				{
+					unitFrame[i].unit_Portrait_Unable->Render(hdc, unitFrame[i].portraitPos.x, unitFrame[i].portraitPos.y, true);
 					unitFrame[i].coastImage_unable[j]->FrameRender(hdc, 290 + (100 * i) + (10 * j), 555, unitFrame[i].calcUnitCoast[(j - 2) * -1], 0, true, 2);
 				}
 			}
 			else if (!(unitFrame[i].endCoolTime))
 			{
+				unitFrame[i].unit_Portrait_Unable->Render(hdc, unitFrame[i].portraitPos.x, unitFrame[i].portraitPos.y, true);
 				unitFrame[i].coolTimeBar->CoolTimeRender(hdc, 300 + (100 * i), 555, true, unitFrame[i].purchaseCoolTime, unitFrame[i].currCoolTime);
 			}
 		}
 	}
-	wsprintf(test, "%d , %d", playerAP, playerApLevel);
+	wsprintf(test, "%d , %d, %d, %d", playerAP, playerApLevel, enemyAp.enemyAP, enemyAp.enemyApLevel);
 	TextOut(hdc, 80, 400, test, strlen(test));
 }
 
@@ -318,6 +342,57 @@ void UiManager::PurchaseAp()
 		endPurchase = false;
 		apStatus = APSTATUS::PURCHASE;
 		apCurrFrameX = 0;
+	}
+}
+
+bool UiManager::CheckEnemyAP()
+{
+	if (enemyAp.enemyAP >= apLvUpCoast[enemyAp.enemyApLevel] && enemyAp.enemyApLevel < maxApLevel)
+	{
+		enemyAp.enemyAP -= apLvUpCoast[enemyAp.enemyApLevel];
+		enemyAp.enemyApLevel++;
+		return false;
+	}
+	else if (enemyAp.enemyAP >= enemyAp.unitCoast[0] && enemyAp.canPurchase[0])
+	{
+		enemyAp.unitNum = 1;
+		enemyAp.enemyAP -= enemyAp.unitCoast[0];
+		enemyAp.canPurchase[0] = false;
+		return true;
+	}
+	else if (enemyAp.enemyAP >= enemyAp.unitCoast[1] && enemyAp.canPurchase[1])
+	{
+		enemyAp.unitNum = 2;
+		enemyAp.enemyAP -= enemyAp.unitCoast[1];
+		enemyAp.canPurchase[1] = false;
+		return true;
+	}
+	else if (enemyAp.enemyAP >= enemyAp.unitCoast[2] && enemyAp.canPurchase[2])
+	{
+		enemyAp.unitNum = 3;
+		enemyAp.enemyAP -= enemyAp.unitCoast[2];
+		enemyAp.canPurchase[2] = false;
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+void UiManager::RunEnemyCool()
+{
+	for (int i = 0; i < 3; i++)
+	{
+		if (!(enemyAp.canPurchase[i]))
+		{
+			enemyAp.coolTime[i] += TimerManager::GetSingleton()->GetElapsedTime();
+			if (enemyAp.coolTime[i] >= enemyAp.enemyUnitCoolTime[i])
+			{
+				enemyAp.canPurchase[i] = true;
+				enemyAp.coolTime[i] = 0.0f;
+			}
+		}
 	}
 }
 

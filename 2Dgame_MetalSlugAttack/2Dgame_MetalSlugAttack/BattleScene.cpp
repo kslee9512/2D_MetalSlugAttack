@@ -11,8 +11,6 @@ HRESULT BattleScene::Init()
 	attackReadyFrame = 3;
 	attackFireFrame = 10;
 	checkAttackCool = 0.0f;
-	apCurrFrameX = 0;
-	apWalkFrame = 11;
 	apPurchaseFrame = 14;
 	changeTime = 0.0f;
 	currFrameX = 0;
@@ -56,6 +54,12 @@ HRESULT BattleScene::Init()
 	ImageManager::GetSingleton()->AddImage("shield_dead", "Image/Shield/shield_dead.bmp", 960, 80, 12, 1, true, RGB(255, 255, 255));
 	ImageManager::GetSingleton()->AddImage("shield_win", "Image/Shield/shield_win.bmp", 320, 80, 4, 1, true, RGB(255, 255, 255));
 
+	//Allen Image Add
+	ImageManager::GetSingleton()->AddImage("allen_stand", "Image/Allen/Allen_stand.bmp", 1960, 75, 14, 1, true, RGB(255, 255, 255));
+	ImageManager::GetSingleton()->AddImage("allen_walk", "Image/Allen/Allen_walk.bmp", 1400, 75, 10, 1, true, RGB(255, 255, 255));
+	ImageManager::GetSingleton()->AddImage("allen_fire", "Image/Allen/Allen_fire.bmp", 1260, 75, 9, 1, true, RGB(255, 255, 255));
+	ImageManager::GetSingleton()->AddImage("allen_dead", "Image/Allen/Allen_dead.bmp", 1960, 75, 14, 1, true, RGB(255, 255, 255));
+
 	backGround = ImageManager::GetSingleton()->FindImage("background");
 	ui_Up = ImageManager::GetSingleton()->FindImage("ui_up");
 	ui_Down = ImageManager::GetSingleton()->FindImage("ui_down");
@@ -75,10 +79,13 @@ HRESULT BattleScene::Init()
 	apPurchase = ImageManager::GetSingleton()->FindImage("appurchase");
 
 	playerMgr = new PlayerManager();
+	playerMgr->BaseInit();
 	enemyMgr = new EnemyManager();
+	enemyMgr->BaseInit();
 	collisionChecker = new CollisionChecker();
 	uiMgr = new UiManager();
 	uiMgr->Init();
+	isEndGame = false;
 	return S_OK;
 }
 
@@ -91,14 +98,17 @@ void BattleScene::Release()
 void BattleScene::Update()
 {
 	uiMgr->Update();
-	if (KeyManager::GetSingleton()->IsOnceKeyDown(VK_LBUTTON))
+	if (!isEndGame)
 	{
-		uiMgr->PurchaseAp();
-		if (uiMgr->CheckUnitPurchase())
+		if (KeyManager::GetSingleton()->IsOnceKeyDown(VK_LBUTTON))
 		{
-			int unitNum = 0;
-			unitNum = uiMgr->PurchaseUnit();
-			playerMgr->Init(unitNum, collisionChecker);
+			uiMgr->PurchaseAp();
+			if (uiMgr->CheckUnitPurchase())
+			{
+				int unitNum = 0;
+				unitNum = uiMgr->PurchaseUnit();
+				playerMgr->Init(unitNum, collisionChecker);
+			}
 		}
 	}
 	playerMgr->Update();
@@ -171,12 +181,12 @@ void BattleScene::Render(HDC hdc)
 
 void BattleScene::EnemyInit() //Enemy Init 작동방식 구현
 {
-	if (KeyManager::GetSingleton()->IsOnceKeyDown('A'))
+	if (!isEndGame)
 	{
-		enemyMgr->Init(1, collisionChecker);
-	}
-	else if (KeyManager::GetSingleton()->IsOnceKeyDown('S'))
-	{
-		enemyMgr->Init(2, collisionChecker);
+		if (uiMgr->CheckEnemyAP())
+		{
+			int unitNum = uiMgr->GetEnemyUnitNum();
+			enemyMgr->Init(unitNum, collisionChecker);
+		}
 	}
 }

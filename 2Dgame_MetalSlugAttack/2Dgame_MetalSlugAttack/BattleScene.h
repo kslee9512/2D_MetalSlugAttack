@@ -48,6 +48,7 @@ private:
 	float enemyApTimer;
 	int playerApLevel;
 	int enemyApLevel;
+	bool isEndGame;
 
 	CollisionChecker* collisionChecker;	//충돌처리4
 	UiManager* uiMgr;

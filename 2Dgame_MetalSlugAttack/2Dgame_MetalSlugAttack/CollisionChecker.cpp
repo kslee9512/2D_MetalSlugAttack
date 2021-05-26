@@ -3,6 +3,7 @@
 #include "EnemyManager.h"
 #include "Player.h"
 #include "Enemy.h"
+
 void CollisionChecker::CheckAlive()
 {
 	//lPlayerCharacter의 iterator->isAlive값이 false의 경우 list에서 삭제
@@ -50,9 +51,16 @@ void CollisionChecker::CheckEnemy()
 					|| (*itlPlayerCharacter)->GetStatus() == STATUS::STAND))
 				{
 					(*itlPlayerCharacter)->SetFindEnemy(true);
+					(*itlPlayerCharacter)->SetFindBase(false);
 					(*itlPlayerCharacter)->SetTarget((*itlEnemyCharacter));
 					break;
 				}
+				//else if (IntersectRect(&rc, &playerAttackRange, &enemyBaseHitBox))
+				//{
+				//	(*itlPlayerCharacter)->SetFindEnemy(false);
+				//	(*itlPlayerCharacter)->SetFindBase(true);
+				//	(*itlPlayerCharacter)->SetTarget(enemyBase);
+				//}
 				else
 				{
 					(*itlPlayerCharacter)->SetFindEnemy(false);
@@ -75,14 +83,23 @@ void CollisionChecker::CheckEnemy()
 				if (IntersectRect(&rc, &playerHitBox, &enemyAttackRange))
 				{
 					(*itlEnemyCharacter)->SetFindEnemy(true);
+					(*itlEnemyCharacter)->SetFindBase(false);
 					(*itlEnemyCharacter)->SetTarget((*itlPlayerCharacter));
 					break;
 				}
+				//else if (IntersectRect(&rc, &playerBaseHitBox, &enemyAttackRange))
+				//{
+				//	(*itlEnemyCharacter)->SetFindBase(true);
+				//	(*itlEnemyCharacter)->SetFindEnemy(false);
+				//	(*itlEnemyCharacter)->SetTarget(playerBase);
+				//}
 				else
 				{
 					(*itlEnemyCharacter)->SetFindEnemy(false);
+					(*itlEnemyCharacter)->SetFindBase(false);
 				}
 			}
 		}
 	}
 }
+
