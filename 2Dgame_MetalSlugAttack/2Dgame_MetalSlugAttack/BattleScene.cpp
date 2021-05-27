@@ -83,6 +83,7 @@ HRESULT BattleScene::Init()
 	enemyMgr = new EnemyManager();
 	enemyMgr->BaseInit();
 	collisionChecker = new CollisionChecker();
+	collisionChecker->Init();
 	uiMgr = new UiManager();
 	uiMgr->Init();
 	isEndGame = false;
@@ -111,11 +112,13 @@ void BattleScene::Update()
 			}
 		}
 	}
-	playerMgr->Update();
 	EnemyInit();
+	playerMgr->Update();
 	enemyMgr->Update();
 	collisionChecker->CheckEnemy();
 	collisionChecker->CheckAlive();
+
+	//Attack버튼 관련
 	changeTime += TimerManager::GetSingleton()->GetElapsedTime();
 	if (attackStatus == ATTACKSTATUS::UNDO)
 	{
@@ -145,7 +148,7 @@ void BattleScene::Update()
 			attackStatus = ATTACKSTATUS::UNDO;
 		}
 	}
-
+	isEndGame = collisionChecker->CheckBaseHp();
 }
 
 void BattleScene::Render(HDC hdc)
@@ -159,9 +162,9 @@ void BattleScene::Render(HDC hdc)
 	hp_Frame[1]->Render(hdc, WINSIZE_X - 340, 10);
 	apBar->Render(hdc, 0, 400);
 	uiMgr->Render(hdc);
-
 		playerMgr->Render(hdc);
 		enemyMgr->Render(hdc);
+	collisionChecker->Render(hdc);
 	if (attackStatus == ATTACKSTATUS::UNDO)
 	{
 		attack_Undo->FrameRender(hdc, 860, 470, currFrameX, 0, false, 2);
@@ -177,6 +180,7 @@ void BattleScene::Render(HDC hdc)
 	player_Hpbar->Render(hdc, 130, 30);
 	enemy_Hpbar->Render(hdc, WINSIZE_X - 310, 30);
 	miniMap->Render(hdc, WINSIZE_X / 2 - 130, 10);
+	collisionChecker->Render(hdc);
 }
 
 void BattleScene::EnemyInit() //Enemy Init 작동방식 구현

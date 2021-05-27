@@ -40,11 +40,10 @@ HRESULT PlayerManager::BaseInit()
     ImageManager::GetSingleton()->AddImage("playerbase", "Image/Base/Base_player.bmp", 1298, 80, 22, 1, true, RGB(255, 255, 255));
     playerBase = ImageManager::GetSingleton()->FindImage("playerbase");
     isStart = false;
-    baseHp = 1000;
     baseEngageFrame = 21;
+
     currFrameX = 0;
     frameTimer = 0.0f;
-    playerBaseHitBox = { 50, 310, 100, 380 };
     return S_OK;
 }
 

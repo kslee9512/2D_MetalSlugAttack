@@ -7,14 +7,22 @@ class Player;
 class Enemy;
 class PlayerManager;
 class EnemyManager;
-class CollisionChecker
+class CollisionChecker : public GameNode
 {
 private:
+	char sztext[128];
+	int playerBaseHp;
+	int enemyBaseHp;
 	list<Player*> lPlayerCharacter;
 	list<Player*>::iterator itlPlayerCharacter;
 	list<Enemy*> lEnemyCharacter;
 	list<Enemy*>::iterator itlEnemyCharacter;
+	RECT playerBaseHitBox;
+	RECT enemyBaseHitBox;
 public:
+	HRESULT Init();
+	void Release();
+	void Render(HDC hdc);
 	void AddPlayerCharacter(Player* characterData) { lPlayerCharacter.push_back(characterData); }
 	void EraseDeadPlayerCharacter(Player* characterData) { lPlayerCharacter.remove(characterData); }
 
@@ -23,5 +31,7 @@ public:
 
 	void CheckAlive();
 	void CheckEnemy();
-	bool CheckEndGame();
+	void SetEnemyBaseHp(int damage) { this->enemyBaseHp -= damage; }
+	void SetPlayerBaseHp(int damage) { this->playerBaseHp -= damage; }
+	bool CheckBaseHp();
 };

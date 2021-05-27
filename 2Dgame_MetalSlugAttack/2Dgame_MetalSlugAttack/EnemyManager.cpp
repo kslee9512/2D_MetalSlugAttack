@@ -39,11 +39,9 @@ HRESULT EnemyManager::BaseInit()
     ImageManager::GetSingleton()->AddImage("enemybase", "Image/Base/Base_enemy.bmp", 1298, 80, 22, 1, true, RGB(255, 255, 255));
     enemyBase = ImageManager::GetSingleton()->FindImage("enemybase");
     isStart = false;
-    baseHp = 1000;
     baseEngageFrame = 21;
     currFrameX = 0;
     frameTimer = 0.0f;
-    enemyBaseHitBox = { 860, 310, 910, 380 };
     return S_OK;
 }
 

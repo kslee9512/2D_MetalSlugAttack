@@ -2,7 +2,7 @@
 #include "CollisionChecker.h"
 #include "Image.h"
 #include "CommonFunction.h"
-#include "PlayerManager.h"
+
 HRESULT Enemy::Init(int unitNum, CollisionChecker* collisionChecker)
 {
     this->collisionChecker = collisionChecker;
@@ -285,13 +285,13 @@ void Enemy::UpdateStand()
     {
         currFrameX = 0;
         readyToFire = false;
-        if (findEnemy)
+        if (findEnemy && !findBase)
         {
             target->SetCharacterHp(characterAtk);
         }
         else if (findBase)
         {
-            playerBase->SetBaseHp(characterAtk);
+            collisionChecker->SetPlayerBaseHp(characterAtk);
         }
         characterStatus = STATUS::FIRE;
     }
