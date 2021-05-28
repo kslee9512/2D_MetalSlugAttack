@@ -64,6 +64,7 @@ public:
 	void SetCurrFrameX(int currFrameX) { this->currFrameX = currFrameX; }
 	void SetReadyToFire(bool readyToFire) { this->readyToFire = readyToFire; }
 	void SetCharacterHp(int damage) { this->characterHp -= damage; }
+	void SetCharacterHp0() { this->characterHp = 0; }
 	void SetIsAlive(bool isAlive) { this->isAlive = isAlive; }
 	void SetTarget(Enemy* enemy) { this->target = enemy; }
 	void SetTarget(EnemyManager* enemyBase) { this->enemyBase = enemyBase; }

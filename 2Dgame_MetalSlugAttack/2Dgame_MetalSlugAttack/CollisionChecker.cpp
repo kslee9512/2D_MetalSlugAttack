@@ -136,7 +136,7 @@ bool CollisionChecker::CheckBaseHp()
 		{
 			if ((*itlPlayerCharacter)->GetCharacterAlive())
 			{
-				(*itlPlayerCharacter)->SetIsAlive(false);
+				(*itlPlayerCharacter)->SetCharacterHp0();
 				(*itlEnemyCharacter)->SetCurrFrameX(0);
 			}
 		}
@@ -164,7 +164,7 @@ bool CollisionChecker::CheckBaseHp()
 		{
 			if ((*itlEnemyCharacter)->GetCharacterAlive())
 			{
-				(*itlEnemyCharacter)->SetIsAlive(false);
+				(*itlEnemyCharacter)->SetCharacterHp0();
 				(*itlEnemyCharacter)->SetCurrFrameX(0);
 			}
 		}
