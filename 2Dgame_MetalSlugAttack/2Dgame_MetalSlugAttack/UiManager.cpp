@@ -48,9 +48,9 @@ HRESULT UiManager::Init()
 	playerApTimer = 0.0f;
 	enemyAp.enemyApTimer = 0.0f;
 	//Àû À¯´Ö ÄÚ½ºÆ®
-	enemyAp.unitCoast[0] = 3000;
-	enemyAp.unitCoast[1] = 1600;
-	enemyAp.unitCoast[2] = 3000;
+	enemyAp.unitCoast[0] = 30;
+	enemyAp.unitCoast[1] = 160;
+	enemyAp.unitCoast[2] = 300;
 	//Àû À¯´Ö ÄðÅ¸ÀÓ
 	enemyAp.enemyUnitCoolTime[0] = 4;
 	enemyAp.enemyUnitCoolTime[1] = 7;
