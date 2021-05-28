@@ -145,7 +145,7 @@ void Image::Render(HDC hdc, int destX, int destY, bool isCenterRenderring)
     }
 }
 
-void Image::CoolTimeRender(HDC hdc, int destX, int destY, bool isCenterRenderring, int maxCoolTime, int currTime)
+void Image::CoolTimeRender(HDC hdc, int destX, int destY, bool isCenterRenderring, float maxCoolTime, float currTime)
 {
     int x = destX;
     int y = destY;
@@ -155,17 +155,18 @@ void Image::CoolTimeRender(HDC hdc, int destX, int destY, bool isCenterRenderrin
         y = destY - (imageInfo->height / 2);
     }
 
+    float currWidth = (imageInfo->width / maxCoolTime) * currTime;
     if (isTransparent)
     {
         // 특정 색상을 빼고 복사하는 함수
         GdiTransparentBlt(
             hdc,
             x, y,
-            imageInfo->width - ((imageInfo->width / maxCoolTime) * currTime), imageInfo->height,
+            imageInfo->width - currWidth, imageInfo->height,
 
             imageInfo->hMemDC,
             0, 0,
-            imageInfo->width, imageInfo->height,
+            imageInfo->width - currWidth, imageInfo->height,
             transColor
         );
     }
@@ -267,6 +268,70 @@ void Image::AlphaRender(HDC hdc, int destX, int destY, bool isCenterRenderring)
     // 3.
     AlphaBlend(hdc, x, y, imageInfo->width, imageInfo->height,
         imageInfo->hBlendDC, 0, 0, imageInfo->width, imageInfo->height, blendFunc);
+}
+
+void Image::PlayerBaseHpRender(HDC hdc, int destX, int destY, bool isCenterRenderring, float currBaseHp, float maxBaseHp)
+{
+    int x = destX;
+    int y = destY;
+    if (isCenterRenderring)
+    {
+        x = destX - (imageInfo->width / 2);
+        y = destY - (imageInfo->height / 2);
+    }
+    float calcFloat = maxBaseHp - currBaseHp;
+
+    float currWidth = (imageInfo->width / maxBaseHp) * calcFloat;
+    if (isTransparent)
+    {
+        // 특정 색상을 빼고 복사하는 함수
+        GdiTransparentBlt(
+            hdc,
+            x, y,
+            imageInfo->width - currWidth, imageInfo->height,
+
+            imageInfo->hMemDC,
+            0, 0,
+            imageInfo->width - currWidth, imageInfo->height,
+            transColor
+        );
+    }
+    else
+    {
+        // bitmap 에 있는 이미지 정보를 다른 비트맵에 복사
+        BitBlt(
+            hdc,                // 복사 목적지 DC
+            x, y,               // 복사 시작 위치
+            imageInfo->width - currWidth,   // 원본에서 복사될 가로크기
+            imageInfo->height,  // 원본에서 복사될 세로크기
+            imageInfo->hMemDC,  // 원본 DC
+            0, 0,               // 원본에서 복사 시작 위치
+            SRCCOPY             // 복사 옵션
+        );
+    }
+}
+
+void Image::EnemyBaseHpRender(HDC hdc, int destX, int destY, bool isCenterRendering, float currBaseHp, float maxBaseHp)
+{
+    int x = destX;
+    int y = destY;
+    if (isCenterRendering)
+    {
+        x = destX - (imageInfo->width / 2);
+        y = destY - (imageInfo->height / 2);
+    }
+    //우측으로 줄게
+    float calcFloat = maxBaseHp - currBaseHp;
+    float currWidth = (imageInfo->width / maxBaseHp) * calcFloat;
+    StretchBlt(hdc,
+        x, y,
+        (imageInfo->width - (int)currWidth) * -1,
+        (imageInfo->height),
+        imageInfo->hMemDC,
+        0, 0,
+        imageInfo->width - (int)currWidth,
+        imageInfo->height,
+        SRCCOPY);
 }
 
 void Image::Release()

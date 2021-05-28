@@ -59,7 +59,7 @@ HRESULT Player::Init(int unitNum, CollisionChecker* collisionChecker)
         deadMaxFrame = 20;
         winMaxFrame = 6;
         characterHp = 50;
-        characterAtk = 15;
+        characterAtk = 15.0f;
         attackCooltime = 2.0f;
         hitBoxHeight = 50;
         hitBoxWidth = 30;
@@ -106,7 +106,10 @@ void Player::Update()
         break;
     case STATUS::DEAD:
         UpdateDead();
-        break;   
+        break;
+    case STATUS::WIN:
+        UpdateWin();
+        break;
     }
 }
 
@@ -160,7 +163,7 @@ void Player::UpdateMove()
             readyToFire = true;
         }
     }
-    if (findEnemy)
+    if (findEnemy || findBase)
     {
         currFrameX = 0;
         characterStatus = STATUS::STAND;
@@ -197,12 +200,11 @@ void Player::UpdateStand()
             readyToFire = true;
         }
     }
-    if (findEnemy && readyToFire)
+    if ((findEnemy || findBase) && readyToFire)
     {
         currFrameX = 0;
-        changeTimer = 0.0f;
-        characterStatus = STATUS::FIRE;
-        if (findEnemy && !findBase)
+        readyToFire = false;
+        if (findEnemy)
         {
             target->SetCharacterHp(characterAtk);
         }
@@ -210,11 +212,10 @@ void Player::UpdateStand()
         {
             collisionChecker->SetEnemyBaseHp(characterAtk);
         }
+        characterStatus = STATUS::FIRE;
     }
-    else if (!findEnemy)
+    else if (!findEnemy && !findBase)
     {
-        currFrameX = 0;
-        changeTimer = 0.0f;
         characterStatus = STATUS::WALK;
     }
 }
@@ -248,6 +249,20 @@ void Player::UpdateDead()
         {
             currFrameX = 0;
             endDeadScene = true;
+        }
+    }
+}
+
+void Player::UpdateWin()
+{
+    changeTimer += TimerManager::GetSingleton()->GetElapsedTime();
+    if (changeTimer >= 0.07f)
+    {
+        changeTimer = 0.0f;
+        currFrameX++;
+        if (currFrameX > winMaxFrame)
+        {
+            currFrameX = 0;
         }
     }
 }

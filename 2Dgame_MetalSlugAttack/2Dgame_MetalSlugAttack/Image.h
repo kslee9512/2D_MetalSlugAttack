@@ -81,13 +81,13 @@ public:
 	// 화면에 출력
 	void Render(HDC hdc, int destX = 0, int destY = 0,
 		bool isCenterRenderring = false);
-	void CoolTimeRender(HDC hdc, int destX = 0, int destY = 0, bool isCenterRenderring = false, int maxCoolTime = 0, int currTime = 0);
+	void CoolTimeRender(HDC hdc, int destX = 0, int destY = 0, bool isCenterRenderring = false, float maxCoolTime = 1.0f, float currTime = 1.0f);
 	void FrameRender(HDC hdc, int destX, int destY,
 		int currFrameX, int currFrameY, bool isCenterRenderring = false, int size = 1);
 	void AlphaRender(HDC hdc, int destX, int destY,
 		bool isCenterRenderring = false);
-
-
+	void PlayerBaseHpRender(HDC hdc, int destX = 0, int destY = 0, bool isCenterRenderring = false, float currBaseHp = 1.0f, float maxBaseHp = 1.0f);
+	void EnemyBaseHpRender(HDC hdc, int destX = 0, int destY = 0, bool isCenterRendering = false, float currBaseHp = 1.0f, float maxBaseHp = 1.0f);
 	void Release();
 
 	// get, set

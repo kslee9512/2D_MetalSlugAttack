@@ -16,7 +16,12 @@ HRESULT BattleScene::Init()
 	currFrameX = 0;
 	attackCool = 5.0f;
 	attackStatus = ATTACKSTATUS::UNDO;
-
+	startTimer = 0.0f;
+	failedTimer = 0.0f;
+	winTimer = 0.0f;
+	textMoveTimer = 0;
+	textPosition[0] = 0;
+	textPosition[1] = WINSIZE_X;
 	//UiImage Add
 	ImageManager::GetSingleton()->AddImage("background", "Image/Background/background.bmp", WINSIZE_X, 380);
 	ImageManager::GetSingleton()->AddImage("ui_up", "Image/Ui/Ui_Up.bmp", WINSIZE_X, 70);
@@ -32,6 +37,11 @@ HRESULT BattleScene::Init()
 	ImageManager::GetSingleton()->AddImage("enemyhp", "Image/Ui/Red_Bar.bmp", 178, 8, true, RGB(255, 255, 255));
 	ImageManager::GetSingleton()->AddImage("playerhp", "Image/Ui/Yellow_Bar.bmp", 178, 8, true, RGB(255, 255, 255));
 	ImageManager::GetSingleton()->AddImage("apbar", "Image/Ui/Pointbar.bmp", 200, 76, true, RGB(255, 0, 255));
+	ImageManager::GetSingleton()->AddImage("mission", "Image/Ui/mission.bmp", 420, 80, true, RGB(255, 255, 255));
+	ImageManager::GetSingleton()->AddImage("start", "Image/Ui/start.bmp", 420, 80, true, RGB(255, 255, 255));
+	ImageManager::GetSingleton()->AddImage("complete", "Image/Ui/complete.bmp", 500, 80, true, RGB(255, 255, 255));
+	ImageManager::GetSingleton()->AddImage("failedMission", "Image/Ui/failmission.bmp", 500, 80, true, RGB(255, 255, 255));
+	ImageManager::GetSingleton()->AddImage("failed", "Image/Ui/failed.bmp", 500, 80, true, RGB(255, 255, 255));
 	//Character_Eri Image Add
 	ImageManager::GetSingleton()->AddImage("Eri_walk", "Image/Eri/Eri_walk.bmp", 960, 50, 12, 1, true, RGB(255, 255, 255));
 	ImageManager::GetSingleton()->AddImage("Eri_stand", "Image/Eri/Eri_stand.bmp", 640, 50, 8, 1, true, RGB(255, 255, 255));
@@ -60,6 +70,11 @@ HRESULT BattleScene::Init()
 	ImageManager::GetSingleton()->AddImage("allen_fire", "Image/Allen/Allen_fire.bmp", 1260, 75, 9, 1, true, RGB(255, 255, 255));
 	ImageManager::GetSingleton()->AddImage("allen_dead", "Image/Allen/Allen_dead.bmp", 1960, 75, 14, 1, true, RGB(255, 255, 255));
 
+	text_Mission = ImageManager::GetSingleton()->FindImage("mission");
+	text_Start = ImageManager::GetSingleton()->FindImage("start");
+	text_Complete = ImageManager::GetSingleton()->FindImage("complete");
+	failed_Mission = ImageManager::GetSingleton()->FindImage("failedMission");
+	text_Failed = ImageManager::GetSingleton()->FindImage("failed");
 	backGround = ImageManager::GetSingleton()->FindImage("background");
 	ui_Up = ImageManager::GetSingleton()->FindImage("ui_up");
 	ui_Down = ImageManager::GetSingleton()->FindImage("ui_down");
@@ -72,8 +87,6 @@ HRESULT BattleScene::Init()
 	miniMap = ImageManager::GetSingleton()->FindImage("minimap");
 	pfText[0] = ImageManager::GetSingleton()->FindImage("player");
 	pfText[1] = ImageManager::GetSingleton()->FindImage("enemy");
-	player_Hpbar = ImageManager::GetSingleton()->FindImage("playerhp");
-	enemy_Hpbar = ImageManager::GetSingleton()->FindImage("enemyhp");
 	apBar = ImageManager::GetSingleton()->FindImage("apbar");
 	apWalk = ImageManager::GetSingleton()->FindImage("apwalk");
 	apPurchase = ImageManager::GetSingleton()->FindImage("appurchase");
@@ -87,6 +100,7 @@ HRESULT BattleScene::Init()
 	uiMgr = new UiManager();
 	uiMgr->Init();
 	isEndGame = false;
+	isReadyGame = false;
 	return S_OK;
 }
 
@@ -98,57 +112,70 @@ void BattleScene::Release()
 
 void BattleScene::Update()
 {
-	uiMgr->Update();
-	if (!isEndGame)
+	if (!isReadyGame)
 	{
-		if (KeyManager::GetSingleton()->IsOnceKeyDown(VK_LBUTTON))
+		StartTextMove();
+	}
+	if (isReadyGame)
+	{
+		if (!isEndGame)
 		{
-			uiMgr->PurchaseAp();
-			if (uiMgr->CheckUnitPurchase())
+			uiMgr->Update();
+			if (KeyManager::GetSingleton()->IsOnceKeyDown(VK_LBUTTON))
 			{
-				int unitNum = 0;
-				unitNum = uiMgr->PurchaseUnit();
-				playerMgr->Init(unitNum, collisionChecker);
+				uiMgr->PurchaseAp();
+				if (uiMgr->CheckUnitPurchase())
+				{
+					int unitNum = 0;
+					unitNum = uiMgr->PurchaseUnit();
+					playerMgr->Init(unitNum, collisionChecker);
+				}
+			}
+			EnemyInit();
+		}
+		playerMgr->Update();
+		enemyMgr->Update();
+		collisionChecker->CheckPlayer();
+		collisionChecker->CheckEnemy();
+		collisionChecker->CheckAlive();
+		isPlayerWin = collisionChecker->CheckPlayerWin();
+		isPlayerDefeat = collisionChecker->CheckPlayerDefeat();
+		//Attack버튼 관련
+		changeTime += TimerManager::GetSingleton()->GetElapsedTime();
+		if (attackStatus == ATTACKSTATUS::UNDO)
+		{
+			checkAttackCool += TimerManager::GetSingleton()->GetElapsedTime();
+			if (checkAttackCool >= attackCool)
+			{
+				attackStatus = ATTACKSTATUS::READY;
+				currFrameX = 0;
+				checkAttackCool = 0.0f;
 			}
 		}
+		if (changeTime >= 0.1f)
+		{
+			changeTime = 0.0f;
+			currFrameX++;
+			if (attackStatus == ATTACKSTATUS::UNDO && currFrameX >= attackUndoFrame)
+			{
+				currFrameX = 0;
+			}
+			if (attackStatus == ATTACKSTATUS::READY && currFrameX >= attackReadyFrame)
+			{
+				currFrameX = 0;
+			}
+			if (attackStatus == ATTACKSTATUS::FIRED && currFrameX >= attackFireFrame)
+			{
+				currFrameX = 0;
+				attackStatus = ATTACKSTATUS::UNDO;
+			}
+		}
+		isEndGame = collisionChecker->CheckBaseHp();
 	}
-	EnemyInit();
-	playerMgr->Update();
-	enemyMgr->Update();
-	collisionChecker->CheckEnemy();
-	collisionChecker->CheckAlive();
-
-	//Attack버튼 관련
-	changeTime += TimerManager::GetSingleton()->GetElapsedTime();
-	if (attackStatus == ATTACKSTATUS::UNDO)
+	if (isPlayerWin || isPlayerDefeat)
 	{
-		checkAttackCool += TimerManager::GetSingleton()->GetElapsedTime();
-		if (checkAttackCool >= attackCool)
-		{
-			attackStatus = ATTACKSTATUS::READY;
-			currFrameX = 0;
-			checkAttackCool = 0.0f;
-		}
+		EndTextMove();
 	}
-	if (changeTime >= 0.1f)
-	{
-		changeTime = 0.0f;
-		currFrameX++;
-		if (attackStatus == ATTACKSTATUS::UNDO && currFrameX >= attackUndoFrame)
-		{
-			currFrameX = 0;
-		}
-		if (attackStatus == ATTACKSTATUS::READY && currFrameX >= attackReadyFrame)
-		{
-			currFrameX = 0;
-		}
-		if (attackStatus == ATTACKSTATUS::FIRED && currFrameX >= attackFireFrame)
-		{
-			currFrameX = 0;
-			attackStatus = ATTACKSTATUS::UNDO;
-		}
-	}
-	isEndGame = collisionChecker->CheckBaseHp();
 }
 
 void BattleScene::Render(HDC hdc)
@@ -177,10 +204,23 @@ void BattleScene::Render(HDC hdc)
 	{
 		attack_Fire->FrameRender(hdc, 860, 470, currFrameX, 0, false, 2);
 	}
-	player_Hpbar->Render(hdc, 130, 30);
-	enemy_Hpbar->Render(hdc, WINSIZE_X - 310, 30);
 	miniMap->Render(hdc, WINSIZE_X / 2 - 130, 10);
 	collisionChecker->Render(hdc);
+	if (!isReadyGame)
+	{
+		text_Mission->Render(hdc, textPosition[0], (WINSIZE_Y / 2) - 50);
+		text_Start->Render(hdc, textPosition[1], (WINSIZE_Y / 2) + 50);
+	}
+	if (isPlayerWin)
+	{
+		text_Mission->Render(hdc, (WINSIZE_X / 2) - 150, textPosition[0]);
+		text_Complete->Render(hdc, (WINSIZE_X / 2) - 180, textPosition[1]);
+	}
+	else if (isPlayerDefeat)
+	{
+		failed_Mission->Render(hdc, (WINSIZE_X / 2) - 200, textPosition[0]);
+		text_Failed->Render(hdc, (WINSIZE_X / 2) - 225, textPosition[1]);
+	}
 }
 
 void BattleScene::EnemyInit() //Enemy Init 작동방식 구현
@@ -191,6 +231,69 @@ void BattleScene::EnemyInit() //Enemy Init 작동방식 구현
 		{
 			int unitNum = uiMgr->GetEnemyUnitNum();
 			enemyMgr->Init(unitNum, collisionChecker);
+		}
+	}
+}
+
+void BattleScene::StartTextMove()
+{
+	startTimer += TimerManager::GetSingleton()->GetElapsedTime();
+	if (textPosition[0] < WINSIZE_X / 2 - 200 && textMoveTimer < 1)
+	{
+		startTimer = 0.0f;
+		textPosition[0]++;
+	}
+	if (textPosition[1] > WINSIZE_X / 2 - 200 && textMoveTimer < 1)
+	{
+		startTimer = 0.0f;
+		textPosition[1]--;
+	}
+	if (textPosition[0] == WINSIZE_X / 2 - 200 && textPosition[1] == WINSIZE_X / 2 - 200 && startTimer >= 1.0f)
+	{
+		startTimer = 0.0f;
+		textMoveTimer++;
+	}
+	if (textMoveTimer >= 1)
+	{
+		textPosition[0]++;
+		textPosition[1]--;
+		if (textPosition[0] >= WINSIZE_X && textPosition[1] <= 0)
+		{
+			textPosition[0] = 0;
+			textPosition[1] = WINSIZE_Y;
+			textMoveTimer = 0;
+			startTimer = 0.0f;
+			isReadyGame = true;
+		}
+	}
+}
+
+void BattleScene::EndTextMove()
+{
+	if (isPlayerDefeat || isPlayerWin)
+	{
+		startTimer += TimerManager::GetSingleton()->GetElapsedTime();
+		if (textPosition[0] <= (WINSIZE_Y / 2) - 100)
+		{
+			startTimer = 0;
+			textPosition[0]++;
+		}
+		if (textPosition[1] >= (WINSIZE_Y / 2) - 20)
+		{
+			startTimer = 0;
+			textPosition[1]--;
+		}
+		if (textPosition[0] == (WINSIZE_Y / 2) - 100 && textPosition[1] == (WINSIZE_Y / 2) - 20)
+		{
+			if (startTimer >= 1)
+			{
+				startTimer = 0.0f;
+				textMoveTimer++;
+			}
+			if (textMoveTimer >= 2)
+			{
+				textMoveTimer = 2;
+			}
 		}
 	}
 }

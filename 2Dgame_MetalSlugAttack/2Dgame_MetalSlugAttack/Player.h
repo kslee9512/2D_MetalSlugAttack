@@ -39,7 +39,7 @@ class Player : public GameNode
 	int deadMaxFrame;
 	int winMaxFrame;
 	int characterHp;
-	int characterAtk;
+	float characterAtk;
 	int unitCoast;
 	int hitBoxWidth;
 	int hitBoxHeight;
@@ -57,6 +57,7 @@ public:
 	void UpdateStand();
 	void UpdateFire();
 	void UpdateDead();
+	void UpdateWin();
 
 	void SetStatus(STATUS status) { this->characterStatus = status; }
 	void SetFindEnemy(bool findEnemy) { this->findEnemy = findEnemy; }

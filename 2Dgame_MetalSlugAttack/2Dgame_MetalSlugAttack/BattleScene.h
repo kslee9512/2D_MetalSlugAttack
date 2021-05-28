@@ -12,6 +12,11 @@ class BattleScene : public GameNode
 {
 private:
 	//UI
+	Image* text_Mission;
+	Image* text_Start;
+	Image* text_Complete;
+	Image* failed_Mission;
+	Image* text_Failed;
 	Image* apWalk;
 	Image* apPurchase;
 	Image* backGround;
@@ -23,8 +28,6 @@ private:
 	Image* hp_Frame[2];
 	Image* miniMap;
 	Image* pfText[2];
-	Image* player_Hpbar;
-	Image* enemy_Hpbar;
 	Image* apBar;
 	ATTACKSTATUS attackStatus;
 	int currFrameX;
@@ -46,10 +49,17 @@ private:
 	float apChargeTime[5];
 	float playerApTimer;
 	float enemyApTimer;
+	float startTimer;
+	float failedTimer;
+	float winTimer;
+	int textMoveTimer;
+	int textPosition[2];
 	int playerApLevel;
 	int enemyApLevel;
 	bool isEndGame;
-
+	bool isReadyGame;
+	bool isPlayerDefeat;
+	bool isPlayerWin;
 	CollisionChecker* collisionChecker;	//충돌처리4
 	UiManager* uiMgr;
 	PlayerManager* playerMgr;
@@ -62,6 +72,8 @@ public:
 
 	
 	void EnemyInit();
+	void StartTextMove();
+	void EndTextMove();
 	virtual ~BattleScene() {};
 };
 

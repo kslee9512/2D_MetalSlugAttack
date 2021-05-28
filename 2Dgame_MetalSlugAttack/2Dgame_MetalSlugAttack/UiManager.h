@@ -17,8 +17,8 @@ typedef struct FrameUi
 	int selectNum;
 	int unitCoast;
 	int calcUnitCoast[3];
-	int currCoolTime;
-	int purchaseCoolTime;
+	float currCoolTime;
+	float purchaseCoolTime;
 	float checkCoolTime;
 };
 typedef struct enemyAp

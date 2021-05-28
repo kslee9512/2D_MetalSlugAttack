@@ -47,11 +47,13 @@ HRESULT UiManager::Init()
 	apCurrFrameX = 0;
 	playerApTimer = 0.0f;
 	enemyAp.enemyApTimer = 0.0f;
-	enemyAp.unitCoast[0] = 30;
-	enemyAp.unitCoast[1] = 120;
-	enemyAp.unitCoast[2] = 300;
+	//Àû À¯´Ö ÄÚ½ºÆ®
+	enemyAp.unitCoast[0] = 3000;
+	enemyAp.unitCoast[1] = 1600;
+	enemyAp.unitCoast[2] = 3000;
+	//Àû À¯´Ö ÄðÅ¸ÀÓ
 	enemyAp.enemyUnitCoolTime[0] = 4;
-	enemyAp.enemyUnitCoolTime[1] = 15;
+	enemyAp.enemyUnitCoolTime[1] = 7;
 	enemyAp.enemyUnitCoolTime[2] = 30;
 	for (int i = 0; i < 3; i++)
 	{
@@ -62,7 +64,7 @@ HRESULT UiManager::Init()
 	enemyAp.enemyApLevel = 0;
 	playerAP = 0;
 	enemyAp.enemyAP = 0;
-	float timer = 0.05f;
+	float timer = 0.03f;
 	for (int i = 0; i < 5; i++)
 	{
 		apChargeTime[i] = timer;
@@ -116,7 +118,7 @@ HRESULT UiManager::Init()
 			unitFrame[i].unitCoast = 40;
 			unitFrame[i].unit_Portrait_able = ImageManager::GetSingleton()->FindImage("eri_portrait_able");
 			unitFrame[i].unit_Portrait_Unable = ImageManager::GetSingleton()->FindImage("eri_portrait_unable");
-			unitFrame[i].purchaseCoolTime = 5;
+			unitFrame[i].purchaseCoolTime = 500.0f;
 			unitFrame[i].portraitPos = { float(300 + (100 * i)), 515 };
 		}
 		calcAp = unitFrame[i].unitCoast;
@@ -148,12 +150,12 @@ void UiManager::ApCount()
 		if (!(unitFrame[i].endCoolTime))
 		{
 			unitFrame[i].checkCoolTime += TimerManager::GetSingleton()->GetElapsedTime();
-			if (unitFrame[i].checkCoolTime >= 1)
+			if (unitFrame[i].checkCoolTime >= 0.01f)
 			{
 				unitFrame[i].checkCoolTime = 0.0f;
-				unitFrame[i].currCoolTime += 1;
+				unitFrame[i].currCoolTime += 1.0f;
 			}
-			if (unitFrame[i].currCoolTime == unitFrame[i].purchaseCoolTime)
+			if (unitFrame[i].currCoolTime >= unitFrame[i].purchaseCoolTime)
 			{
 				unitFrame[i].endCoolTime = true;
 				unitFrame[i].currCoolTime = 0;
@@ -193,6 +195,10 @@ void UiManager::ApCount()
 	if (playerAP >= apLvUpCoast[playerApLevel] && endPurchase)
 	{
 		apFrame.canPurchase = true;
+	}
+	else if (playerAP < apLvUpCoast[playerApLevel] && playerApLevel != maxApLevel)
+	{
+		apFrame.canPurchase = false;
 	}
 	if (playerApTimer >= apChargeTime[playerApLevel])
 	{
@@ -292,8 +298,6 @@ void UiManager::Render(HDC hdc)
 			}
 		}
 	}
-	wsprintf(test, "%d , %d, %d, %d", playerAP, playerApLevel, enemyAp.enemyAP, enemyAp.enemyApLevel);
-	TextOut(hdc, 80, 400, test, strlen(test));
 }
 
 void UiManager::UpdateNumImage()

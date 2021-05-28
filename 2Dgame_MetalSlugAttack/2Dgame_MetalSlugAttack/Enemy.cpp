@@ -60,7 +60,7 @@ HRESULT Enemy::Init(int unitNum, CollisionChecker* collisionChecker)
         winMaxFrame = 5;
         deadMaxFrame = 10;
         characterHp = 30;
-        characterAtk = 20;
+        characterAtk = 20.0f;
         attackCooltime = 3.0f;
         hitBoxHeight = 50;
         hitBoxWidth = 30;
@@ -115,7 +115,7 @@ HRESULT Enemy::Init(int unitNum, CollisionChecker* collisionChecker)
         winMaxFrame = 3;
         deadMaxFrame = 11;
         characterHp = 400;
-        characterAtk = 50;
+        characterAtk = 50.0f;
         attackCooltime = 8.0f;
         hitBoxHeight = 50;
         hitBoxWidth = 30;
@@ -144,7 +144,7 @@ HRESULT Enemy::Init(int unitNum, CollisionChecker* collisionChecker)
         winMaxFrame = 9;
         deadMaxFrame = 13;
         characterHp = 800;
-        characterAtk = 50;
+        characterAtk = 100.0f;
         attackCooltime = 4.0f;
         hitBoxHeight = 50;
         hitBoxWidth = 30;
@@ -168,11 +168,12 @@ void Enemy::Update()
 {
     if (characterHp <= 0)
     {
-        if (isAlive && endDeadScene == false)
+        if (isAlive)
         {
             isAlive = false;
             characterStatus = STATUS::DEAD;
             currFrameX = 0;
+            changeTimer = 0.0f;
         }
     }
     switch (characterStatus)
@@ -188,6 +189,9 @@ void Enemy::Update()
         break;
     case STATUS::DEAD:
         UpdateDead();
+        break;
+    case STATUS::WIN:
+        UpdateWin();
         break;
     }
 }
@@ -242,7 +246,7 @@ void Enemy::UpdateMove()
             readyToFire = true;
         }
     }
-    if (findEnemy)
+    if (findEnemy || findBase)
     {
         currFrameX = 0;
         characterStatus = STATUS::STAND;
@@ -281,11 +285,11 @@ void Enemy::UpdateStand()
             readyToFire = true;
         }
     }
-    if (findEnemy && readyToFire)
+    if ((findEnemy || findBase) && readyToFire)
     {
         currFrameX = 0;
         readyToFire = false;
-        if (findEnemy && !findBase)
+        if (findEnemy)
         {
             target->SetCharacterHp(characterAtk);
         }
@@ -295,7 +299,7 @@ void Enemy::UpdateStand()
         }
         characterStatus = STATUS::FIRE;
     }
-    else if (!findEnemy)
+    else if (!findEnemy && !findBase)
     {
         characterStatus = STATUS::WALK;
     }
@@ -326,8 +330,22 @@ void Enemy::UpdateDead()
         currFrameX++;
         if (currFrameX > deadMaxFrame)
         {
-            currFrameX = 0;
             endDeadScene = true;
+            currFrameX = 0;
+        }
+    }
+}
+
+void Enemy::UpdateWin()
+{
+    changeTimer += TimerManager::GetSingleton()->GetElapsedTime();
+    if (changeTimer >= 0.07f)
+    {
+        changeTimer = 0.0f;
+        currFrameX++;
+        if (currFrameX > winMaxFrame)
+        {
+            currFrameX = 0;
         }
     }
 }

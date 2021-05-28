@@ -10,9 +10,13 @@ class EnemyManager;
 class CollisionChecker : public GameNode
 {
 private:
+	Image* player_Hpbar;
+	Image* enemy_Hpbar;
 	char sztext[128];
-	int playerBaseHp;
-	int enemyBaseHp;
+	float maxPlayerBaseHp;
+	float maxEnemyBaseHp;
+	float playerBaseHp;
+	float enemyBaseHp;
 	list<Player*> lPlayerCharacter;
 	list<Player*>::iterator itlPlayerCharacter;
 	list<Enemy*> lEnemyCharacter;
@@ -31,7 +35,10 @@ public:
 
 	void CheckAlive();
 	void CheckEnemy();
-	void SetEnemyBaseHp(int damage) { this->enemyBaseHp -= damage; }
-	void SetPlayerBaseHp(int damage) { this->playerBaseHp -= damage; }
+	void CheckPlayer();
+	void SetEnemyBaseHp(float damage) { this->enemyBaseHp -= damage; }
+	void SetPlayerBaseHp(float damage) { this->playerBaseHp -= damage; }
 	bool CheckBaseHp();
+	bool CheckPlayerWin();
+	bool CheckPlayerDefeat();
 };
