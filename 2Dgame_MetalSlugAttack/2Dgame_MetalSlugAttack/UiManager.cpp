@@ -21,6 +21,14 @@ HRESULT UiManager::Init()
 	//캐릭터 초상화
 	ImageManager::GetSingleton()->AddImage("eri_portrait_able", "Image/Ui/eri_portrait_able.bmp", 80, 80, true, RGB(255, 255, 255));
 	ImageManager::GetSingleton()->AddImage("eri_portrait_unable", "Image/Ui/eri_portrait_unable.bmp", 80, 80, true, RGB(255, 255, 255));
+	ImageManager::GetSingleton()->AddImage("trevor_portrait_able", "Image/Ui/trevor_portrait_able.bmp", 80, 80, true, RGB(255, 255, 255));
+	ImageManager::GetSingleton()->AddImage("trevor_portrait_unable", "Image/Ui/trevor_portrait_unable.bmp", 80, 80, true, RGB(255, 255, 255));
+	ImageManager::GetSingleton()->AddImage("amber_portrait_able", "Image/Ui/amber_portrait_able.bmp", 80, 80, true, RGB(255, 255, 255));
+	ImageManager::GetSingleton()->AddImage("amber_portrait_unable", "Image/Ui/amber_portrait_unable.bmp", 80, 80, true, RGB(255, 255, 255));
+	ImageManager::GetSingleton()->AddImage("ralf_portrait_able", "Image/Ui/ralf_portrait_able.bmp", 80, 80, true, RGB(255, 255, 255));
+	ImageManager::GetSingleton()->AddImage("ralf_portrait_unable", "Image/Ui/ralf_portrait_unable.bmp", 80, 80, true, RGB(255, 255, 255));
+	ImageManager::GetSingleton()->AddImage("marco_portrait_able", "Image/Ui/marco_portrait_able.bmp", 80, 80, true, RGB(255, 255, 255));
+	ImageManager::GetSingleton()->AddImage("marco_portrait_unable", "Image/Ui/marco_portrait_unable.bmp", 80, 80, true, RGB(255, 255, 255));
 	maxApImage = ImageManager::GetSingleton()->FindImage("maxLv");
 	for (int i = 0; i < 3; i++)
 	{
@@ -65,11 +73,13 @@ HRESULT UiManager::Init()
 	playerAP = 0;
 	enemyAp.enemyAP = 0;
 	float timer = 0.03f;
+	//AP 레벨별 상승시간 지정
 	for (int i = 0; i < 5; i++)
 	{
 		apChargeTime[i] = timer;
 		timer -= 0.005f;
 	}
+	//AP 레벨별 MAX AP값 지정
 	int maxInt = 3000;
 	for (int i = 0; i < 5; i++)
 	{
@@ -78,18 +88,21 @@ HRESULT UiManager::Init()
 	}
 	int calcAp = maxAp[0];
 	int calcNum = 0;
+	//maxAP 이미지 출력용 값 계산
 	for (int i = 0; i < 5; i++)
 	{
 		calcNum = calcAp % 10;
 		maxAp_calcNum[i] = calcNum;
 		calcAp /= 10;
 	}
+	//AP 레벨 증가 코스트 계산 및 적용
 	for (int i = 0; i < 5; i++)
 	{
 		apLvUpCoast[i] = 80 * (i + 1);
 	}
 	calcAp = apLvUpCoast[0];
 	calcNum = 0;
+	//AP값 표시를 위한 값 계산
 	for (int i = 0; i < 3; i++)
 	{
 		calcNum = calcAp % 10;
@@ -109,7 +122,7 @@ HRESULT UiManager::Init()
 		unitFrame[i].unit_Frame_unable = ImageManager::GetSingleton()->FindImage("unit_frame_undo");
 		unitFrame[i].coastFrame = ImageManager::GetSingleton()->FindImage("coastframe");
 		unitFrame[i].coolTimeBar = ImageManager::GetSingleton()->FindImage("cooltimebar");
-		unitFrame[i].selectNum = 1;
+		unitFrame[i].selectNum = i + 1;
 		unitFrame[i].checkCoolTime = 0.0f;
 		unitFrame[i].frameBox = { 260 + (100 * i), 480, 340 + (100 * i), 560 };
 		unitFrame[i].currCoolTime = 0;
@@ -119,6 +132,38 @@ HRESULT UiManager::Init()
 			unitFrame[i].unit_Portrait_able = ImageManager::GetSingleton()->FindImage("eri_portrait_able");
 			unitFrame[i].unit_Portrait_Unable = ImageManager::GetSingleton()->FindImage("eri_portrait_unable");
 			unitFrame[i].purchaseCoolTime = 500.0f;
+			unitFrame[i].portraitPos = { float(300 + (100 * i)), 515 };
+		}
+		else if (unitFrame[i].selectNum == 2)
+		{
+			unitFrame[i].unitCoast = 120;
+			unitFrame[i].unit_Portrait_able = ImageManager::GetSingleton()->FindImage("trevor_portrait_able");
+			unitFrame[i].unit_Portrait_Unable = ImageManager::GetSingleton()->FindImage("trevor_portrait_unable");
+			unitFrame[i].purchaseCoolTime = 1000.0f;
+			unitFrame[i].portraitPos = { float(300 + (100 * i)), 515 };
+		}
+		else if (unitFrame[i].selectNum == 3)
+		{
+			unitFrame[i].unitCoast = 200;
+			unitFrame[i].unit_Portrait_able = ImageManager::GetSingleton()->FindImage("ralf_portrait_able");
+			unitFrame[i].unit_Portrait_Unable = ImageManager::GetSingleton()->FindImage("ralf_portrait_unable");
+			unitFrame[i].purchaseCoolTime = 1500.0f;
+			unitFrame[i].portraitPos = { float(300 + (100 * i)), 515 };
+		}
+		else if (unitFrame[i].selectNum == 4)
+		{
+			unitFrame[i].unitCoast = 300;
+			unitFrame[i].unit_Portrait_able = ImageManager::GetSingleton()->FindImage("marco_portrait_able");
+			unitFrame[i].unit_Portrait_Unable = ImageManager::GetSingleton()->FindImage("marco_portrait_unable");
+			unitFrame[i].purchaseCoolTime = 2400.0f;
+			unitFrame[i].portraitPos = { float(300 + (100 * i)), 515 };
+		}
+		else if (unitFrame[i].selectNum == 5)
+		{
+			unitFrame[i].unitCoast = 700;
+			unitFrame[i].unit_Portrait_able = ImageManager::GetSingleton()->FindImage("amber_portrait_able");
+			unitFrame[i].unit_Portrait_Unable = ImageManager::GetSingleton()->FindImage("amber_portrait_unable");
+			unitFrame[i].purchaseCoolTime = 4000.0f;
 			unitFrame[i].portraitPos = { float(300 + (100 * i)), 515 };
 		}
 		calcAp = unitFrame[i].unitCoast;

@@ -37,19 +37,41 @@ HRESULT BattleScene::Init()
 	ImageManager::GetSingleton()->AddImage("enemyhp", "Image/Ui/Red_Bar.bmp", 178, 8, true, RGB(255, 255, 255));
 	ImageManager::GetSingleton()->AddImage("playerhp", "Image/Ui/Yellow_Bar.bmp", 178, 8, true, RGB(255, 255, 255));
 	ImageManager::GetSingleton()->AddImage("apbar", "Image/Ui/Pointbar.bmp", 200, 76, true, RGB(255, 0, 255));
-	ImageManager::GetSingleton()->AddImage("mission", "Image/Ui/mission.bmp", 420, 80, true, RGB(255, 255, 255));
-	ImageManager::GetSingleton()->AddImage("start", "Image/Ui/start.bmp", 420, 80, true, RGB(255, 255, 255));
-	ImageManager::GetSingleton()->AddImage("complete", "Image/Ui/complete.bmp", 500, 80, true, RGB(255, 255, 255));
-	ImageManager::GetSingleton()->AddImage("failedMission", "Image/Ui/failmission.bmp", 500, 80, true, RGB(255, 255, 255));
-	ImageManager::GetSingleton()->AddImage("failed", "Image/Ui/failed.bmp", 500, 80, true, RGB(255, 255, 255));
+	ImageManager::GetSingleton()->AddImage("mission", "Image/Ui/mission.bmp", 420, 80, true, RGB(255, 0, 255));
+	ImageManager::GetSingleton()->AddImage("start", "Image/Ui/start.bmp", 420, 80, true, RGB(255, 0, 255));
+	ImageManager::GetSingleton()->AddImage("complete", "Image/Ui/complete.bmp", 500, 80, true, RGB(255, 0, 255));
+	ImageManager::GetSingleton()->AddImage("failedMission", "Image/Ui/failmission.bmp", 500, 80, true, RGB(255, 0, 255));
+	ImageManager::GetSingleton()->AddImage("failed", "Image/Ui/failed.bmp", 500, 80, true, RGB(255, 0, 255));
 	//Character_Eri Image Add
 	ImageManager::GetSingleton()->AddImage("Eri_walk", "Image/Eri/Eri_walk.bmp", 960, 50, 12, 1, true, RGB(255, 255, 255));
 	ImageManager::GetSingleton()->AddImage("Eri_stand", "Image/Eri/Eri_stand.bmp", 640, 50, 8, 1, true, RGB(255, 255, 255));
 	ImageManager::GetSingleton()->AddImage("Eri_fire", "Image/Eri/Eri_fire.bmp", 480, 50, 6, 1, true, RGB(255, 255, 255));
 	ImageManager::GetSingleton()->AddImage("Eri_win", "Image/Eri/Eri_win.bmp", 560, 50, 7, 1, true, RGB(255, 255, 255));
 	ImageManager::GetSingleton()->AddImage("Eri_dead", "Image/Eri/Eri_dead.bmp", 1680, 50, 21, 1, true, RGB(255, 255, 255));
-
-
+	//Character_Trevor Image Add
+	ImageManager::GetSingleton()->AddImage("Trevor_walk", "Image/Trevor/trevor_walk.bmp", 880, 80, 11, 1, true, RGB(255, 255, 255));
+	ImageManager::GetSingleton()->AddImage("Trevor_stand", "Image/Trevor/trevor_stand.bmp", 640, 80, 8, 1, true, RGB(255, 255, 255));
+	ImageManager::GetSingleton()->AddImage("Trevor_fire", "Image/Trevor/trevor_fire.bmp", 560, 80, 7, 1, true, RGB(255, 255, 255));
+	ImageManager::GetSingleton()->AddImage("Trevor_dead", "Image/Trevor/trevor_dead.bmp", 1440, 80, 18, 1, true, RGB(255, 0, 255));
+	ImageManager::GetSingleton()->AddImage("Trevor_win", "Image/Trevor/trevor_win.bmp", 1200, 80, 15, 1, true, RGB(255, 255, 255));
+	//Character_Amber Image Add
+	ImageManager::GetSingleton()->AddImage("Amber_walk", "Image/Amber/amber_walk.bmp", 2880, 80, 16, 1, true, RGB(255, 255, 255));
+	ImageManager::GetSingleton()->AddImage("Amber_stand", "Image/Amber/amber_stand.bmp", 1260, 80, 7, 1, true, RGB(255, 255, 255));
+	ImageManager::GetSingleton()->AddImage("Amber_fire", "Image/Amber/amber_fire.bmp", 3060, 80, 17, 1, true, RGB(255, 255, 255));
+	ImageManager::GetSingleton()->AddImage("Amber_dead", "Image/Amber/amber_dead.bmp", 1800, 80, 10, 1, true, RGB(255, 255, 255));
+	ImageManager::GetSingleton()->AddImage("Amber_win", "Image/Amber/amber_win.bmp", 5940, 80, 33, 1, true, RGB(255, 255, 255));
+	//Character_Ralf Image Add
+	ImageManager::GetSingleton()->AddImage("Ralf_walk", "Image/Ralf/ralf_walk.bmp", 960, 80, 12, 1, true, RGB(255, 255, 255));
+	ImageManager::GetSingleton()->AddImage("Ralf_stand", "Image/Ralf/ralf_stand.bmp", 480, 80, 6, 1, true, RGB(255, 255, 255));
+	ImageManager::GetSingleton()->AddImage("Ralf_fire", "Image/Ralf/ralf_fire.bmp", 1280, 80, 16, 1, true, RGB(255, 255, 255));
+	ImageManager::GetSingleton()->AddImage("Ralf_dead", "Image/Ralf/ralf_dead.bmp", 1520, 80, 19, 1, true, RGB(255, 255, 255));
+	ImageManager::GetSingleton()->AddImage("Ralf_win", "Image/Ralf/ralf_win.bmp", 1200, 80, 15, 1, true, RGB(255, 255, 255));
+	//Character_Marco Image Add
+	ImageManager::GetSingleton()->AddImage("Marco_walk", "Image/Marco/marco_walk.bmp", 960, 80, 12, 1, true, RGB(255, 255, 255));
+	ImageManager::GetSingleton()->AddImage("Marco_stand", "Image/Marco/marco_stand.bmp", 480, 80, 6, 1, true, RGB(255, 255, 255));
+	ImageManager::GetSingleton()->AddImage("Marco_fire", "Image/Marco/marco_fire.bmp", 640, 80, 8, 1, true, RGB(255, 255, 255));
+	ImageManager::GetSingleton()->AddImage("Marco_dead", "Image/Marco/marco_dead.bmp", 1520, 80, 19, 1, true, RGB(255, 255, 255));
+	ImageManager::GetSingleton()->AddImage("Marco_win", "Image/Marco/marco_win.bmp", 480, 80, 6, 1, true, RGB(255, 255, 255));
 	//Rifle Image Add
 	ImageManager::GetSingleton()->AddImage("rifle_stand", "Image/Rifle/rifle_stand.bmp", 480, 60, 8, 1, true, RGB(255, 255, 255));
 	ImageManager::GetSingleton()->AddImage("rifle_walk", "Image/Rifle/rifle_walk.bmp", 720, 60, 12, 1, true, RGB(255, 255, 255));
@@ -273,14 +295,10 @@ void BattleScene::EndTextMove()
 	if (isPlayerDefeat || isPlayerWin)
 	{
 		startTimer += TimerManager::GetSingleton()->GetElapsedTime();
-		if (textPosition[0] <= (WINSIZE_Y / 2) - 100)
+		if ((textPosition[0] <= (WINSIZE_Y / 2) - 100 && textPosition[1] >= (WINSIZE_Y / 2) - 20) && startTimer >= 0.007 )
 		{
 			startTimer = 0;
 			textPosition[0]++;
-		}
-		if (textPosition[1] >= (WINSIZE_Y / 2) - 20)
-		{
-			startTimer = 0;
 			textPosition[1]--;
 		}
 		if (textPosition[0] == (WINSIZE_Y / 2) - 100 && textPosition[1] == (WINSIZE_Y / 2) - 20)

@@ -68,13 +68,230 @@ HRESULT Player::Init(int unitNum, CollisionChecker* collisionChecker)
         attackRangeWidth = 200;
         attackRangeHeight = 150;
         maxAttackCount = 1;
+        attackBoxPos = { pos.x + (attackRangeWidth / 2) - 30, pos.y };
     }
+    if (unitNum == 2)
+    {
+        Name = "Trevor";
+        unitType = UnitType::PLAYER;
+        image_Stand = ImageManager::GetSingleton()->FindImage("Trevor_stand");
+        if (image_Stand == nullptr)
+        {
+            MessageBox(g_hWnd, "Trevor_Stand_Image Load_Fail", "Image_Load Fail", MB_OK);
+            return E_FAIL;
+        }
 
-    attackBoxPos = { pos.x + (attackRangeWidth / 2) - 30, pos.y };
+        image_Walk = ImageManager::GetSingleton()->FindImage("Trevor_walk");
+        if (image_Walk == nullptr)
+        {
+            MessageBox(g_hWnd, "Trevor_Walk_Image Load_Fail", "Image_Load Fail", MB_OK);
+            return E_FAIL;
+        }
+        image_Fire = ImageManager::GetSingleton()->FindImage("Trevor_fire");
+        if (image_Fire == nullptr)
+        {
+            MessageBox(g_hWnd, "Trevor_Fire_Image Load_Fail", "Image_Load Fail", MB_OK);
+            return E_FAIL;
+        }
+        image_Dead = ImageManager::GetSingleton()->FindImage("Trevor_dead");
+        if (image_Dead == nullptr)
+        {
+            MessageBox(g_hWnd, "Trevor_Dead_Image Load_Fail", "Image_Load Fail", MB_OK);
+            return E_FAIL;
+        }
+        image_Win = ImageManager::GetSingleton()->FindImage("Trevor_win");
+        if (image_Win == nullptr)
+        {
+            MessageBox(g_hWnd, "Trevor_Winready_Image Load_Fail", "Image_Load Fail", MB_OK);
+            return E_FAIL;
+        }
+        pos.x = 140;
+        pos.y = 330;
+        moveSpeed = 100.0f;
+        walkMaxFrame = 10;
+        standMaxFrame = 7;
+        fireMaxFrame = 6;
+        deadMaxFrame = 17;
+        winMaxFrame = 14;
+        characterHp = 150;
+        characterAtk = 30.0f;
+        attackCooltime = 4.0f;
+        hitBoxHeight = 50;
+        hitBoxWidth = 30;
+        hitBoxPos.x = pos.x - 40;
+        hitBoxPos.y = pos.y + 20;
+        attackRangeWidth = 220;
+        attackRangeHeight = 150;
+        maxAttackCount = 1;
+        attackBoxPos = { pos.x + (attackRangeWidth / 2) - 30, pos.y };
+    }
+    if (unitNum == 3)
+    {
+        Name = "Ralf";
+        unitType = UnitType::PLAYER;
+        image_Stand = ImageManager::GetSingleton()->FindImage("Ralf_stand");
+        if (image_Stand == nullptr)
+        {
+            MessageBox(g_hWnd, "Ralf_Stand_Image Load_Fail", "Image_Load Fail", MB_OK);
+            return E_FAIL;
+        }
+        image_Walk = ImageManager::GetSingleton()->FindImage("Ralf_walk");
+        if (image_Walk == nullptr)
+        {
+            MessageBox(g_hWnd, "Ralf_Walk_Image Load_Fail", "Image_Load Fail", MB_OK);
+            return E_FAIL;
+        }
+        image_Fire = ImageManager::GetSingleton()->FindImage("Ralf_fire");
+        if (image_Fire == nullptr)
+        {
+            MessageBox(g_hWnd, "Ralf_Fire_Image Load_Fail", "Image_Load Fail", MB_OK);
+            return E_FAIL;
+        }
+        image_Dead = ImageManager::GetSingleton()->FindImage("Ralf_dead");
+        if (image_Dead == nullptr)
+        {
+            MessageBox(g_hWnd, "Ralf_Dead_Image Load_Fail", "Image_Load Fail", MB_OK);
+            return E_FAIL;
+        }
+        image_Win = ImageManager::GetSingleton()->FindImage("Ralf_win");
+        if (image_Win == nullptr)
+        {
+            MessageBox(g_hWnd, "Ralf_Winready_Image Load_Fail", "Image_Load Fail", MB_OK);
+            return E_FAIL;
+        }
+        pos.x = 140;
+        pos.y = 330;
+        moveSpeed = 110.0f;
+        walkMaxFrame = 11;
+        standMaxFrame = 5;
+        fireMaxFrame = 15;
+        deadMaxFrame = 18;
+        winMaxFrame = 14;
+        characterHp = 300;
+        characterAtk = 30.0f;
+        attackCooltime = 2.0f;
+        hitBoxHeight = 50;
+        hitBoxWidth = 30;
+        hitBoxPos.x = pos.x - 40;
+        hitBoxPos.y = pos.y + 20;
+        attackRangeWidth = 50;
+        attackRangeHeight = 150;
+        maxAttackCount = 1;
+        attackBoxPos = { pos.x + (attackRangeWidth / 2) - 30, pos.y };
+    }
+    if (unitNum == 4)
+    {
+        Name = "Marco";
+        unitType = UnitType::PLAYER;
+        image_Stand = ImageManager::GetSingleton()->FindImage("Marco_stand");
+        if (image_Stand == nullptr)
+        {
+            MessageBox(g_hWnd, "Marco_Stand_Image Load_Fail", "Image_Load Fail", MB_OK);
+            return E_FAIL;
+        }
+        image_Walk = ImageManager::GetSingleton()->FindImage("Marco_walk");
+        if (image_Walk == nullptr)
+        {
+            MessageBox(g_hWnd, "Marco_Walk_Image Load_Fail", "Image_Load Fail", MB_OK);
+            return E_FAIL;
+        }
+        image_Fire = ImageManager::GetSingleton()->FindImage("Marco_fire");
+        if (image_Fire == nullptr)
+        {
+            MessageBox(g_hWnd, "Marco_Fire_Image Load_Fail", "Image_Load Fail", MB_OK);
+            return E_FAIL;
+        }
+        image_Dead = ImageManager::GetSingleton()->FindImage("Marco_dead");
+        if (image_Dead == nullptr)
+        {
+            MessageBox(g_hWnd, "Marco_Dead_Image Load_Fail", "Image_Load Fail", MB_OK);
+            return E_FAIL;
+        }
+        image_Win = ImageManager::GetSingleton()->FindImage("Marco_win");
+        if (image_Win == nullptr)
+        {
+            MessageBox(g_hWnd, "Marco_Winready_Image Load_Fail", "Image_Load Fail", MB_OK);
+            return E_FAIL;
+        }
+        pos.x = 140;
+        pos.y = 330;
+        moveSpeed = 100.0f;
+        walkMaxFrame = 11;
+        standMaxFrame = 5;
+        fireMaxFrame = 7;
+        deadMaxFrame = 18;
+        winMaxFrame = 5;
+        characterHp = 250;
+        characterAtk = 50.0f;
+        attackCooltime = 4.0f;
+        hitBoxHeight = 50;
+        hitBoxWidth = 30;
+        hitBoxPos.x = pos.x - 40;
+        hitBoxPos.y = pos.y + 20;
+        attackRangeWidth = 250;
+        attackRangeHeight = 150;
+        maxAttackCount = 1;
+        attackBoxPos = { pos.x + (attackRangeWidth / 2) - 30, pos.y };
+    }
+    if (unitNum == 5)
+    {
+        Name = "Amber";
+        unitType = UnitType::PLAYER;
+        image_Stand = ImageManager::GetSingleton()->FindImage("Amber_stand");
+        if (image_Stand == nullptr)
+        {
+            MessageBox(g_hWnd, "Amber_Stand_Image Load_Fail", "Image_Load Fail", MB_OK);
+            return E_FAIL;
+        }
+
+        image_Walk = ImageManager::GetSingleton()->FindImage("Amber_walk");
+        if (image_Walk == nullptr)
+        {
+            MessageBox(g_hWnd, "Amber_Walk_Image Load_Fail", "Image_Load Fail", MB_OK);
+            return E_FAIL;
+        }
+        image_Fire = ImageManager::GetSingleton()->FindImage("Amber_fire");
+        if (image_Fire == nullptr)
+        {
+            MessageBox(g_hWnd, "Amber_Fire_Image Load_Fail", "Image_Load Fail", MB_OK);
+            return E_FAIL;
+        }
+        image_Dead = ImageManager::GetSingleton()->FindImage("Amber_dead");
+        if (image_Dead == nullptr)
+        {
+            MessageBox(g_hWnd, "Amber_Dead_Image Load_Fail", "Image_Load Fail", MB_OK);
+            return E_FAIL;
+        }
+        image_Win = ImageManager::GetSingleton()->FindImage("Amber_win");
+        if (image_Win == nullptr)
+        {
+            MessageBox(g_hWnd, "Amber_Winready_Image Load_Fail", "Image_Load Fail", MB_OK);
+            return E_FAIL;
+        }
+        pos.x = 190;
+        pos.y = 330;
+        moveSpeed = 80.0f;
+        walkMaxFrame = 15;
+        standMaxFrame = 6;
+        fireMaxFrame = 16;
+        deadMaxFrame = 9;
+        winMaxFrame = 32;
+        characterHp = 2500;
+        characterAtk = 300.0f;
+        attackCooltime = 6.0f;
+        hitBoxHeight = 50;
+        hitBoxWidth = 30;
+        hitBoxPos.x = pos.x - 70;
+        hitBoxPos.y = pos.y + 30;
+        attackRangeWidth = 240;
+        attackRangeHeight = 150;
+        maxAttackCount = 1;
+        attackBoxPos = { pos.x + (attackRangeWidth / 2) - 80, pos.y };
+    }
     attackRange = GetRectToCenter(attackBoxPos.x, attackBoxPos.y, attackRangeWidth, attackRangeHeight);
     hitBox = GetRectToCenter(hitBoxPos.x, hitBoxPos.y, hitBoxWidth, hitBoxHeight);
     collisionChecker->AddPlayerCharacter(this);
-    return E_NOTIMPL;
+    return S_OK;
 }
 
 void Player::Release()
@@ -260,7 +477,19 @@ void Player::UpdateWin()
     {
         changeTimer = 0.0f;
         currFrameX++;
-        if (currFrameX > winMaxFrame)
+        if (Name == "Trevor" && currFrameX > winMaxFrame)
+        {
+            currFrameX = 9;
+        }
+        else if (Name == "Amber" && currFrameX > winMaxFrame)
+        {
+            currFrameX = 29;
+        }
+        else if (Name == "Ralf" && currFrameX > winMaxFrame)
+        {
+            currFrameX--;
+        }
+        else if (currFrameX > winMaxFrame)
         {
             currFrameX = 0;
         }

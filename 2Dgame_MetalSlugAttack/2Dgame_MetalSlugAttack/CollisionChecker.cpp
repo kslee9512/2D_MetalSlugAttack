@@ -34,6 +34,7 @@ void CollisionChecker::Render(HDC hdc)
 	{
 		enemy_Hpbar->EnemyBaseHpRender(hdc, 887, 30, false, enemyBaseHp, maxEnemyBaseHp);
 	}
+	//Rectangle(hdc, enemyBaseHitBox.left, enemyBaseHitBox.top, enemyBaseHitBox.right, enemyBaseHitBox.bottom);
 }
 
 void CollisionChecker::CheckAlive()
@@ -67,7 +68,14 @@ void CollisionChecker::CheckEnemy()
 	RECT enemyBasehitBox = enemyBaseHitBox;
 		for (itlPlayerCharacter = lPlayerCharacter.begin(); itlPlayerCharacter != lPlayerCharacter.end(); itlPlayerCharacter++)
 		{
+			(*itlPlayerCharacter)->SetFindEnemy(false);
+			(*itlPlayerCharacter)->SetFindBase(false);	
 			playerAttackRange = (*itlPlayerCharacter)->GetAttackBox();
+			if (IntersectRect(&rc, &enemyBasehitBox, &playerAttackRange))
+			{
+				(*itlPlayerCharacter)->SetFindEnemy(false);
+				(*itlPlayerCharacter)->SetFindBase(true);
+			}
 			for (itlEnemyCharacter = lEnemyCharacter.begin(); itlEnemyCharacter != lEnemyCharacter.end(); itlEnemyCharacter++)
 			{
 				enemyHitBox = (*itlEnemyCharacter)->GetHitBox();
@@ -78,16 +86,6 @@ void CollisionChecker::CheckEnemy()
 					(*itlPlayerCharacter)->SetTarget((*itlEnemyCharacter));
 					break;
 				}
-				else
-				{
-					(*itlPlayerCharacter)->SetFindEnemy(false);
-					(*itlPlayerCharacter)->SetFindBase(false);
-				}
-			}
-			if (IntersectRect(&rc, &enemyBasehitBox, &playerAttackRange))
-			{
-				(*itlPlayerCharacter)->SetFindEnemy(false);
-				(*itlPlayerCharacter)->SetFindBase(true);
 			}
 		}
 }
@@ -100,30 +98,25 @@ void CollisionChecker::CheckPlayer()
 	RECT playerBasehitBox = playerBaseHitBox;
 	for (itlEnemyCharacter = lEnemyCharacter.begin(); itlEnemyCharacter != lEnemyCharacter.end(); itlEnemyCharacter++)
 	{
+		(*itlEnemyCharacter)->SetFindEnemy(false);
+		(*itlEnemyCharacter)->SetFindBase(false);
 		enemyAttackRange = (*itlEnemyCharacter)->GetAttackBox();
-		if (lPlayerCharacter.size() >= 1)
-		{
-			for (itlPlayerCharacter = lPlayerCharacter.begin(); itlPlayerCharacter != lPlayerCharacter.end(); itlPlayerCharacter++)
-			{
-				playerHitBox = (*itlPlayerCharacter)->GetHitBox();
-				if (IntersectRect(&rc, &playerHitBox, &enemyAttackRange) && (*itlPlayerCharacter)->GetCharacterAlive())
-				{
-					(*itlEnemyCharacter)->SetFindEnemy(true);
-					(*itlEnemyCharacter)->SetFindBase(false);
-					(*itlEnemyCharacter)->SetTarget((*itlPlayerCharacter));
-					break;
-				}
-				else
-				{
-					(*itlEnemyCharacter)->SetFindEnemy(false);
-					(*itlEnemyCharacter)->SetFindBase(false);
-				}
-			}
-		}
-		else if (IntersectRect(&rc, &playerBasehitBox, &enemyAttackRange))
+		if (IntersectRect(&rc, &playerBasehitBox, &enemyAttackRange))
 		{
 			(*itlEnemyCharacter)->SetFindEnemy(false);
 			(*itlEnemyCharacter)->SetFindBase(true);
+		}
+		for (itlPlayerCharacter = lPlayerCharacter.begin(); itlPlayerCharacter != lPlayerCharacter.end(); itlPlayerCharacter++)
+		{
+			playerHitBox = (*itlPlayerCharacter)->GetHitBox();
+			if (IntersectRect(&rc, &playerHitBox, &enemyAttackRange) && (*itlPlayerCharacter)->GetCharacterAlive())
+			{
+				(*itlEnemyCharacter)->SetFindEnemy(true);
+				(*itlEnemyCharacter)->SetFindBase(false);
+				(*itlEnemyCharacter)->SetTarget((*itlPlayerCharacter));
+				break;
+			}
+		
 		}
 	}
 }
