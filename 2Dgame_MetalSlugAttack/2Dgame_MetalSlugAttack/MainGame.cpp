@@ -1,6 +1,8 @@
 #include "MainGame.h"
 #include "Image.h"
 #include "BattleScene.h"
+#include "IntroScene.h"
+#include "LoadingScene.h"
 
 HRESULT MainGame::Init()
 {
@@ -21,8 +23,10 @@ HRESULT MainGame::Init()
 
 	isInited = true;	
 
-	SceneManager::GetSingleton()->AddScene("battleScene", new BattleScene);
-	SceneManager::GetSingleton()->ChangeScene("battleScene");
+	SceneManager::GetSingleton()->AddScene("IntroScene", new IntroScene);
+	SceneManager::GetSingleton()->AddScene("BattleScene", new BattleScene);
+	SceneManager::GetSingleton()->AddLoadingScene("LoadingScene", new LoadingScene);
+	SceneManager::GetSingleton()->ChangeScene("IntroScene");
 	return S_OK;
 }
 

@@ -139,7 +139,7 @@ HRESULT UiManager::Init()
 			unitFrame[i].unitCoast = 120;
 			unitFrame[i].unit_Portrait_able = ImageManager::GetSingleton()->FindImage("trevor_portrait_able");
 			unitFrame[i].unit_Portrait_Unable = ImageManager::GetSingleton()->FindImage("trevor_portrait_unable");
-			unitFrame[i].purchaseCoolTime = 1000.0f;
+			unitFrame[i].purchaseCoolTime = 700.0f;
 			unitFrame[i].portraitPos = { float(300 + (100 * i)), 515 };
 		}
 		else if (unitFrame[i].selectNum == 3)
@@ -147,7 +147,7 @@ HRESULT UiManager::Init()
 			unitFrame[i].unitCoast = 200;
 			unitFrame[i].unit_Portrait_able = ImageManager::GetSingleton()->FindImage("ralf_portrait_able");
 			unitFrame[i].unit_Portrait_Unable = ImageManager::GetSingleton()->FindImage("ralf_portrait_unable");
-			unitFrame[i].purchaseCoolTime = 1500.0f;
+			unitFrame[i].purchaseCoolTime = 1000.0f;
 			unitFrame[i].portraitPos = { float(300 + (100 * i)), 515 };
 		}
 		else if (unitFrame[i].selectNum == 4)
@@ -155,15 +155,15 @@ HRESULT UiManager::Init()
 			unitFrame[i].unitCoast = 300;
 			unitFrame[i].unit_Portrait_able = ImageManager::GetSingleton()->FindImage("marco_portrait_able");
 			unitFrame[i].unit_Portrait_Unable = ImageManager::GetSingleton()->FindImage("marco_portrait_unable");
-			unitFrame[i].purchaseCoolTime = 2400.0f;
+			unitFrame[i].purchaseCoolTime = 1500.0f;
 			unitFrame[i].portraitPos = { float(300 + (100 * i)), 515 };
 		}
 		else if (unitFrame[i].selectNum == 5)
 		{
-			unitFrame[i].unitCoast = 700;
+			unitFrame[i].unitCoast = 600;
 			unitFrame[i].unit_Portrait_able = ImageManager::GetSingleton()->FindImage("amber_portrait_able");
 			unitFrame[i].unit_Portrait_Unable = ImageManager::GetSingleton()->FindImage("amber_portrait_unable");
-			unitFrame[i].purchaseCoolTime = 4000.0f;
+			unitFrame[i].purchaseCoolTime = 2500.0f;
 			unitFrame[i].portraitPos = { float(300 + (100 * i)), 515 };
 		}
 		calcAp = unitFrame[i].unitCoast;

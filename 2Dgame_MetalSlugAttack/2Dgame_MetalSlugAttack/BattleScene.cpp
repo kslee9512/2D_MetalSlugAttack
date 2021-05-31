@@ -130,6 +130,8 @@ void BattleScene::Release()
 {
 	SAFE_RELEASE(playerMgr);
 	SAFE_RELEASE(enemyMgr);
+	SAFE_RELEASE(collisionChecker);
+	SAFE_RELEASE(uiMgr);
 }
 
 void BattleScene::Update()
@@ -301,17 +303,17 @@ void BattleScene::EndTextMove()
 			textPosition[0]++;
 			textPosition[1]--;
 		}
-		if (textPosition[0] == (WINSIZE_Y / 2) - 100 && textPosition[1] == (WINSIZE_Y / 2) - 20)
-		{
-			if (startTimer >= 1)
-			{
-				startTimer = 0.0f;
-				textMoveTimer++;
-			}
-			if (textMoveTimer >= 2)
-			{
-				textMoveTimer = 2;
-			}
-		}
+		//else
+		//{
+		//	if (startTimer >= 1)
+		//	{
+		//		startTimer = 0.0f;
+		//		textMoveTimer++;
+		//	}
+		//	if (textMoveTimer >= 5)
+		//	{
+		//		SceneManager::GetSingleton()->ChangeScene("IntroScene", "LoadingScene");
+		//	}
+		//}
 	}
 }

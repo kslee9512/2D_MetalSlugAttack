@@ -139,6 +139,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="IntroScene.cpp" />
+    <ClCompile Include="LoadingScene.cpp" />
     <ClCompile Include="UiManager.cpp" />
     <ClCompile Include="BattleScene.cpp" />
     <ClCompile Include="CollisionChecker.cpp" />
@@ -157,6 +159,8 @@
     <ClCompile Include="TimerManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="IntroScene.h" />
+    <ClInclude Include="LoadingScene.h" />
     <ClInclude Include="UiManager.h" />
     <ClInclude Include="BattleScene.h" />
     <ClInclude Include="CollisionChecker.h" />

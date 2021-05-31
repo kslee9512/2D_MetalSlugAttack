@@ -28,6 +28,9 @@
     <Filter Include="소스 파일\GameData">
       <UniqueIdentifier>{0a660a3a-0488-43e4-802a-054659c20a23}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Scene">
+      <UniqueIdentifier>{4ec87259-52e4-49a1-ae9c-c24da3776c7c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -57,9 +60,6 @@
     <ClCompile Include="SceneManager.cpp">
       <Filter>소스 파일\2DFrameWork\Manager</Filter>
     </ClCompile>
-    <ClCompile Include="BattleScene.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="CollisionChecker.cpp">
       <Filter>소스 파일\Coolision</Filter>
     </ClCompile>
@@ -77,6 +77,15 @@
     </ClCompile>
     <ClCompile Include="UiManager.cpp">
       <Filter>소스 파일\GameData</Filter>
+    </ClCompile>
+    <ClCompile Include="BattleScene.cpp">
+      <Filter>소스 파일\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="IntroScene.cpp">
+      <Filter>소스 파일\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="LoadingScene.cpp">
+      <Filter>소스 파일\Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -113,9 +122,6 @@
     <ClInclude Include="SceneManager.h">
       <Filter>소스 파일\2DFrameWork\Manager</Filter>
     </ClInclude>
-    <ClInclude Include="BattleScene.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="CollisionChecker.h">
       <Filter>소스 파일\Coolision</Filter>
     </ClInclude>
@@ -133,6 +139,15 @@
     </ClInclude>
     <ClInclude Include="UiManager.h">
       <Filter>소스 파일\GameData</Filter>
+    </ClInclude>
+    <ClInclude Include="BattleScene.h">
+      <Filter>소스 파일\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="LoadingScene.h">
+      <Filter>소스 파일\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="IntroScene.h">
+      <Filter>소스 파일\Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

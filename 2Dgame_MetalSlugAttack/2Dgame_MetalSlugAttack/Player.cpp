@@ -114,7 +114,7 @@ HRESULT Player::Init(int unitNum, CollisionChecker* collisionChecker)
         deadMaxFrame = 17;
         winMaxFrame = 14;
         characterHp = 150;
-        characterAtk = 30.0f;
+        characterAtk = 50.0f;
         attackCooltime = 4.0f;
         hitBoxHeight = 50;
         hitBoxWidth = 30;
@@ -167,9 +167,9 @@ HRESULT Player::Init(int unitNum, CollisionChecker* collisionChecker)
         fireMaxFrame = 15;
         deadMaxFrame = 18;
         winMaxFrame = 14;
-        characterHp = 300;
+        characterHp = 350;
         characterAtk = 30.0f;
-        attackCooltime = 2.0f;
+        attackCooltime = 1.0f;
         hitBoxHeight = 50;
         hitBoxWidth = 30;
         hitBoxPos.x = pos.x - 40;
@@ -222,7 +222,7 @@ HRESULT Player::Init(int unitNum, CollisionChecker* collisionChecker)
         deadMaxFrame = 18;
         winMaxFrame = 5;
         characterHp = 250;
-        characterAtk = 50.0f;
+        characterAtk = 100.0f;
         attackCooltime = 4.0f;
         hitBoxHeight = 50;
         hitBoxWidth = 30;
