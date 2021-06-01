@@ -1,7 +1,7 @@
 #include "UiManager.h"
 #include "Image.h"
 //test
-HRESULT UiManager::Init(int* unitNum)
+HRESULT UiManager::Init(int unitNum[5])
 {
 	//Ui 프레임 관련
 	ImageManager::GetSingleton()->AddImage("currAp", "Image/Ui/ap_number.bmp", 100, 20, 10, 1, true, RGB(255, 255, 255));

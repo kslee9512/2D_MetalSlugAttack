@@ -180,7 +180,7 @@ HRESULT SceneManager::ChangeScene(string sceneName, string loadingsceneName)
     return E_FAIL;
 }
 
-HRESULT SceneManager::ChangeScene(string sceneName, string loadingsceneName, int* selectNum)
+HRESULT SceneManager::ChangeScene(string sceneName, string loadingsceneName, int selectNum[5])
 {
     map<string, GameNode*>::iterator it = mSceneDatas.find(sceneName);
     if (it == mSceneDatas.end())

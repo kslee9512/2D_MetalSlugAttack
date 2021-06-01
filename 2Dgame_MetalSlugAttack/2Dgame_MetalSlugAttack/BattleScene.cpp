@@ -4,7 +4,7 @@
 #include "PlayerManager.h"
 #include "EnemyManager.h"
 #include "UiManager.h"
-HRESULT BattleScene::Init(int* unitNum)
+HRESULT BattleScene::Init(int unitNum[5])
 {
 	apImageCount = 0.0f;
 	attackUndoFrame = 14;
