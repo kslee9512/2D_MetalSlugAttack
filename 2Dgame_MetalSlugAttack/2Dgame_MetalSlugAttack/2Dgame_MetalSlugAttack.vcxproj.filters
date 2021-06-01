@@ -87,6 +87,9 @@
     <ClCompile Include="LoadingScene.cpp">
       <Filter>소스 파일\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="CustomScene.cpp">
+      <Filter>소스 파일\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Config.h">
@@ -147,6 +150,9 @@
       <Filter>소스 파일\Scene</Filter>
     </ClInclude>
     <ClInclude Include="IntroScene.h">
+      <Filter>소스 파일\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="CustomScene.h">
       <Filter>소스 파일\Scene</Filter>
     </ClInclude>
   </ItemGroup>

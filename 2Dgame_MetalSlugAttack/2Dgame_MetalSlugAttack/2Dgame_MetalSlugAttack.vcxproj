@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CustomScene.cpp" />
     <ClCompile Include="IntroScene.cpp" />
     <ClCompile Include="LoadingScene.cpp" />
     <ClCompile Include="UiManager.cpp" />
@@ -159,6 +160,7 @@
     <ClCompile Include="TimerManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CustomScene.h" />
     <ClInclude Include="IntroScene.h" />
     <ClInclude Include="LoadingScene.h" />
     <ClInclude Include="UiManager.h" />

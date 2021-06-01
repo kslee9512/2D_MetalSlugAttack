@@ -179,3 +179,54 @@ HRESULT SceneManager::ChangeScene(string sceneName, string loadingsceneName)
 
     return E_FAIL;
 }
+
+HRESULT SceneManager::ChangeScene(string sceneName, string loadingsceneName, int* selectNum)
+{
+    map<string, GameNode*>::iterator it = mSceneDatas.find(sceneName);
+    if (it == mSceneDatas.end())
+    {
+        return E_FAIL;
+    }
+
+    if (it->second == currentScene)
+    {
+        return S_OK;
+    }
+    //로딩 씬 찾기
+    map<string, GameNode*>::iterator itLoading
+        = mLoadingSceneDatas.find(loadingsceneName);
+    if (itLoading == mLoadingSceneDatas.end())
+    {
+        return ChangeScene(sceneName);
+    }
+
+
+
+    if (SUCCEEDED(itLoading->second->Init()))
+    {
+        // 현재 씬 -> 타이틀 씬
+        // 바꾸고 싶은 씬 -> 배틀 씬
+        if (currentScene)
+        {
+            currentScene->Release();
+        }
+        currentScene = itLoading->second;
+
+        readyScene = it->second;
+        loadingScene = itLoading->second;
+
+        // 다음 씬을 초기화할 쓰레드를 생성
+        DWORD loadingThread;
+        HANDLE hThread;
+        hThread = CreateThread(NULL, 0, LoadingThread, // 실행 시킬 함수포인터
+            NULL,                // 실행시킬 함수에 들어갈 매개변수
+            0,
+            &loadingThread
+        );
+
+        CloseHandle(hThread);
+
+        return S_OK;
+    }
+    return E_FAIL;
+}

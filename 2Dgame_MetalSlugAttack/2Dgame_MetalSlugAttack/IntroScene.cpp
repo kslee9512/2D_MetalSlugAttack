@@ -16,7 +16,7 @@ void IntroScene::Update()
 {
 	if (KeyManager::GetSingleton()->IsOnceKeyDown(VK_RETURN))
 	{
-		SceneManager::GetSingleton()->ChangeScene("BattleScene", "LoadingScene");
+		SceneManager::GetSingleton()->ChangeScene("CustomScene", "LoadingScene");
 		return;
 	}
 }

@@ -28,6 +28,6 @@ public:
 	
 	HRESULT ChangeScene(string sceneName);
 	HRESULT ChangeScene(string sceneName, string loadingsceneName);
-
+	HRESULT ChangeScene(string sceneName, string loadingsceneName, int* selectNum);
 };
 

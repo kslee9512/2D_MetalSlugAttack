@@ -3,7 +3,7 @@
 #include "BattleScene.h"
 #include "IntroScene.h"
 #include "LoadingScene.h"
-
+#include "CustomScene.h"
 HRESULT MainGame::Init()
 {
 	hdc = GetDC(g_hWnd);
@@ -24,6 +24,7 @@ HRESULT MainGame::Init()
 	isInited = true;	
 
 	SceneManager::GetSingleton()->AddScene("IntroScene", new IntroScene);
+	SceneManager::GetSingleton()->AddScene("CustomScene", new CustomScene);
 	SceneManager::GetSingleton()->AddScene("BattleScene", new BattleScene);
 	SceneManager::GetSingleton()->AddLoadingScene("LoadingScene", new LoadingScene);
 	SceneManager::GetSingleton()->ChangeScene("IntroScene");
@@ -54,8 +55,8 @@ void MainGame::Render()
 	// ÀÎ»ç
 	//TextOut(hBackDC, 20, 20, "MainGame ·»´õ Áß", strlen("MainGame ·»´õ Áß"));
 	// ¸¶¿ì½º ÁÂÇ¥
-	//wsprintf(szText, "X : %d, Y : %d", g_ptMouse.x, g_ptMouse.y);
-	//TextOut(hBackDC, 200, 20, szText, strlen(szText));
+	wsprintf(szText, "X : %d, Y : %d", g_ptMouse.x, g_ptMouse.y);
+	TextOut(hBackDC, 200, 20, szText, strlen(szText));
 	// FPS
 	//TimerManager::GetSingleton()->Render(hBackDC);
 
