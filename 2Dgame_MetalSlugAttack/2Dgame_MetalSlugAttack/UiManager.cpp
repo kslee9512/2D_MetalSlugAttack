@@ -1,7 +1,7 @@
 #include "UiManager.h"
 #include "Image.h"
 //test
-HRESULT UiManager::Init()
+HRESULT UiManager::Init(int* unitNum)
 {
 	//Ui 프레임 관련
 	ImageManager::GetSingleton()->AddImage("currAp", "Image/Ui/ap_number.bmp", 100, 20, 10, 1, true, RGB(255, 255, 255));
@@ -114,15 +114,16 @@ HRESULT UiManager::Init()
 	apImageCount = 0.0f;
 	apStatus = APSTATUS::NORMAL;
 	//UnitFrame Init
+	
 	for (int i = 0; i < 5; i++)
 	{
+		unitFrame[i].selectNum = unitNum[i];
 		unitFrame[i].canPurchase = false;
 		unitFrame[i].endCoolTime = true;
 		unitFrame[i].unit_Frame_able = ImageManager::GetSingleton()->FindImage("unit_frame");
 		unitFrame[i].unit_Frame_unable = ImageManager::GetSingleton()->FindImage("unit_frame_undo");
 		unitFrame[i].coastFrame = ImageManager::GetSingleton()->FindImage("coastframe");
 		unitFrame[i].coolTimeBar = ImageManager::GetSingleton()->FindImage("cooltimebar");
-		unitFrame[i].selectNum = i + 1;
 		unitFrame[i].checkCoolTime = 0.0f;
 		unitFrame[i].frameBox = { 260 + (100 * i), 480, 340 + (100 * i), 560 };
 		unitFrame[i].currCoolTime = 0;

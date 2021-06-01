@@ -4,7 +4,7 @@
 #include "PlayerManager.h"
 #include "EnemyManager.h"
 #include "UiManager.h"
-HRESULT BattleScene::Init()
+HRESULT BattleScene::Init(int* unitNum)
 {
 	apImageCount = 0.0f;
 	attackUndoFrame = 14;
@@ -120,7 +120,7 @@ HRESULT BattleScene::Init()
 	collisionChecker = new CollisionChecker();
 	collisionChecker->Init();
 	uiMgr = new UiManager();
-	uiMgr->Init();
+	uiMgr->Init(unitNum);
 	isEndGame = false;
 	isReadyGame = false;
 	return S_OK;
@@ -303,17 +303,19 @@ void BattleScene::EndTextMove()
 			textPosition[0]++;
 			textPosition[1]--;
 		}
-		//else
-		//{
-		//	if (startTimer >= 1)
-		//	{
-		//		startTimer = 0.0f;
-		//		textMoveTimer++;
-		//	}
-		//	if (textMoveTimer >= 5)
-		//	{
-		//		SceneManager::GetSingleton()->ChangeScene("IntroScene", "LoadingScene");
-		//	}
-		//}
+		else
+		{
+			if (startTimer >= 1)
+			{
+				startTimer = 0.0f;
+				textMoveTimer++;
+			}
+			if (textMoveTimer >= 5)
+			{
+				isPlayerWin = false;
+				isPlayerDefeat = false;
+				SceneManager::GetSingleton()->ChangeScene("IntroScene", "LoadingScene");
+			}
+		}
 	}
 }

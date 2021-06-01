@@ -65,7 +65,7 @@ private:
 	PlayerManager* playerMgr;
 	EnemyManager* enemyMgr;
 public:
-	virtual HRESULT Init();
+	virtual HRESULT Init(int* unitNum);
 	virtual void Release();
 	virtual void Update();
 	virtual void Render(HDC hdc);

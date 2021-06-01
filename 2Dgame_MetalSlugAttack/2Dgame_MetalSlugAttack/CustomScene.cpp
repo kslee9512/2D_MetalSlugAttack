@@ -272,7 +272,7 @@ void CustomScene::AttackUpdate()
         attackImageCurrFrameX++;
         if (attackImageCurrFrameX > 19)
         {
-            SceneManager::GetSingleton()->ChangeScene("BattleScene", "LoadingScene");
+            SceneManager::GetSingleton()->ChangeScene("BattleScene", "LoadingScene", deckUnitNum);
             return;
         }
     }
