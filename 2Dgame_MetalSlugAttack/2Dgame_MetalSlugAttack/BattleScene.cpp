@@ -303,17 +303,19 @@ void BattleScene::EndTextMove()
 			textPosition[0]++;
 			textPosition[1]--;
 		}
-		//else
-		//{
-		//	if (startTimer >= 1)
-		//	{
-		//		startTimer = 0.0f;
-		//		textMoveTimer++;
-		//	}
-		//	if (textMoveTimer >= 5)
-		//	{
-		//		SceneManager::GetSingleton()->ChangeScene("IntroScene", "LoadingScene");
-		//	}
-		//}
+		else
+		{
+			if (startTimer >= 1)
+			{
+				startTimer = 0.0f;
+				textMoveTimer++;
+			}
+			if (textMoveTimer >= 5)
+			{
+				isPlayerDefeat = false;
+				isPlayerWin = false;
+				SceneManager::GetSingleton()->ChangeScene("IntroScene", "LoadingScene");
+			}
+		}
 	}
 }
