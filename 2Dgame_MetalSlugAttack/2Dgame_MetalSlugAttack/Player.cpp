@@ -289,7 +289,7 @@ HRESULT Player::Init(int unitNum, CollisionChecker* collisionChecker)
         hitBoxWidth = 30;
         hitBoxPos.x = pos.x - 70;
         hitBoxPos.y = pos.y + 30;
-        attackRangeWidth = 240;
+        attackRangeWidth = 280;
         attackRangeHeight = 150;
         maxAttackCount = 1;
         attackBoxPos = { pos.x + (attackRangeWidth / 2) - 80, pos.y };
@@ -469,7 +469,6 @@ void Player::UpdateFire()
             if (attackType == AttackType::PIERCE)
             {
                 needTarget = true;
-                ltarget.clear();
             }
         }
     }
@@ -513,5 +512,15 @@ void Player::UpdateWin()
         {
             currFrameX = 0;
         }
+    }
+}
+
+void Player::ClearTargetList()
+{
+    list<Enemy*>::iterator itlTarget = ltarget.begin();
+    for (itlTarget; itlTarget != ltarget.end();)
+    {
+        if (ltarget.empty()) break;
+        ltarget.erase(itlTarget++);
     }
 }

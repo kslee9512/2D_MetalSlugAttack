@@ -62,6 +62,7 @@ public:
 	void UpdateFire();
 	void UpdateDead();
 	void UpdateWin();
+	void ClearTargetList();
 
 	void SetStatus(STATUS status) { this->characterStatus = status; }
 	void SetFindEnemy(bool findEnemy) { this->findEnemy = findEnemy; }
@@ -91,5 +92,6 @@ public:
 	void SetNeedTarget(bool needTarget) { this->needTarget = needTarget; }
 	bool GetNeedTarget() { return this->needTarget; }
 	int GetTargetList() { return this->ltarget.size(); }
+
 };
 

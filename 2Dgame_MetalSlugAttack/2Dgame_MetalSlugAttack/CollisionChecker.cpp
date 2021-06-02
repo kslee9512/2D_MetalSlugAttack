@@ -66,8 +66,13 @@ void CollisionChecker::CheckEnemy()
 	RECT playerAttackRange;
 	RECT enemyHitBox;
 	RECT enemyBasehitBox = enemyBaseHitBox;
+
 		for (itlPlayerCharacter = lPlayerCharacter.begin(); itlPlayerCharacter != lPlayerCharacter.end(); itlPlayerCharacter++)
 		{
+			if ((*itlPlayerCharacter)->GetAttackType() == AttackType::PIERCE && (*itlPlayerCharacter)->GetStatus() == STATUS::STAND)
+			{
+				(*itlPlayerCharacter)->ClearTargetList();
+			}
 			(*itlPlayerCharacter)->SetFindEnemy(false);
 			(*itlPlayerCharacter)->SetFindBase(false);	
 			playerAttackRange = (*itlPlayerCharacter)->GetAttackBox();
@@ -94,16 +99,7 @@ void CollisionChecker::CheckEnemy()
 						(*itlPlayerCharacter)->SetFindBase(false);
 						(*itlPlayerCharacter)->SetFindEnemy(true);
 					}
-					if ((*itlPlayerCharacter)->GetAttackType() == AttackType::PIERCE)
-					{
-						(*itlPlayerCharacter)->SetFindEnemy(true);
-					}
-
 				}
-			}
-			if ((*itlPlayerCharacter)->GetAttackType() == AttackType::PIERCE && (*itlPlayerCharacter)->GetTargetList() >= 1)
-			{
-				(*itlPlayerCharacter)->SetNeedTarget(false);
 			}
 		}
 }
