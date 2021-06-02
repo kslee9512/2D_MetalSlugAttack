@@ -4,7 +4,7 @@
 #include "PlayerManager.h"
 #include "EnemyManager.h"
 #include "UiManager.h"
-HRESULT BattleScene::Init(int unitNum[5])
+HRESULT BattleScene::Init()
 {
 	apImageCount = 0.0f;
 	attackUndoFrame = 14;
@@ -120,7 +120,7 @@ HRESULT BattleScene::Init(int unitNum[5])
 	collisionChecker = new CollisionChecker();
 	collisionChecker->Init();
 	uiMgr = new UiManager();
-	uiMgr->Init(unitNum);
+	uiMgr->Init();
 	isEndGame = false;
 	isReadyGame = false;
 	return S_OK;

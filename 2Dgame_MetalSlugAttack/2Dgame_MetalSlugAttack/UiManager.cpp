@@ -1,7 +1,7 @@
 #include "UiManager.h"
 #include "Image.h"
 //test
-HRESULT UiManager::Init(int unitNum[5])
+HRESULT UiManager::Init()
 {
 	//Ui 프레임 관련
 	ImageManager::GetSingleton()->AddImage("currAp", "Image/Ui/ap_number.bmp", 100, 20, 10, 1, true, RGB(255, 255, 255));
@@ -117,7 +117,7 @@ HRESULT UiManager::Init(int unitNum[5])
 	
 	for (int i = 0; i < 5; i++)
 	{
-		unitFrame[i].selectNum = unitNum[i];
+		unitFrame[i].selectNum = DeckManager::GetSingleton()->GetDeckNumber(i);
 		unitFrame[i].canPurchase = false;
 		unitFrame[i].endCoolTime = true;
 		unitFrame[i].unit_Frame_able = ImageManager::GetSingleton()->FindImage("unit_frame");

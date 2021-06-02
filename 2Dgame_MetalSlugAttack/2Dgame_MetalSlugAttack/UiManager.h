@@ -70,7 +70,7 @@ private:
 	APSTATUS apStatus;
 	enemyAp enemyAp;
 public:
-	HRESULT Init(int unitNum[5]);
+	HRESULT Init();
 	void Update();
 	void ApCount();
 	void Render(HDC hdc);
