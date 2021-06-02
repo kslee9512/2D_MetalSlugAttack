@@ -161,7 +161,7 @@ HRESULT UiManager::Init()
 		}
 		else if (unitFrame[i].selectNum == 5)
 		{
-			unitFrame[i].unitCoast = 600;
+			unitFrame[i].unitCoast = 750;
 			unitFrame[i].unit_Portrait_able = ImageManager::GetSingleton()->FindImage("amber_portrait_able");
 			unitFrame[i].unit_Portrait_Unable = ImageManager::GetSingleton()->FindImage("amber_portrait_unable");
 			unitFrame[i].purchaseCoolTime = 2500.0f;

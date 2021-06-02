@@ -288,7 +288,7 @@ HRESULT Player::Init(int unitNum, CollisionChecker* collisionChecker)
         attackCooltime = 6.0f;
         hitBoxHeight = 50;
         hitBoxWidth = 30;
-        hitBoxPos.x = pos.x - 70;
+        hitBoxPos.x = pos.x - 90;
         hitBoxPos.y = pos.y + 30;
         attackRangeWidth = 280;
         attackRangeHeight = 150;
@@ -439,6 +439,10 @@ void Player::UpdateStand()
             for (itlEnemy = ltarget.begin(); itlEnemy != ltarget.end(); itlEnemy++)
             {
                 (*itlEnemy)->SetCharacterHp(characterAtk);
+                if (Name == "Amber")
+                {
+                    (*itlEnemy)->SetKnockBack(true);
+                }
             }
         }
         else if (findBase)

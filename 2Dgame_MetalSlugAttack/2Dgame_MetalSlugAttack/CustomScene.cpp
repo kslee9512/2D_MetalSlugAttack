@@ -215,6 +215,7 @@ void CustomScene::ClickAttack()
     if (PtInRect(&attackRect, g_ptMouse))
     {
         changeTime = 0.0f;
+        numberSelected = false;
         startGame = true;
     }
 }

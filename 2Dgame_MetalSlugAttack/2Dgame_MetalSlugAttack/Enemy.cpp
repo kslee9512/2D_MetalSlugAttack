@@ -6,6 +6,8 @@
 HRESULT Enemy::Init(int unitNum, CollisionChecker* collisionChecker)
 {
     this->collisionChecker = collisionChecker;
+    isKnockback = false;
+    knockbackCount = 0;
     endDeadScene = false;
     fireCount = 0.0f;
     changeTimer = 0.0f; // 프레임 변경 확인용 타이머
@@ -64,7 +66,7 @@ HRESULT Enemy::Init(int unitNum, CollisionChecker* collisionChecker)
         attackCooltime = 3.0f;
         hitBoxHeight = 50;
         hitBoxWidth = 30;
-        hitBoxPos = { pos.x + hitBoxWidth, pos.y };
+        hitBoxPos = { pos.x + 20, pos.y };
         attackRangeWidth = 250;
         attackRangeHeight = 150;
         maxAttackCount = 1;
@@ -148,7 +150,7 @@ HRESULT Enemy::Init(int unitNum, CollisionChecker* collisionChecker)
         attackCooltime = 4.0f;
         hitBoxHeight = 50;
         hitBoxWidth = 30;
-        hitBoxPos = { pos.x + 60, pos.y };
+        hitBoxPos = { pos.x + 80, pos.y };
         attackRangeWidth = 400;
         attackRangeHeight = 150;
         maxAttackCount = 1;
@@ -175,6 +177,10 @@ void Enemy::Update()
             currFrameX = 0;
             changeTimer = 0.0f;
         }
+    }
+    if (isKnockback)
+    {
+        KnockBackUpdate();
     }
     switch (characterStatus)
     {
@@ -347,5 +353,16 @@ void Enemy::UpdateWin()
         {
             currFrameX = 0;
         }
+    }
+}
+
+void Enemy::KnockBackUpdate()
+{
+    pos.x++;
+    knockbackCount++;
+    if (knockbackCount >= 80)
+    {
+        isKnockback = false;
+        knockbackCount = 0;
     }
 }

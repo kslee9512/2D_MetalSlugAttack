@@ -24,6 +24,7 @@ private:
 	bool findEnemy;
 	bool findBase;
 	bool endDeadScene;
+	bool isKnockback;
 	int currFrameX;
 	UnitType unitType;
 	RECT attackRange;
@@ -40,6 +41,7 @@ private:
 	int deadMaxFrame;
 	int winMaxFrame;
 	int characterHp;
+	int knockbackCount;
 	float characterAtk;
 	int unitCoast;
 	int hitBoxWidth;
@@ -58,6 +60,7 @@ public:
 	void UpdateFire();
 	void UpdateDead();
 	void UpdateWin();
+	void KnockBackUpdate();
 
 	void SetStatus(STATUS status) { this->characterStatus = status; }
 	void SetFindEnemy(bool findEnemy) { this->findEnemy = findEnemy; }
@@ -80,6 +83,7 @@ public:
 	bool GetReadyToFire() { return this->readyToFire; }
 	bool GetCharacterAlive() { return this->isAlive; }
 	bool GetEndDeadScene() { return this->endDeadScene; }
+	void SetKnockBack(bool isKnockback) { this->isKnockback = isKnockback; }
 	RECT GetAttackBox() { return this->attackRange; }
 	RECT GetHitBox() { return this->hitBox; }
 	STATUS GetStatus() { return this->characterStatus; }
