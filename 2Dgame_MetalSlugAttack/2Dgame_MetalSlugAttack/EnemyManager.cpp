@@ -5,6 +5,7 @@
 HRESULT EnemyManager::Init(int unitNum, CollisionChecker* collisionChecker)
 {
     this->collisionChecker = collisionChecker;
+    isDefeat = false;
     if (vEnemyMgr.size() < 1)
     {
         vEnemyMgr.push_back(new Enemy);
@@ -69,6 +70,10 @@ void EnemyManager::Update()
     {
     	vEnemyMgr[i]->Update();
     }
+    if (isDefeat)
+    {
+        BaseRetreat();
+    }
 }
 
 void EnemyManager::Render(HDC hdc)
@@ -81,4 +86,18 @@ void EnemyManager::Render(HDC hdc)
             vEnemyMgr[i]->Render(hdc);
         }
 	}
+}
+
+void EnemyManager::BaseRetreat()
+{
+    frameTimer += TimerManager::GetSingleton()->GetElapsedTime();
+    if (frameTimer >= 0.05)
+    {
+        frameTimer = 0.0f;
+        currFrameX--;
+        if (currFrameX == 0)
+        {
+            currFrameX = 0;
+        }
+    }
 }

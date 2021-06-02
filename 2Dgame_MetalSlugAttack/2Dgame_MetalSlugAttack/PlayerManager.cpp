@@ -5,6 +5,7 @@
 HRESULT PlayerManager::Init(int unitNum, CollisionChecker* collisionChecker)
 {
     this->collisionChecker = collisionChecker;
+    isDefeat = false;
     if (vPlayerCharacter.size() < 1)
     {
         vPlayerCharacter.push_back(new Player);
@@ -70,6 +71,10 @@ void PlayerManager::Update()
     {
         vPlayerCharacter[i]->Update();
     }
+    if (isDefeat)
+    {
+        PlayerBaseRetreat();
+    }
 }
 
 void PlayerManager::Render(HDC hdc)
@@ -78,5 +83,19 @@ void PlayerManager::Render(HDC hdc)
     for (int i = 0; i < vPlayerCharacter.size(); i++)
     {
         vPlayerCharacter[i]->Render(hdc);
+    }
+}
+
+void PlayerManager::PlayerBaseRetreat()
+{
+    frameTimer += TimerManager::GetSingleton()->GetElapsedTime();
+    if (frameTimer >= 0.05)
+    {
+        frameTimer = 0.0f;
+        currFrameX--;
+        if (currFrameX == 0)
+        {
+            currFrameX = 0;
+        }
     }
 }

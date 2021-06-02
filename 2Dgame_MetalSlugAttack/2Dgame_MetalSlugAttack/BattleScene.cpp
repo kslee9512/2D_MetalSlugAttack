@@ -195,6 +195,14 @@ void BattleScene::Update()
 			}
 		}
 		isEndGame = collisionChecker->CheckBaseHp();
+		if (collisionChecker->GetEnemyBaseHp() <= 0.0f)
+		{
+			enemyMgr->SetIsDefeat(true);
+		}
+		else if (collisionChecker->GetPlayerBaseHp() <= 0.0f)
+		{
+			playerMgr->SetIsDefeat(true);
+		}
 	}
 	if (isPlayerWin || isPlayerDefeat)
 	{
@@ -216,7 +224,6 @@ void BattleScene::Render(HDC hdc)
 	collisionChecker->Render(hdc);
 	playerMgr->Render(hdc);
 	enemyMgr->Render(hdc);
-	collisionChecker->Render(hdc);
 	if (attackStatus == ATTACKSTATUS::UNDO)
 	{
 		attack_Undo->FrameRender(hdc, 860, 470, currFrameX, 0, false, 2);

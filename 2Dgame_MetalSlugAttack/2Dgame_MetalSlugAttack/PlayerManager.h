@@ -14,7 +14,7 @@ private:
 	int currFrameX;
 	float frameTimer;
 	bool isStart;
-
+	bool isDefeat;
 	vector<Player*> vPlayerCharacter;
 	vector<Player*>::iterator itlPlayerCharacter;
 	CollisionChecker* collisionChecker;
@@ -24,8 +24,10 @@ public:
 	 void Release();
 	 void Update();
 	 void Render(HDC hdc);
+	 void PlayerBaseRetreat();
 	 void SetBaseHp(int damage) { this->baseHp -= damage; }
 	 int GetPlayerBaseHp() { return this->baseHp; }
 	 RECT GetPlayerBaseHitBox() { return this->playerBaseHitBox; }
 	 vector<Player*> GetPlayerVector() { return this->vPlayerCharacter; }
+	 void SetIsDefeat(bool isDefeat) { this->isDefeat = isDefeat; }
 };

@@ -74,7 +74,7 @@ void CollisionChecker::CheckEnemy()
 				(*itlPlayerCharacter)->ClearTargetList();
 			}
 			(*itlPlayerCharacter)->SetFindEnemy(false);
-			(*itlPlayerCharacter)->SetFindBase(false);	
+			(*itlPlayerCharacter)->SetFindBase(false);
 			playerAttackRange = (*itlPlayerCharacter)->GetAttackBox();
 			if (IntersectRect(&rc, &enemyBasehitBox, &playerAttackRange))
 			{

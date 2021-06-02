@@ -39,6 +39,8 @@ public:
 	void SetEnemyBaseHp(float damage) { this->enemyBaseHp -= damage; }
 	void SetPlayerBaseHp(float damage) { this->playerBaseHp -= damage; }
 	bool CheckBaseHp();
+	float GetPlayerBaseHp() { return this->playerBaseHp; }
+	float GetEnemyBaseHp() { return this->enemyBaseHp; }
 	bool CheckPlayerWin();
 	bool CheckPlayerDefeat();
 };
