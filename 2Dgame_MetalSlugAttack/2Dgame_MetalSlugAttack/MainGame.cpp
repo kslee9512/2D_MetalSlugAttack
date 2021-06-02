@@ -4,6 +4,7 @@
 #include "IntroScene.h"
 #include "LoadingScene.h"
 #include "CustomScene.h"
+
 HRESULT MainGame::Init()
 {
 	hdc = GetDC(g_hWnd);
@@ -11,7 +12,7 @@ HRESULT MainGame::Init()
 	KeyManager::GetSingleton()->Init();
 	ImageManager::GetSingleton()->Init();
 	SceneManager::GetSingleton()->Init();
-
+	DeckManager::GetSingleton()->Init();
 	// 이미지를 미리 로드한다
 
 	// 메인게임의 초기화 함수
@@ -36,7 +37,7 @@ void MainGame::Release()
 	KeyManager::GetSingleton()->Release();
 	ImageManager::GetSingleton()->Release();
 	SceneManager::GetSingleton()->Release();
-
+	DeckManager::GetSingleton()->Release();
 	SAFE_RELEASE(backBuffer);
 
 	ReleaseDC(g_hWnd, hdc);
@@ -55,8 +56,8 @@ void MainGame::Render()
 	// 인사
 	//TextOut(hBackDC, 20, 20, "MainGame 렌더 중", strlen("MainGame 렌더 중"));
 	// 마우스 좌표
-	wsprintf(szText, "X : %d, Y : %d", g_ptMouse.x, g_ptMouse.y);
-	TextOut(hBackDC, 200, 20, szText, strlen(szText));
+	//wsprintf(szText, "X : %d, Y : %d", g_ptMouse.x, g_ptMouse.y);
+	//TextOut(hBackDC, 200, 20, szText, strlen(szText));
 	// FPS
 	//TimerManager::GetSingleton()->Render(hBackDC);
 

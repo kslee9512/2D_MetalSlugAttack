@@ -17,6 +17,7 @@ using namespace std;
 #include "ImageManager.h"
 #include "TimerManager.h"
 #include "SceneManager.h"
+#include "DeckManager.h"
 
 #define WINSIZE_X	1020
 #define WINSIZE_Y	600
