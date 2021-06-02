@@ -1,5 +1,6 @@
 #pragma once
 #include "GameNode.h"
+#include <list>
 
 class Enemy;
 class EnemyManager;
@@ -8,6 +9,7 @@ class Player : public GameNode
 {
 	CollisionChecker* collisionChecker;
 	Enemy* target;
+	list<Enemy*> ltarget;
 	EnemyManager* enemyBase;
 	string Name;
 	Image* image_Stand;
@@ -18,6 +20,8 @@ class Player : public GameNode
 	FPOINT pos;
 	FPOINT hitBoxPos;
 	FPOINT attackBoxPos;
+	AttackType attackType;
+	bool needTarget;
 	bool isAlive;
 	bool readyToFire;
 	bool findEnemy;
@@ -68,6 +72,7 @@ public:
 	void SetIsAlive(bool isAlive) { this->isAlive = isAlive; }
 	void SetTarget(Enemy* enemy) { this->target = enemy; }
 	void SetTarget(EnemyManager* enemyBase) { this->enemyBase = enemyBase; }
+	void SetMultyTarget(Enemy* enemy) { this->ltarget.push_back(enemy); }
 	void SetFindBase(bool findBase) { this->findBase = findBase; }
 	void PlusCurrAttackCount() { this->currAttackCount++; }
 	void SetCurrAttackCount() { this->currAttackCount += 1; }
@@ -82,5 +87,9 @@ public:
 	RECT GetAttackBox() { return this->attackRange; }
 	RECT GetHitBox() { return this->hitBox; }
 	STATUS GetStatus() { return this->characterStatus; }
+	AttackType GetAttackType() { return this->attackType; }
+	void SetNeedTarget(bool needTarget) { this->needTarget = needTarget; }
+	bool GetNeedTarget() { return this->needTarget; }
+	int GetTargetList() { return this->ltarget.size(); }
 };
 

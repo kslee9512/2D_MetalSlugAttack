@@ -15,10 +15,12 @@ HRESULT Player::Init(int unitNum, CollisionChecker* collisionChecker)
     readyToFire = true;
     currAttackCount = 0;
     endDeadScene = false;
+    needTarget = false;
     if (unitNum == 1)
     {
         Name = "Eri";
         unitType = UnitType::PLAYER;
+        attackType = AttackType::NORMAL;
         image_Stand = ImageManager::GetSingleton()->FindImage("Eri_stand");
         if (image_Stand == nullptr)
         {
@@ -74,6 +76,7 @@ HRESULT Player::Init(int unitNum, CollisionChecker* collisionChecker)
     {
         Name = "Trevor";
         unitType = UnitType::PLAYER;
+        attackType = AttackType::NORMAL;
         image_Stand = ImageManager::GetSingleton()->FindImage("Trevor_stand");
         if (image_Stand == nullptr)
         {
@@ -129,6 +132,7 @@ HRESULT Player::Init(int unitNum, CollisionChecker* collisionChecker)
     {
         Name = "Ralf";
         unitType = UnitType::PLAYER;
+        attackType = AttackType::NORMAL;
         image_Stand = ImageManager::GetSingleton()->FindImage("Ralf_stand");
         if (image_Stand == nullptr)
         {
@@ -183,6 +187,7 @@ HRESULT Player::Init(int unitNum, CollisionChecker* collisionChecker)
     {
         Name = "Marco";
         unitType = UnitType::PLAYER;
+        attackType = AttackType::NORMAL;
         image_Stand = ImageManager::GetSingleton()->FindImage("Marco_stand");
         if (image_Stand == nullptr)
         {
@@ -237,6 +242,7 @@ HRESULT Player::Init(int unitNum, CollisionChecker* collisionChecker)
     {
         Name = "Amber";
         unitType = UnitType::PLAYER;
+        attackType = AttackType::PIERCE;
         image_Stand = ImageManager::GetSingleton()->FindImage("Amber_stand");
         if (image_Stand == nullptr)
         {
@@ -287,6 +293,7 @@ HRESULT Player::Init(int unitNum, CollisionChecker* collisionChecker)
         attackRangeHeight = 150;
         maxAttackCount = 1;
         attackBoxPos = { pos.x + (attackRangeWidth / 2) - 80, pos.y };
+        needTarget = true;
     }
     attackRange = GetRectToCenter(attackBoxPos.x, attackBoxPos.y, attackRangeWidth, attackRangeHeight);
     hitBox = GetRectToCenter(hitBoxPos.x, hitBoxPos.y, hitBoxWidth, hitBoxHeight);
@@ -421,9 +428,17 @@ void Player::UpdateStand()
     {
         currFrameX = 0;
         readyToFire = false;
-        if (findEnemy)
+        if (findEnemy && attackType == AttackType::NORMAL)
         {
             target->SetCharacterHp(characterAtk);
+        }
+        else if (findEnemy && attackType == AttackType::PIERCE)
+        {
+            list<Enemy*>::iterator itlEnemy;
+            for (itlEnemy = ltarget.begin(); itlEnemy != ltarget.end(); itlEnemy++)
+            {
+                (*itlEnemy)->SetCharacterHp(characterAtk);
+            }
         }
         else if (findBase)
         {
@@ -451,6 +466,11 @@ void Player::UpdateFire()
             currAttackCount = 0;
             readyToFire = false;
             characterStatus = STATUS::STAND;
+            if (attackType == AttackType::PIERCE)
+            {
+                needTarget = true;
+                ltarget.clear();
+            }
         }
     }
 }

@@ -28,6 +28,7 @@ using namespace std;
 
 enum class UnitType{ PLAYER, ENEMY};
 enum class STATUS { STAND, WALK, FIRE, DEAD, WIN };
+enum class AttackType {NORMAL, PIERCE};
 typedef struct tagFPoint
 {
 	float x;
