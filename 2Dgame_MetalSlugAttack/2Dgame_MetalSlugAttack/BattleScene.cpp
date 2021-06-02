@@ -213,8 +213,9 @@ void BattleScene::Render(HDC hdc)
 	hp_Frame[1]->Render(hdc, WINSIZE_X - 340, 10);
 	apBar->Render(hdc, 0, 400);
 	uiMgr->Render(hdc);
-		playerMgr->Render(hdc);
-		enemyMgr->Render(hdc);
+	collisionChecker->Render(hdc);
+	playerMgr->Render(hdc);
+	enemyMgr->Render(hdc);
 	collisionChecker->Render(hdc);
 	if (attackStatus == ATTACKSTATUS::UNDO)
 	{
@@ -229,7 +230,6 @@ void BattleScene::Render(HDC hdc)
 		attack_Fire->FrameRender(hdc, 860, 470, currFrameX, 0, false, 2);
 	}
 	miniMap->Render(hdc, WINSIZE_X / 2 - 130, 10);
-	collisionChecker->Render(hdc);
 	if (!isReadyGame)
 	{
 		text_Mission->Render(hdc, textPosition[0], (WINSIZE_Y / 2) - 50);
