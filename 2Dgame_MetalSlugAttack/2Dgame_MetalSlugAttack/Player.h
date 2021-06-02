@@ -92,6 +92,8 @@ public:
 	void SetNeedTarget(bool needTarget) { this->needTarget = needTarget; }
 	bool GetNeedTarget() { return this->needTarget; }
 	int GetTargetList() { return this->ltarget.size(); }
+	FPOINT GetHitPos() { return this->hitBoxPos; }
+	Enemy* GetTarget() { return this->target; }
 
 };
 

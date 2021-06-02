@@ -83,5 +83,7 @@ public:
 	RECT GetAttackBox() { return this->attackRange; }
 	RECT GetHitBox() { return this->hitBox; }
 	STATUS GetStatus() { return this->characterStatus; }
+	FPOINT GetHitPos() { return this->hitBoxPos; }
+	Player* GetTarget() { return this->target; }
 };
 

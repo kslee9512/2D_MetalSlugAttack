@@ -90,8 +90,18 @@ void CollisionChecker::CheckEnemy()
 					{
 						(*itlPlayerCharacter)->SetFindEnemy(true);
 						(*itlPlayerCharacter)->SetFindBase(false);
-						(*itlPlayerCharacter)->SetTarget((*itlEnemyCharacter));
-						break;
+						if ((*itlPlayerCharacter)->GetTarget() != NULL)
+						{
+							if ((*itlPlayerCharacter)->GetTarget()->GetHitPos().x >= (*itlEnemyCharacter)->GetHitPos().x)
+							{
+								(*itlPlayerCharacter)->SetTarget((*itlEnemyCharacter));
+							}
+						}
+						else
+						{
+							(*itlPlayerCharacter)->SetTarget((*itlEnemyCharacter));
+							break;
+						}
 					}
 					else if ((*itlPlayerCharacter)->GetAttackType() == AttackType::PIERCE && (*itlPlayerCharacter)->GetNeedTarget())
 					{
@@ -127,8 +137,18 @@ void CollisionChecker::CheckPlayer()
 			{
 				(*itlEnemyCharacter)->SetFindEnemy(true);
 				(*itlEnemyCharacter)->SetFindBase(false);
-				(*itlEnemyCharacter)->SetTarget((*itlPlayerCharacter));
-				break;
+				if ((*itlEnemyCharacter)->GetTarget() != NULL)
+				{
+					if ((*itlEnemyCharacter)->GetTarget()->GetHitPos().x <= (*itlPlayerCharacter)->GetHitPos().x)
+					{
+						(*itlEnemyCharacter)->SetTarget((*itlPlayerCharacter));
+					}
+				}
+				else
+				{
+					(*itlEnemyCharacter)->SetTarget((*itlPlayerCharacter));
+					break;
+				}
 			}
 		
 		}
