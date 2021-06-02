@@ -132,7 +132,8 @@ HRESULT Player::Init(int unitNum, CollisionChecker* collisionChecker)
     {
         Name = "Ralf";
         unitType = UnitType::PLAYER;
-        attackType = AttackType::NORMAL;
+        attackType = AttackType::PIERCE;
+        needTarget = true;
         image_Stand = ImageManager::GetSingleton()->FindImage("Ralf_stand");
         if (image_Stand == nullptr)
         {
@@ -227,7 +228,7 @@ HRESULT Player::Init(int unitNum, CollisionChecker* collisionChecker)
         deadMaxFrame = 18;
         winMaxFrame = 5;
         characterHp = 250;
-        characterAtk = 100.0f;
+        characterAtk = 200.0f;
         attackCooltime = 4.0f;
         hitBoxHeight = 50;
         hitBoxWidth = 30;

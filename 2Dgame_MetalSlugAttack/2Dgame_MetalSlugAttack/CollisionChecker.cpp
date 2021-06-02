@@ -92,9 +92,13 @@ void CollisionChecker::CheckEnemy()
 						(*itlPlayerCharacter)->SetFindBase(false);
 						if ((*itlPlayerCharacter)->GetTarget() != NULL)
 						{
-							if ((*itlPlayerCharacter)->GetTarget()->GetHitPos().x >= (*itlEnemyCharacter)->GetHitPos().x)
+							if ((*itlPlayerCharacter)->GetTarget()->GetHitPos().x > (*itlEnemyCharacter)->GetHitPos().x)
 							{
 								(*itlPlayerCharacter)->SetTarget((*itlEnemyCharacter));
+							}
+							else
+							{
+								continue;
 							}
 						}
 						else
@@ -139,9 +143,13 @@ void CollisionChecker::CheckPlayer()
 				(*itlEnemyCharacter)->SetFindBase(false);
 				if ((*itlEnemyCharacter)->GetTarget() != NULL)
 				{
-					if ((*itlEnemyCharacter)->GetTarget()->GetHitPos().x <= (*itlPlayerCharacter)->GetHitPos().x)
+					if ((*itlEnemyCharacter)->GetTarget()->GetHitPos().x < (*itlPlayerCharacter)->GetHitPos().x)
 					{
 						(*itlEnemyCharacter)->SetTarget((*itlPlayerCharacter));
+					}
+					else
+					{
+						continue;
 					}
 				}
 				else
