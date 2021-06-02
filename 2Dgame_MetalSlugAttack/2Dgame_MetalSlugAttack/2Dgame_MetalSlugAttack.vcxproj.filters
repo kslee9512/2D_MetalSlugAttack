@@ -90,6 +90,9 @@
     <ClCompile Include="CustomScene.cpp">
       <Filter>소스 파일\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="DeckManager.cpp">
+      <Filter>소스 파일\2DFrameWork\Manager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Config.h">
@@ -154,6 +157,9 @@
     </ClInclude>
     <ClInclude Include="CustomScene.h">
       <Filter>소스 파일\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="DeckManager.h">
+      <Filter>소스 파일\2DFrameWork\Manager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

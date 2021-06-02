@@ -140,6 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CustomScene.cpp" />
+    <ClCompile Include="DeckManager.cpp" />
     <ClCompile Include="IntroScene.cpp" />
     <ClCompile Include="LoadingScene.cpp" />
     <ClCompile Include="UiManager.cpp" />
@@ -161,6 +162,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CustomScene.h" />
+    <ClInclude Include="DeckManager.h" />
     <ClInclude Include="IntroScene.h" />
     <ClInclude Include="LoadingScene.h" />
     <ClInclude Include="UiManager.h" />

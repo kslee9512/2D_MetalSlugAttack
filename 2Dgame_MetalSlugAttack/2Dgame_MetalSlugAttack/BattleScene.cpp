@@ -312,8 +312,8 @@ void BattleScene::EndTextMove()
 			}
 			if (textMoveTimer >= 5)
 			{
-				isPlayerDefeat = false;
 				isPlayerWin = false;
+				isPlayerDefeat = false;
 				SceneManager::GetSingleton()->ChangeScene("IntroScene", "LoadingScene");
 			}
 		}
